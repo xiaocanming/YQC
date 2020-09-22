@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/black"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/Play"
+        android:layout_width="250dp"
+        android:layout_height="120dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        >
+        <SurfaceView
+            android:id="@+id/Sur_Player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            app:backgroundTint="@color/colorPrimary"  />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/carmerstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="无错误"
+        android:textSize="12sp"
+        android:layout_toLeftOf="@+id/Play"
+        android:layout_marginRight="10dp"
+        android:layout_alignTop="@+id/Play"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_4" />
+
+    <com.example.yqc.customview.ThrottleView
+        android:id="@+id/thr_bar"
+        android:layout_width="100dp"
+        android:layout_height="74dp"
+        android:alpha="0.4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:id="@+id/text1_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/thr_bar"
+        android:text="小车数据"
+        android:textSize="12sp"
+        android:layout_marginLeft="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text11_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text1_title"
+        android:layout_below="@+id/text1_title"
+        android:layout_marginTop="10dp"
+        android:text="小车位置X"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text11_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text11_title"
+        android:layout_toRightOf="@+id/text11_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+    <TextView
+        android:id="@+id/text12_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text11_title"
+        android:layout_below="@+id/text11_title"
+        android:layout_marginTop="6dp"
+        android:text="小车位置Y"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text12_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text12_title"
+        android:layout_toRightOf="@+id/text12_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text13_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text12_title"
+        android:layout_below="@+id/text12_title"
+        android:layout_marginTop="6dp"
+        android:text="小车位置Z"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text13_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text13_title"
+        android:layout_toRightOf="@+id/text13_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text14_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text13_title"
+        android:layout_below="@+id/text13_title"
+        android:layout_marginTop="6dp"
+        android:text="自检状态"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text14_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text14_title"
+        android:layout_toRightOf="@+id/text14_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text15_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text14_title"
+        android:layout_below="@+id/text14_title"
+        android:layout_marginTop="6dp"
+        android:text="运动模式"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text15_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text15_title"
+        android:layout_toRightOf="@+id/text15_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text16_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text15_title"
+        android:layout_below="@+id/text15_title"
+        android:layout_marginTop="6dp"
+        android:text="运动标志"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text16_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text16_title"
+        android:layout_toRightOf="@+id/text16_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text31_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text16_title"
+        android:layout_below="@+id/text16_title"
+        android:layout_marginTop="6dp"
+        android:text="+5V电压"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text31_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text31_title"
+        android:layout_toRightOf="@+id/text31_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text32_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text31_title"
+        android:layout_below="@+id/text31_title"
+        android:layout_marginTop="6dp"
+        android:text="+12V电压"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text32_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text32_title"
+        android:layout_toRightOf="@+id/text32_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text33_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text32_title"
+        android:layout_below="@+id/text32_title"
+        android:layout_marginTop="6dp"
+        android:text="+24V电压"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text33_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text33_title"
+        android:layout_toRightOf="@+id/text33_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text17_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text33_title"
+        android:layout_below="@+id/text33_title"
+        android:layout_marginTop="6dp"
+        android:text="预留字段1"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text17_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text17_title"
+        android:layout_toRightOf="@+id/text17_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+
+
+
+    <TextView
+        android:id="@+id/text2_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/text11_value"
+        android:text="驱动数据"
+        android:textSize="12sp"
+        android:layout_marginLeft="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text21_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text2_title"
+        android:layout_below="@+id/text2_title"
+        android:layout_marginTop="10dp"
+        android:text="前轮1角度"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text21_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text21_title"
+        android:layout_toRightOf="@+id/text21_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text22_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text21_title"
+        android:layout_below="@+id/text21_title"
+        android:layout_marginTop="6dp"
+        android:text="前轮2角度"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text22_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text22_title"
+        android:layout_toRightOf="@+id/text22_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text23_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text22_title"
+        android:layout_below="@+id/text22_title"
+        android:layout_marginTop="6dp"
+        android:text="后轮1角度"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text23_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text23_title"
+        android:layout_toRightOf="@+id/text23_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text24_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text23_title"
+        android:layout_below="@+id/text23_title"
+        android:layout_marginTop="6dp"
+        android:text="后轮2角度"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text24_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text24_title"
+        android:layout_toRightOf="@+id/text24_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text25_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text24_title"
+        android:layout_below="@+id/text24_title"
+        android:layout_marginTop="6dp"
+        android:text="桅杆起伏"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text25_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text25_title"
+        android:layout_toRightOf="@+id/text25_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text26_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text25_title"
+        android:layout_below="@+id/text25_title"
+        android:layout_marginTop="6dp"
+        android:text="桅杆转动"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text26_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text26_title"
+        android:layout_toRightOf="@+id/text26_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text27_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text26_title"
+        android:layout_below="@+id/text26_title"
+        android:layout_marginTop="6dp"
+        android:text="帆板角度"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text27_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text27_title"
+        android:layout_toRightOf="@+id/text27_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text34_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text27_title"
+        android:layout_below="@+id/text27_title"
+        android:layout_marginTop="6dp"
+        android:text="驱动轮"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text34_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text34_title"
+        android:layout_toRightOf="@+id/text34_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text35_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text34_title"
+        android:layout_below="@+id/text34_title"
+        android:layout_marginTop="6dp"
+        android:text="转向轮"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text35_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text35_title"
+        android:layout_toRightOf="@+id/text35_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text18_title"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text35_title"
+        android:layout_below="@+id/text35_title"
+        android:layout_marginTop="6dp"
+        android:text="预留字段2"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text18_value"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text18_title"
+        android:layout_toRightOf="@+id/text18_title"
+        android:text="------"
+        android:textSize="10sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <com.example.yqc.customview.NoScrollViewPager
+        android:id="@+id/main_view_pager"
+        android:layout_width="300dp"
+        android:layout_height="140dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/tcpstatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未连接"
+        android:textSize="12sp"
+        android:layout_above="@+id/main_view_pager"
+        android:layout_marginBottom="15dp"
+        android:layout_toLeftOf="@+id/tabs"
+        android:layout_marginRight="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_1" />
+
+    <com.qmuiteam.qmui.widget.tab.QMUITabSegment
+        android:id="@+id/tabs"
+        android:layout_width="200dp"
+        android:layout_height="49dp"
+        android:layout_gravity="bottom"
+        android:layout_above="@+id/main_view_pager"
+        android:layout_marginBottom="5dp"
+        android:layout_alignRight="@+id/main_view_pager"
+        android:textSize="12sp"
+        app:qmui_tab_icon_position="top"
+        app:qmui_topDividerColor="?attr/qmui_skin_support_color_separator"/>
+
+
+    <FrameLayout
+        android:id="@+id/btn_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/main_view_pager"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/main_view_pager"
+        android:layout_gravity="center">
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/button2"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:text="速度\n固化"
+            android:textSize="14sp"
+            android:singleLine="false"
+            app:qmui_borderColor="@color/button_text"
+            app:qmui_borderWidth="2dp"
+            android:textColor="@color/white"
+            app:qmui_radiusTopLeft="8dp"/>
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/button1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="64dp"
+            android:gravity="center"
+            android:text="停止\n运动"
+            android:textSize="14sp"
+            android:singleLine="false"
+            app:qmui_borderColor="@color/button_text"
+            app:qmui_borderWidth="2dp"
+            android:textColor="@color/white"
+            app:qmui_radiusTopRight="8dp"/>
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/button4"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="64dp"
+            android:gravity="center"
+            android:text="边界\n设置 "
+            android:textSize="14sp"
+            android:singleLine="false"
+            app:qmui_borderColor="@color/button_text"
+            app:qmui_borderWidth="2dp"
+            android:textColor="@color/white"
+            app:qmui_radiusBottomLeft="8dp"/>
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/button3"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="64dp"
+            android:layout_marginTop="64dp"
+            android:gravity="center"
+            android:text="恢复\n运动"
+            android:textSize="14sp"
+            android:singleLine="false"
+            app:qmui_borderColor="@color/button_text"
+            app:qmui_borderWidth="2dp"
+            android:textColor="@color/white"
+            app:qmui_radiusBottomRight="8dp"/>
+
+    </FrameLayout>
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/btn_rz"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignBottom="@+id/btn_group"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:singleLine="false"
+        android:gravity="center"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btn_group"
+        android:text="接收\n数据"
+        android:textSize="14sp"
+        app:qmui_borderColor="@color/button_text"
+        app:qmui_borderWidth="2dp"
+        android:textColor="@color/white"
+        app:qmui_radius="4dp"
+        />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/btn_sn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_above="@+id/btn_rz"
+        android:layout_marginBottom="4dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:singleLine="false"
+        android:gravity="center"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btn_group"
+        android:text="使能\n运动"
+        android:textSize="14sp"
+        app:qmui_borderColor="@color/button_text"
+        app:qmui_borderWidth="2dp"
+        android:textColor="@color/white"
+        app:qmui_radius="4dp"
+        />
+
+</RelativeLayout>
