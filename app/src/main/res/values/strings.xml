@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">YQC</string>
+    <!-- Strings  -->
+    <string name="set_hostip">192.168.4.1</string>
+    <integer name="set_hostport">60000</integer>
+    <integer name="connection_cycle">200</integer>
+    <!-- 摄像头  -->
+    <string name="set_cameraip">192.168.8.64</string>
+    <integer name="set_cameraport">8000</integer>
+    <string name="set_camerausername">admin</string>
+    <string name="set_camerapassword">xiniu123</string>
+
+    <string name="btn_set">飞控设置</string>
+    <string name="btn_col">体感飞行控制</string>
+    <string name="btn_ygcol">摇杆飞行控制</string>
+    <string name="btn_carcol">平衡小车控制</string>
+    <string name="btn_bt_link">蓝牙连接</string>
+    <string name="btn_wifi_set">WIFI连接</string>
+    <string name="btn_yaw_a">右转</string>
+    <string name="btn_yaw_d">左转</string>
+    <string name="btn_stop">紧急停机</string>
+    <string name="text_control_logo">酷世DIY</string>
+    <string name="text_acc_x">加速度 X:</string>
+    <string name="text_acc_y">加速度 Y:</string>
+    <string name="text_acc_z">加速度 Z:</string>
+    <string name="text_gyr_x">陀螺仪 X:</string>
+    <string name="text_gyr_y">陀螺仪 Y:</string>
+    <string name="text_gyr_z">陀螺仪 Z:</string>
+    <string name="text_rol">ROLL:</string>
+    <string name="text_pit">PITCH:</string>
+    <string name="text_yaw">YAW:</string>
+    <string name="text_rol1">ROLL:</string>
+    <string name="text_pit1">PITCH:</string>
+    <string name="text_yaw1">YAW:</string>
+    <string name="text_height">HIGH:</string>
+    <string name="btn_read_set">读取飞控</string>
+    <string name="btn_write_set">写入飞控</string>
+    <string name="btn_cal_acc">加速度矫正</string>
+    <string name="btn_cal_gyr">陀螺仪矫正</string>
+    <string name="btn_jt">急停</string>
+    <string name="btn_jias">加锁</string>
+    <string name="btn_jies">解锁</string>
+    <string name="btn_jiaozhun">校准</string>
+
+</resources>
