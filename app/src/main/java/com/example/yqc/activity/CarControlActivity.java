@@ -231,10 +231,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         m_osurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
         Log.i(TAG, "surface is created");
 
-        //valid just when single channel preview
-//        if (-1 == m_iPlayID && -1 == m_iPlaybackID) {
-//            return;
-//        }
+
         if(playView[0]==null){
             return;
         }

@@ -403,7 +403,7 @@
         android:layout_alignLeft="@+id/text2_title"
         android:layout_below="@+id/text2_title"
         android:layout_marginTop="6dp"
-        android:text="前轮1角度"
+        android:text="前轮左角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -425,7 +425,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text21_title"
         android:layout_below="@+id/text21_title"
-        android:text="前轮2角度"
+        android:text="前轮右角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -447,7 +447,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text22_title"
         android:layout_below="@+id/text22_title"
-        android:text="后轮1角度"
+        android:text="后轮左角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -469,7 +469,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text23_title"
         android:layout_below="@+id/text23_title"
-        android:text="后轮2角度"
+        android:text="后轮右角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
