@@ -133,13 +133,15 @@ public class StringTool {
         //TOF右后距离
         CarControlActivity.VAL_TOF_RightBack= String.valueOf(ByteInt_Single(bodybetys[37]));
         //姿态传感器磁场X坐标
-        CarControlActivity.VAL_AttitudeSensor_X= String.valueOf(ByteInt_Single(bodybetys[38]));
+        CarControlActivity.VAL_AttitudeSensor_X= String.valueOf(Bytes2Int_BE(bodybetys[38],bodybetys[39])/10.0);
         //姿态传感器磁场Y坐标
-        CarControlActivity.VAL_AttitudeSensor_Y= String.valueOf(ByteInt_Single(bodybetys[39]));
+        CarControlActivity.VAL_AttitudeSensor_Y=  String.valueOf(Bytes2Int_BE(bodybetys[40],bodybetys[41])/10.0);
         //姿态传感器磁场Z坐标
-        CarControlActivity.VAL_AttitudeSensor_Z= String.valueOf(ByteInt_Single(bodybetys[40]));
+        CarControlActivity.VAL_AttitudeSensor_Z=  String.valueOf(Bytes2Int_BE(bodybetys[42],bodybetys[43])/10.0);
+        //云台角度
+        CarControlActivity.VAL_Yuntai_Angle= String.valueOf(Bytes2Int_BE(bodybetys[44],bodybetys[45])) +" °";
         //预留1
-        CarControlActivity.VAL_Reserved_Fields1= String.valueOf(ByteInt_Single(bodybetys[41]));
+        CarControlActivity.VAL_Reserved_Fields1= String.valueOf(ByteInt_Single(bodybetys[46]));
         return true;
     }
 

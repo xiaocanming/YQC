@@ -107,6 +107,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private TextView mTextView45;
     private TextView mTextView46;
     private TextView mTextView47;
+    private TextView mTextView48;
     //磁场位置
     private TextView mTextView51;
     private TextView mTextView52;
@@ -188,11 +189,11 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     //回传数据
     public static String VAL_Voltage_5V="",VAL_Voltage_12V="",VAL_Voltage_24V="",VAL_Wheel_Status="",VAL_TurnWheel_Status="";
     public static String VAL_TurnWheel_A_Angle="",VAL_TurnWheel_B_Angle="",VAL_TurnWheel_C_Angle="",VAL_TurnWheel_D_Angle="",VAL_Updown_Mast_Angle="",VAL_TurnWheel_Mast_Angle="", VAL_TurnWheel_Sailboard_Angle="",VAL_SelfDetection_Status="",VAL_Sport_Mode="",VAL_Sport_Sign="",VAL_X_Ordinate="",VAL_Y_Ordinate="",VAL_Z_Ordinate="";
-    public static String VAL_TOF_Front1="",VAL_TOF_Front2="",VAL_TOF_LeftFront="",VAL_TOF_RightFront="",VAL_TOF_Back1="",VAL_TOF_Back2="",VAL_TOF_LeftBack="",VAL_TOF_RightBack="";
+    public static String VAL_TOF_Front1="",VAL_TOF_Front2="",VAL_TOF_LeftFront="",VAL_TOF_RightFront="",VAL_TOF_Back1="",VAL_TOF_Back2="",VAL_TOF_LeftBack="",VAL_TOF_RightBack="",VAL_Yuntai_Angle="";
     public static String VAL_AttitudeSensor_X="",VAL_AttitudeSensor_Y="",VAL_AttitudeSensor_Z="";
     public static String VAL_Reserved_Fields1="";
     //TCP的body长度
-    public static final int  BodyLength= 43;
+    public static final int  BodyLength= 48;
 
     //调节阶段用于查看接收的数据
     private TextView textView;
@@ -321,6 +322,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         mTextView45=findViewById(R.id.text45_value);
         mTextView46=findViewById(R.id.text46_value);
         mTextView47=findViewById(R.id.text47_value);
+        mTextView48=findViewById(R.id.text48_value);
         //磁场位置
         mTextView51=findViewById(R.id.text51_value);
         mTextView52=findViewById(R.id.text52_value);
@@ -942,6 +944,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mTextView45.setText(VAL_TOF_Back2);
             mTextView46.setText(VAL_TOF_LeftBack);
             mTextView47.setText(VAL_TOF_RightBack);
+            mTextView48.setText(VAL_Yuntai_Angle);
             //磁场位置
             mTextView51.setText(VAL_AttitudeSensor_X);
             mTextView52.setText(VAL_AttitudeSensor_Y);
