@@ -1,9 +1,12 @@
 package com.example.yqc.activity.carcontrol;
 
 import android.content.Context;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.yqc.R;
 import com.example.yqc.bean.DefaultSendBean;
@@ -87,39 +90,140 @@ public class ManualController extends HomeController{
         //原地左转
         MyRoundButton MyRoundButton6= new MyRoundButton(getContext());
         MyRoundButton6.setText("原地左转");
-        MyRoundButton6.setOnClickListener(new View.OnClickListener() {
+        final GestureDetector gestureDetector6 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            /**
+             * 发生确定的单击时执行
+             * @param e
+             * @return
+             */
             @Override
-            public void onClick(View v) {
+            public boolean onSingleTapConfirmed(MotionEvent e) {//单击事件
+//                Toast.makeText(getContext(),"这是单击事件", Toast.LENGTH_SHORT).show();
+                return super.onSingleTapConfirmed(e);
+            }
+            /**
+             * 双击发生时的通知
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {//双击事件
+//                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x16);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                return super.onDoubleTap(e);
+            }
+
+            /**
+             * 双击手势过程中发生的事件，包括按下、移动和抬起事件
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent e) {
+                return super.onDoubleTapEvent(e);
             }
         });
+        MyRoundButton6.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector6.onTouchEvent(event);
+            }
+        });
+
+
 
         //原地右转
         MyRoundButton MyRoundButton7= new MyRoundButton(getContext());
         MyRoundButton7.setText("原地右转");
-        MyRoundButton7.setOnClickListener(new View.OnClickListener() {
+        final GestureDetector gestureDetector7 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            /**
+             * 发生确定的单击时执行
+             * @param e
+             * @return
+             */
             @Override
-            public void onClick(View v) {
+            public boolean onSingleTapConfirmed(MotionEvent e) {//单击事件
+//                Toast.makeText(getContext(),"这是单击事件", Toast.LENGTH_SHORT).show();
+                return super.onSingleTapConfirmed(e);
+            }
+            /**
+             * 双击发生时的通知
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {//双击事件
+//                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x17);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                return super.onDoubleTap(e);
+            }
+
+            /**
+             * 双击手势过程中发生的事件，包括按下、移动和抬起事件
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent e) {
+                return super.onDoubleTapEvent(e);
+            }
+        });
+        MyRoundButton7.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector7.onTouchEvent(event);
             }
         });
 
         //车轮复位
         MyRoundButton MyRoundButton8= new MyRoundButton(getContext());
         MyRoundButton8.setText("车轮复位");
-        MyRoundButton8.setOnClickListener(new View.OnClickListener() {
+        final GestureDetector gestureDetector8 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            /**
+             * 发生确定的单击时执行
+             * @param e
+             * @return
+             */
             @Override
-            public void onClick(View v) {
+            public boolean onSingleTapConfirmed(MotionEvent e) {//单击事件
+//                Toast.makeText(getContext(),"这是单击事件", Toast.LENGTH_SHORT).show();
+                return super.onSingleTapConfirmed(e);
+            }
+            /**
+             * 双击发生时的通知
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {//双击事件
+//                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x1A);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                return super.onDoubleTap(e);
+            }
+
+            /**
+             * 双击手势过程中发生的事件，包括按下、移动和抬起事件
+             * @param e
+             * @return
+             */
+            @Override
+            public boolean onDoubleTapEvent(MotionEvent e) {
+                return super.onDoubleTapEvent(e);
+            }
+        });
+        MyRoundButton8.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector8.onTouchEvent(event);
             }
         });
 

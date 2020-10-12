@@ -117,21 +117,21 @@ public class StringTool {
         //获取Z坐标
         CarControlActivity.VAL_Z_Ordinate= String.valueOf(ByteInt_Single(bodybetys[29]));
         //TOF前1距离
-        CarControlActivity.VAL_TOF_Front1= String.valueOf(ByteInt_Single(bodybetys[30]));
+        CarControlActivity.VAL_TOF_Front1= numToMString(ByteInt_Single(bodybetys[30]));
         //TOF前2距离
-        CarControlActivity.VAL_TOF_Front2= String.valueOf(ByteInt_Single(bodybetys[31]));
+        CarControlActivity.VAL_TOF_Front2= numToMString(ByteInt_Single(bodybetys[31]));
         //TOF左前距离
-        CarControlActivity.VAL_TOF_LeftFront= String.valueOf(ByteInt_Single(bodybetys[32]));
+        CarControlActivity.VAL_TOF_LeftFront= numToMString(ByteInt_Single(bodybetys[32]));
         //TOF右前距离
-        CarControlActivity.VAL_TOF_RightFront= String.valueOf(ByteInt_Single(bodybetys[33]));
+        CarControlActivity.VAL_TOF_RightFront= numToMString(ByteInt_Single(bodybetys[33]));
         //TOF后1距离
-        CarControlActivity.VAL_TOF_Back1= String.valueOf(ByteInt_Single(bodybetys[34]));
+        CarControlActivity.VAL_TOF_Back1= numToMString(ByteInt_Single(bodybetys[34]));
         //TOF后2距离
-        CarControlActivity.VAL_TOF_Back2= String.valueOf(ByteInt_Single(bodybetys[35]));
+        CarControlActivity.VAL_TOF_Back2= numToMString(ByteInt_Single(bodybetys[35]));
         //TOF左后距离
-        CarControlActivity.VAL_TOF_LeftBack= String.valueOf(ByteInt_Single(bodybetys[36]));
+        CarControlActivity.VAL_TOF_LeftBack= numToMString(ByteInt_Single(bodybetys[36]));
         //TOF右后距离
-        CarControlActivity.VAL_TOF_RightBack= String.valueOf(ByteInt_Single(bodybetys[37]));
+        CarControlActivity.VAL_TOF_RightBack= numToMString(ByteInt_Single(bodybetys[37]));
         //姿态传感器磁场X坐标
         CarControlActivity.VAL_AttitudeSensor_X= String.valueOf(Bytes2Int_BE(bodybetys[38],bodybetys[39])/10.0);
         //姿态传感器磁场Y坐标
@@ -173,6 +173,15 @@ public class StringTool {
     public static int ByteInt_Single(byte byte1){
         int iRst = (byte1 & 0xFF);
         return iRst;
+    }
+
+    /**
+     * 把数字转换为转换为m
+     * @return
+     */
+    public static String numToMString(int num){
+        double f = num/10.0;
+        return String.format("%.1f", f)+" m";
     }
 
     public static String byteToString(byte[] bytes) {
