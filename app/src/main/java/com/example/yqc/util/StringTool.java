@@ -38,6 +38,19 @@ public class StringTool {
         CarControlActivity.VAL_Voltage_12V=String.valueOf(Bytes2Int_BE(bodybetys[2],bodybetys[3])/10.0) +" V";
         //获取24V电压值
         CarControlActivity.VAL_Voltage_24V=String.valueOf(Bytes2Int_BE(bodybetys[4],bodybetys[5])/10.0) +" V";
+        //显示电池
+        int battery=0;
+        float voltage24v=Bytes2Int_BE(bodybetys[4],bodybetys[5])/10;
+        if(voltage24v<20){
+            battery=0;
+        }
+        if(voltage24v>25){
+            battery=100;
+        }
+        if(20<=voltage24v&&voltage24v<=25){
+            battery=(int)Math.round((voltage24v-20.0)/(25.0-20.0)*100);
+        }
+        CarControlActivity.VAL_Voltage_24V_Int=battery;
         //获取六个驱动轮电机驱动控制器状态
         int wheelstatus= ByteInt_Single(bodybetys[6]);
         int wheelid= ByteInt_Single(bodybetys[7]);
@@ -66,7 +79,7 @@ public class StringTool {
         CarControlActivity.VAL_TurnWheel_D_Angle= String.valueOf(Bytes2Int_BE(bodybetys[16],bodybetys[17])/10.0) +" °";
         //桅杆起伏角度传感器角度
         CarControlActivity.VAL_Updown_Mast_Angle= String.valueOf(Bytes2Int_BE(bodybetys[18],bodybetys[19])/10.0) +" °";
-        //桅杆转动角度传感器角度
+        //云台偏航角度
         CarControlActivity.VAL_TurnWheel_Mast_Angle= String.valueOf(Bytes2Int_BE(bodybetys[20],bodybetys[21])/10.0) +" °";
         //帆板角度传感器角度
         CarControlActivity.VAL_TurnWheel_Sailboard_Angle= String.valueOf(Bytes2Int_BE(bodybetys[22],bodybetys[23])/10.0) +" °";
@@ -111,11 +124,11 @@ public class StringTool {
                 CarControlActivity.VAL_Sport_Sign="数据异常";
         }
         //获取X坐标
-        CarControlActivity.VAL_X_Ordinate= String.valueOf(ByteInt_Single(bodybetys[27]));
+        CarControlActivity.VAL_X_Ordinate= numToMString(ByteInt_Single(bodybetys[27]));
         //获取Y坐标
-        CarControlActivity.VAL_Y_Ordinate= String.valueOf(ByteInt_Single(bodybetys[28]));
+        CarControlActivity.VAL_Y_Ordinate= numToMString(ByteInt_Single(bodybetys[28]));
         //获取Z坐标
-        CarControlActivity.VAL_Z_Ordinate= String.valueOf(ByteInt_Single(bodybetys[29]));
+        CarControlActivity.VAL_Z_Ordinate= numToMString(ByteInt_Single(bodybetys[29]));
         //TOF前1距离
         CarControlActivity.VAL_TOF_Front1= numToMString(ByteInt_Single(bodybetys[30]));
         //TOF前2距离
@@ -138,7 +151,7 @@ public class StringTool {
         CarControlActivity.VAL_AttitudeSensor_Y=  String.valueOf(Bytes2Int_BE(bodybetys[40],bodybetys[41])/10.0);
         //姿态传感器磁场Z坐标
         CarControlActivity.VAL_AttitudeSensor_Z=  String.valueOf(Bytes2Int_BE(bodybetys[42],bodybetys[43])/10.0);
-        //云台角度
+        //云台俯仰
         CarControlActivity.VAL_Yuntai_Angle= String.valueOf(Bytes2Int_BE(bodybetys[44],bodybetys[45])) +" °";
         //预留1
         CarControlActivity.VAL_Reserved_Fields1= String.valueOf(ByteInt_Single(bodybetys[46]));

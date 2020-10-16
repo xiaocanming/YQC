@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">YQC</string>
     <!-- Strings  -->
-    <string name="set_hostip">192.168.4.1</string>
-    <integer name="set_hostport">60000</integer>
+    <string name="set_hostip">192.168.17.254</string>
+    <integer name="set_hostport">23456</integer>
     <integer name="connection_cycle">200</integer>
     <!-- 摄像头  -->
-    <string name="set_cameraip">192.168.8.64</string>
+    <string name="set_cameraip">192.168.17.90</string>
     <integer name="set_cameraport">8000</integer>
     <string name="set_camerausername">admin</string>
-    <string name="set_camerapassword">xiniu123</string>
+    <string name="set_camerapassword">Aa12345678</string>
 
     <string name="btn_set">飞控设置</string>
     <string name="btn_col">体感飞行控制</string>

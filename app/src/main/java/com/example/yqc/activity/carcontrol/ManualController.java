@@ -38,9 +38,9 @@ public class ManualController extends HomeController{
                 sendDataByteOnce(bean);
             }
         });
-        //桅杆复位
+        //桅杆倒下
         MyRoundButton MyRoundButton2= new MyRoundButton(getContext());
-        MyRoundButton2.setText("桅杆复位");
+        MyRoundButton2.setText("桅杆倒下");
         MyRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,9 +62,9 @@ public class ManualController extends HomeController{
                 sendDataByteOnce(bean);
             }
         });
-        //帆板复位
+        //帆板收拢
         MyRoundButton MyRoundButton4= new MyRoundButton(getContext());
-        MyRoundButton4.setText("帆板复位");
+        MyRoundButton4.setText("帆板收拢");
         MyRoundButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,9 +87,9 @@ public class ManualController extends HomeController{
             }
         });
 
-        //原地左转
+        //原地转弯
         MyRoundButton MyRoundButton6= new MyRoundButton(getContext());
-        MyRoundButton6.setText("原地左转");
+        MyRoundButton6.setText("原地转弯");
         final GestureDetector gestureDetector6 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
             /**
              * 发生确定的单击时执行
@@ -135,51 +135,51 @@ public class ManualController extends HomeController{
 
 
 
-        //原地右转
-        MyRoundButton MyRoundButton7= new MyRoundButton(getContext());
-        MyRoundButton7.setText("原地右转");
-        final GestureDetector gestureDetector7 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-            /**
-             * 发生确定的单击时执行
-             * @param e
-             * @return
-             */
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent e) {//单击事件
-//                Toast.makeText(getContext(),"这是单击事件", Toast.LENGTH_SHORT).show();
-                return super.onSingleTapConfirmed(e);
-            }
-            /**
-             * 双击发生时的通知
-             * @param e
-             * @return
-             */
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {//双击事件
-//                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x17);
-                bean.setFourbyte((byte) 0xA5);
-                sendDataByteOnce(bean);
-                return super.onDoubleTap(e);
-            }
-
-            /**
-             * 双击手势过程中发生的事件，包括按下、移动和抬起事件
-             * @param e
-             * @return
-             */
-            @Override
-            public boolean onDoubleTapEvent(MotionEvent e) {
-                return super.onDoubleTapEvent(e);
-            }
-        });
-        MyRoundButton7.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector7.onTouchEvent(event);
-            }
-        });
+//        //原地右转
+//        MyRoundButton MyRoundButton7= new MyRoundButton(getContext());
+//        MyRoundButton7.setText("原地右转");
+//        final GestureDetector gestureDetector7 = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+//            /**
+//             * 发生确定的单击时执行
+//             * @param e
+//             * @return
+//             */
+//            @Override
+//            public boolean onSingleTapConfirmed(MotionEvent e) {//单击事件
+////                Toast.makeText(getContext(),"这是单击事件", Toast.LENGTH_SHORT).show();
+//                return super.onSingleTapConfirmed(e);
+//            }
+//            /**
+//             * 双击发生时的通知
+//             * @param e
+//             * @return
+//             */
+//            @Override
+//            public boolean onDoubleTap(MotionEvent e) {//双击事件
+////                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
+//                DefaultSendBean bean = new DefaultSendBean();
+//                bean.setThreebyte((byte) 0x17);
+//                bean.setFourbyte((byte) 0xA5);
+//                sendDataByteOnce(bean);
+//                return super.onDoubleTap(e);
+//            }
+//
+//            /**
+//             * 双击手势过程中发生的事件，包括按下、移动和抬起事件
+//             * @param e
+//             * @return
+//             */
+//            @Override
+//            public boolean onDoubleTapEvent(MotionEvent e) {
+//                return super.onDoubleTapEvent(e);
+//            }
+//        });
+//        MyRoundButton7.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return gestureDetector7.onTouchEvent(event);
+//            }
+//        });
 
         //车轮复位
         MyRoundButton MyRoundButton8= new MyRoundButton(getContext());
@@ -253,10 +253,36 @@ public class ManualController extends HomeController{
             }
         });
 
-        //充电位置
+        //云台向左
         MyRoundButton MyRoundButton11= new MyRoundButton(getContext());
-        MyRoundButton11.setText("充电位置");
+        MyRoundButton11.setText("云台向左");
         MyRoundButton11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x1B);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+        });
+
+        //云台向右
+        MyRoundButton MyRoundButton12= new MyRoundButton(getContext());
+        MyRoundButton12.setText("云台向右");
+        MyRoundButton12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x1C);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+        });
+
+        //充电位置
+        MyRoundButton MyRoundButton13= new MyRoundButton(getContext());
+        MyRoundButton13.setText("充电位置");
+        MyRoundButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DefaultSendBean bean = new DefaultSendBean();
@@ -274,11 +300,13 @@ public class ManualController extends HomeController{
         mFloatLayout.addView(MyRoundButton4,lp);
         mFloatLayout.addView(MyRoundButton5,lp);
         mFloatLayout.addView(MyRoundButton6,lp);
-        mFloatLayout.addView(MyRoundButton7,lp);
+//        mFloatLayout.addView(MyRoundButton7,lp);
         mFloatLayout.addView(MyRoundButton8,lp);
         mFloatLayout.addView(MyRoundButton9,lp);
         mFloatLayout.addView(MyRoundButton10,lp);
         mFloatLayout.addView(MyRoundButton11,lp);
+        mFloatLayout.addView(MyRoundButton12,lp);
+        mFloatLayout.addView(MyRoundButton13,lp);
     }
 
     @Override

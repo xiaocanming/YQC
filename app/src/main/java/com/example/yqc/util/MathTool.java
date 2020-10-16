@@ -135,8 +135,8 @@ public class MathTool {
                         }else {
                             matharray[0]=0;
                             matharray[1]=1;
-                            matharray[2]=1;
-                            matharray[3]=0;
+                            matharray[2]=0;
+                            matharray[3]=1;
                             matharray[4]=new Double(newrad-ignoreangle).intValue();
                         }
                     }
@@ -164,8 +164,8 @@ public class MathTool {
                             }else {
                                 matharray[0]=0;
                                 matharray[1]=1;
-                                matharray[2]=0;
-                                matharray[3]=1;
+                                matharray[2]=1;
+                                matharray[3]=0;
                                 matharray[4]=new Double(newrad-ignoreangle).intValue();
                             }
                         }

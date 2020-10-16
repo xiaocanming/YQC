@@ -31,6 +31,7 @@ import com.example.yqc.activity.carcontrol.HomeController;
 import com.example.yqc.activity.carcontrol.ManualController;
 import com.example.yqc.activity.carcontrol.ShowController;
 import com.example.yqc.bean.DefaultSendBean;
+import com.example.yqc.customview.BatteryView;
 import com.example.yqc.customview.MyRoundButton;
 import com.example.yqc.customview.NoScrollViewPager;
 import com.example.yqc.customview.PlaySurfaceView;
@@ -39,6 +40,7 @@ import com.example.yqc.customview.ThrottleView;
 import com.example.yqc.jna.HCNetSDKJNAInstance;
 import com.example.yqc.util.CubbyHole;
 import com.example.yqc.util.MathTool;
+import com.example.yqc.util.RedirectException;
 import com.example.yqc.util.StringTool;
 import com.hikvision.netsdk.ExceptionCallBack;
 import com.hikvision.netsdk.HCNetSDK;
@@ -76,6 +78,7 @@ import java.util.TimerTask;
 
 
 public class CarControlActivity extends AppCompatActivity  implements SurfaceHolder.Callback {
+    private BatteryView batteryView;
     //    小车数据
     private TextView mTextView11;
     private TextView mTextView12;
@@ -187,6 +190,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private OkSocketOptions mOkOptions;
 
     //回传数据
+    public static int VAL_Voltage_24V_Int=0;
     public static String VAL_Voltage_5V="",VAL_Voltage_12V="",VAL_Voltage_24V="",VAL_Wheel_Status="",VAL_TurnWheel_Status="";
     public static String VAL_TurnWheel_A_Angle="",VAL_TurnWheel_B_Angle="",VAL_TurnWheel_C_Angle="",VAL_TurnWheel_D_Angle="",VAL_Updown_Mast_Angle="",VAL_TurnWheel_Mast_Angle="", VAL_TurnWheel_Sailboard_Angle="",VAL_SelfDetection_Status="",VAL_Sport_Mode="",VAL_Sport_Sign="",VAL_X_Ordinate="",VAL_Y_Ordinate="",VAL_Z_Ordinate="";
     public static String VAL_TOF_Front1="",VAL_TOF_Front2="",VAL_TOF_LeftFront="",VAL_TOF_RightFront="",VAL_TOF_Back1="",VAL_TOF_Back2="",VAL_TOF_LeftBack="",VAL_TOF_RightBack="",VAL_Yuntai_Angle="";
@@ -202,17 +206,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//禁止屏幕变暗
-//        // 设置当前窗体为全屏显示
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        int flag = WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//        Window window = CarControlActivity.this.getWindow();
-//        window.setFlags(flag, flag);
-
-//        if(!QMUIDeviceHelper.isTablet(CarControlActivity.this)){
-//            setContentView(R.layout.activity_carcontrol);
-//        }else {
-//            setContentView(R.layout.activity_carcontrolpad);
-//        }
         setContentView(R.layout.activity_carcontrolpad);
 
         if (!initeSdk()) {
@@ -291,6 +284,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     }
 
     private void initView() {
+        //电池
+        batteryView=findViewById(R.id.battery_24v);
         //    小车数据
         mTextView11=findViewById(R.id.text11_value);
         mTextView12=findViewById(R.id.text12_value);
@@ -379,7 +374,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             }
         });
 
-        //速度固化
+        //急停
         qmuiRoundButton2 = (QMUIRoundButton) findViewById(R.id.button2);
         qmuiRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -624,7 +619,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         final Handler handler = new Handler();
         mInfo = new ConnectionInfo(HostIP, HostPort);
         mOkOptions = new OkSocketOptions.Builder()
-                .setReconnectionManager(new NoneReconnect())
+                .setReconnectionManager(OkSocketOptions.getDefault().getReconnectionManager())
+//                .setReconnectionManager(new NoneReconnect())
                 .setConnectTimeoutSecond(10)
                 .setCallbackThreadModeToken(new OkSocketOptions.ThreadModeToken() {
                     @Override
@@ -913,14 +909,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         public void run() {
             // TODO Auto-generated method stub
             ui_handler.postDelayed(this, 30);
-            //    小车数据
+            //电池显示
+            batteryView.setPower(VAL_Voltage_24V_Int);
+            //小车数据
             mTextView11 .setText(VAL_X_Ordinate);
             mTextView12.setText(VAL_Y_Ordinate);
             mTextView13.setText(VAL_Z_Ordinate);
             mTextView14.setText(VAL_SelfDetection_Status);
             mTextView15.setText(VAL_Sport_Mode);
             mTextView16.setText(VAL_Sport_Sign);
-
             //    状态数据
             mTextView21.setText(VAL_TurnWheel_A_Angle);
             mTextView22.setText(VAL_TurnWheel_B_Angle);
@@ -1019,12 +1016,28 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         public void onSocketConnectionSuccess(ConnectionInfo info, String action) {
             mTextViewTcpStatus.setText("已连接");
             mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_4));
+//            OkSocket.open(info)
+//                    .getPulseManager()
+//                    .pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
         }
 
         @Override
         public void onSocketDisconnection(ConnectionInfo info, String action, Exception e) {
-            mTextViewTcpStatus.setText("连接断开");
-            mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+            if (e != null) {
+                if (e instanceof RedirectException) {
+//                    logSend("正在重定向连接(Redirect Connecting)...");
+                    mManager.switchConnectionInfo(((RedirectException) e).redirectInfo);
+                    mManager.connect();
+                } else {
+//                    logSend("异常断开(Disconnected with exception):" + e.getMessage());
+                    mTextViewTcpStatus.setText("异常断开");
+                    mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+                }
+            } else {
+//                logSend("正常断开(Disconnect Manually)");
+                mTextViewTcpStatus.setText("连接断开");
+                mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+            }
         }
 
         @Override
@@ -1035,6 +1048,10 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 
         @Override
         public void onSocketReadResponse(ConnectionInfo info, String action, OriginalData data) {
+//            if(mManager != null ){//是否是心跳返回包,需要解析服务器返回的数据才可知道
+//                //喂狗操作
+//                mManager.getPulseManager().feed();
+//            }
             if(updatetextView){
                 String responseString=StringTool.byteToString(data.getHeadBytes())+StringTool.byteToString(data.getBodyBytes());
                 textView.setText(responseString);
