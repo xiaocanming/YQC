@@ -1,6 +1,8 @@
 package com.example.yqc.activity.carcontrol;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,15 +13,42 @@ import android.widget.Toast;
 import com.example.yqc.R;
 import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.MyRoundButton;
+import com.example.yqc.customview.SingleRockerView;
+import com.example.yqc.customview.ThrottleView;
+import com.example.yqc.util.MathTool;
+import com.hikvision.netsdk.HCNetSDK;
+import com.hikvision.netsdk.PTZCommand;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUIFloatLayout;
 
+import java.util.HashSet;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static android.content.Context.MODE_PRIVATE;
+
 public class ManualController extends HomeController{
     private QMUIFloatLayout mFloatLayout;
+    private Timer send_timer = new Timer( );
+    private static long DirectionTimeinterval ;
+    private boolean MyRoundButton9DOWN=false;
+    private boolean MyRoundButton10DOWN=false;
+    private boolean MyRoundButton11DOWN=false;
+    private boolean MyRoundButton12DOWN=false;
+    //用于存储app参数
+    private static final String SET_FILENAME = "ano_set_filename";
     public ManualController(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.fragment_manual, this);
+        initSetting();
         initView();
+    }
+
+    private void initSetting() {
+        // 得到SP对象   
+        SharedPreferences sp = getContext().getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
+        // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
+        DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
     }
 
     private void initView() {
@@ -230,52 +259,72 @@ public class ManualController extends HomeController{
         //云台向上
         MyRoundButton MyRoundButton9= new MyRoundButton(getContext());
         MyRoundButton9.setText("云台向上");
-        MyRoundButton9.setOnClickListener(new View.OnClickListener() {
+        MyRoundButton9.setOnTouchListener(new OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x18);
-                bean.setFourbyte((byte) 0xA5);
-                sendDataByteOnce(bean);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        MyRoundButton9DOWN=true;
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        MyRoundButton9DOWN=false;
+                        return true;
+                }
+                return false;
             }
         });
 
         //云台向下
         MyRoundButton MyRoundButton10= new MyRoundButton(getContext());
         MyRoundButton10.setText("云台向下");
-        MyRoundButton10.setOnClickListener(new View.OnClickListener() {
+        MyRoundButton10.setOnTouchListener(new OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x19);
-                bean.setFourbyte((byte) 0xA5);
-                sendDataByteOnce(bean);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        MyRoundButton10DOWN=true;
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        MyRoundButton10DOWN=false;
+                        return true;
+                }
+                return false;
             }
         });
 
         //云台向左
         MyRoundButton MyRoundButton11= new MyRoundButton(getContext());
         MyRoundButton11.setText("云台向左");
-        MyRoundButton11.setOnClickListener(new View.OnClickListener() {
+        MyRoundButton11.setOnTouchListener(new OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x1B);
-                bean.setFourbyte((byte) 0xA5);
-                sendDataByteOnce(bean);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        MyRoundButton11DOWN=true;
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        MyRoundButton11DOWN=false;
+                        return true;
+                }
+                return false;
             }
         });
 
         //云台向右
         MyRoundButton MyRoundButton12= new MyRoundButton(getContext());
         MyRoundButton12.setText("云台向右");
-        MyRoundButton12.setOnClickListener(new View.OnClickListener() {
+        MyRoundButton12.setOnTouchListener(new OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x1C);
-                bean.setFourbyte((byte) 0xA5);
-                sendDataByteOnce(bean);
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        MyRoundButton12DOWN=true;
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        MyRoundButton12DOWN=false;
+                        return true;
+                }
+                return false;
             }
         });
 
@@ -307,6 +356,9 @@ public class ManualController extends HomeController{
         mFloatLayout.addView(MyRoundButton11,lp);
         mFloatLayout.addView(MyRoundButton12,lp);
         mFloatLayout.addView(MyRoundButton13,lp);
+
+        //发送陀螺仪数据的任务
+        send_timer.schedule(send_task,1000,DirectionTimeinterval);
     }
 
     @Override
@@ -318,4 +370,34 @@ public class ManualController extends HomeController{
             button.setTextColor(getResources().getColor(R.color.white));
         }
     }
+    TimerTask send_task = new TimerTask( ) {
+        public void run ( )
+        {
+            if(MyRoundButton9DOWN){
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x18);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+            if(MyRoundButton10DOWN){
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x19);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+            if(MyRoundButton11DOWN){
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x1B);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+            if(MyRoundButton12DOWN){
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x1C);
+                bean.setFourbyte((byte) 0xA5);
+                sendDataByteOnce(bean);
+            }
+        }
+    };
+
 }
