@@ -39,6 +39,7 @@ import com.example.yqc.customview.SingleRockerView;
 import com.example.yqc.customview.ThrottleView;
 import com.example.yqc.jna.HCNetSDKJNAInstance;
 import com.example.yqc.util.CubbyHole;
+import com.example.yqc.util.LogTool;
 import com.example.yqc.util.MathTool;
 import com.example.yqc.util.RedirectException;
 import com.example.yqc.util.StringTool;
@@ -371,6 +372,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setThreebyte((byte) 0x06);
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
+                LogTool.d("停止运动",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -383,6 +385,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setThreebyte((byte) 0x04);
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
+                LogTool.d("急停",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -395,6 +398,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setThreebyte((byte) 0x60);
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
+                LogTool.d("恢复运动",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -433,6 +437,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                                                     bean.setThreebyte(itemsbyte[which]);
                                                     bean.setFourbyte((byte)(Integer.valueOf(text) & 0xFF));
                                                     SendData_ByteOnce(bean);
+                                                    LogTool.d("边界设置",StringTool.byteToString(bean.parse()));
                                                     SaveSharedPreferencesInt(itemstag[which],Integer.valueOf(text));
                                                     initSetting();
                                                 }else {
@@ -487,6 +492,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
                 setButtonEnble(true);
+                LogTool.d("使能运动",StringTool.byteToString(bean.parse()));
             }
         });
     }
@@ -531,6 +537,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
+                    LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                 }
                 //手动模式
                 if(index==1){
@@ -538,6 +545,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x01);
                     SendData_ByteOnce(bean);
+                    LogTool.d("手动模式",StringTool.byteToString(bean.parse()));
                 }
             }
 
@@ -553,6 +561,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
+                    LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                 }
                 //手动模式
                 if(index==1){
@@ -560,6 +569,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x01);
                     SendData_ByteOnce(bean);
+                    LogTool.d("手动模式",StringTool.byteToString(bean.parse()));
                 }
             }
 
@@ -961,6 +971,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setThreebyte((byte) 0x03);
                 bean.setFourbyte((byte)(VAL_THR & 0xFF));
                 SendData_ByteOnce(bean);
+                LogTool.d("速度",StringTool.byteToString(bean.parse()));
             }
             int[] controllerangle=MathTool.getRad(SingleRockerView.Value_X,SingleRockerView.Value_Y);
             if(sendtype==1){
@@ -969,12 +980,14 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0C);
                     bean.setFourbyte((byte) 0x01);
                     SendData_ByteOnce(bean);
+                    LogTool.d("向前",StringTool.byteToString(bean.parse()));
                 }
                 if(controllerangle[1]==1){
                     DefaultSendBean bean=new DefaultSendBean();
                     bean.setThreebyte((byte) 0x0C);
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
+                    LogTool.d("向后",StringTool.byteToString(bean.parse()));
                 }
                 sendtype=2;
             }else {
@@ -983,12 +996,14 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0D);
                     bean.setFourbyte((byte)(controllerangle[4] & 0xFF));
                     SendData_ByteOnce(bean);
+                    LogTool.d("向左",StringTool.byteToString(bean.parse()));
                 }
                 if(controllerangle[3]==1){
                     DefaultSendBean bean=new DefaultSendBean();
                     bean.setThreebyte((byte) 0x0E);
                     bean.setFourbyte((byte)(controllerangle[4] & 0xFF));
                     SendData_ByteOnce(bean);
+                    LogTool.d("向右",StringTool.byteToString(bean.parse()));
                 }
                 sendtype=1;
             }
@@ -1007,6 +1022,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setThreebyte((byte) 0x02);
                 bean.setFourbyte((byte)0xA5);
                 SendData_ByteOnce(bean);
+                LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
             }
         }
     };

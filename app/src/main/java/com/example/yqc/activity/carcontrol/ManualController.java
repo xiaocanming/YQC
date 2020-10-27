@@ -15,7 +15,9 @@ import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.MyRoundButton;
 import com.example.yqc.customview.SingleRockerView;
 import com.example.yqc.customview.ThrottleView;
+import com.example.yqc.util.LogTool;
 import com.example.yqc.util.MathTool;
+import com.example.yqc.util.StringTool;
 import com.hikvision.netsdk.HCNetSDK;
 import com.hikvision.netsdk.PTZCommand;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -65,6 +67,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x08);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("位置复位", StringTool.byteToString(bean.parse()));
             }
         });
         //桅杆倒下
@@ -77,6 +80,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
+                LogTool.d("桅杆倒下",StringTool.byteToString(bean.parse()));
             }
         });
         //桅杆起立
@@ -89,6 +93,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x02);
                 sendDataByteOnce(bean);
+                LogTool.d("桅杆起立",StringTool.byteToString(bean.parse()));
             }
         });
         //帆板收拢
@@ -101,6 +106,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x0A);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
+                LogTool.d("帆板收拢",StringTool.byteToString(bean.parse()));
             }
         });
         //帆板展开
@@ -113,6 +119,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x0A);
                 bean.setFourbyte((byte) 0x02);
                 sendDataByteOnce(bean);
+                LogTool.d("帆板展开",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -142,6 +149,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x16);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("原地转弯",StringTool.byteToString(bean.parse()));
                 return super.onDoubleTap(e);
             }
 
@@ -236,6 +244,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x1A);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("车轮复位",StringTool.byteToString(bean.parse()));
                 return super.onDoubleTap(e);
             }
 
@@ -338,6 +347,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x05);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("充电位置",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -378,24 +388,28 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x18);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("云台向上",StringTool.byteToString(bean.parse()));
             }
             if(MyRoundButton10DOWN){
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x19);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("云台向下",StringTool.byteToString(bean.parse()));
             }
             if(MyRoundButton11DOWN){
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x1B);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("云台向左",StringTool.byteToString(bean.parse()));
             }
             if(MyRoundButton12DOWN){
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x1C);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                LogTool.d("云台向右",StringTool.byteToString(bean.parse()));
             }
         }
     };

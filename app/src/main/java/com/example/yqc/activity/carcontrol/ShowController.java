@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.yqc.R;
 import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.MyRoundButton;
+import com.example.yqc.util.LogTool;
 import com.example.yqc.util.StringTool;
 import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -45,6 +46,7 @@ public class ShowController extends HomeController{
                 bean.setThreebyte((byte) 0x01);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
+                LogTool.d("单程演示",StringTool.byteToString(bean.parse()));
             }
         });
         //往复演示
@@ -57,6 +59,7 @@ public class ShowController extends HomeController{
                 bean.setThreebyte((byte) 0x01);
                 bean.setFourbyte((byte) 0x02);
                 sendDataByteOnce(bean);
+                LogTool.d("往复演示",StringTool.byteToString(bean.parse()));
             }
         });
 
