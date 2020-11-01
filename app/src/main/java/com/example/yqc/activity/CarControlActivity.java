@@ -410,7 +410,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 final String[] itemstitle = new String[]{"左端停止X坐标", "左端停止Y坐标", "右端停止X坐标","右端停止Y坐标", "中间停止X坐标", "中间停止Y坐标"};
                 final String[] itemstag = new String[]{"Set_LeftX", "Set_LeftY", "Set_RightX","Set_RightY", "Set_MiddleX", "Set_MiddleY"};
                 final byte[] itemsbyte = new byte[]{(byte) 0x0F, (byte) 0x10, (byte) 0x12,(byte) 0x13, (byte) 0x14, (byte) 0x15};
-                final String[] itemsshow = new String[]{"左端停止X坐标:"+String.valueOf(LeftX), "左端停止Y坐标:"+String.valueOf(LeftY), "右端停止X坐标:"+String.valueOf(RightX),"右端停止Y坐标:"+String.valueOf(RightY), "中间停止X坐标:"+String.valueOf(MiddleX), "中间停止Y坐标:"+String.valueOf(MiddleY)};
+                final String[] itemsshow = new String[]{"左端停止X坐标:"+String.valueOf(LeftX/10.0)+" m", "左端停止Y坐标:"+String.valueOf(LeftY/10.0)+" m", "右端停止X坐标:"+String.valueOf(RightX/10.0)+" m","右端停止Y坐标:"+String.valueOf(RightY/10.0)+" m", "中间停止X坐标:"+String.valueOf(MiddleX/10.0)+" m", "中间停止Y坐标:"+String.valueOf(MiddleY/10.0)+" m"};
                 new QMUIDialog.MenuDialogBuilder(CarControlActivity.this)
                         .setSkinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
                         .addItems(itemsshow, new DialogInterface.OnClickListener() {
@@ -419,7 +419,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                                 dialog.dismiss();
                                 final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(CarControlActivity.this);
                                 builder.setTitle(itemstitle[which])
-                                        .setPlaceholder("请输入您的坐标值")
+                                        .setPlaceholder("请输入您的坐标值(m)")
                                         .setInputType(InputType.TYPE_CLASS_TEXT)
                                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                                             @Override
@@ -431,17 +431,17 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                                             @Override
                                             public void onClick(QMUIDialog dialog, int index) {
                                                 String text = builder.getEditText().getText().toString();
-                                                if(StringTool.isInteger(text)){
+                                                if(StringTool.StringIsNumber(text)){
                                                     dialog.dismiss();
                                                     DefaultSendBean bean = new DefaultSendBean();
                                                     bean.setThreebyte(itemsbyte[which]);
-                                                    bean.setFourbyte((byte)(Integer.valueOf(text) & 0xFF));
+                                                    bean.setFourbyte((byte)( Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))) & 0xFF));
                                                     SendData_ByteOnce(bean);
                                                     LogTool.d("边界设置",StringTool.byteToString(bean.parse()));
-                                                    SaveSharedPreferencesInt(itemstag[which],Integer.valueOf(text));
+                                                    SaveSharedPreferencesInt(itemstag[which],Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))));
                                                     initSetting();
                                                 }else {
-                                                    Toast.makeText(CarControlActivity.this, "请输入有效的坐标值" , Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(CarControlActivity.this, "请输入有效的坐标值,精度保留一位小数" , Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                         })
@@ -613,7 +613,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
         TimerSetList = sp.getStringSet("Set_TimerSet",new HashSet<String>() );
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
-        LeftX = sp.getInt("Set_LeftX",0);
+        LeftX = sp.getInt("Set_LeftX", 0);
         LeftY = sp.getInt("Set_LeftY",0);
         RightX = sp.getInt("Set_RightX",0);
         RightY = sp.getInt("Set_RightY",0);

@@ -50,15 +50,99 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
 
+    <TextView
+        android:id="@+id/text55_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text1_title"
+        android:layout_below="@+id/text1_title"
+        android:layout_marginTop="6dp"
+        android:text="电量"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <com.example.yqc.customview.BatteryView
+        android:id="@+id/battery_24v"
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/text55_title"
+        android:layout_toRightOf="@+id/text55_title"/>
+
+
+    <TextView
+        android:id="@+id/text31_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text55_title"
+        android:layout_below="@+id/text55_title"
+        android:text="+5V电压"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text31_value"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text31_title"
+        android:layout_toRightOf="@+id/text31_title"
+        android:text="------"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_4" />
+
+    <TextView
+        android:id="@+id/text32_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text31_title"
+        android:layout_below="@+id/text31_title"
+        android:text="+12V电压"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text32_value"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text32_title"
+        android:layout_toRightOf="@+id/text32_title"
+        android:text="------"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_4" />
+
+    <TextView
+        android:id="@+id/text33_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text32_title"
+        android:layout_below="@+id/text32_title"
+        android:text="+24V电压"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text33_value"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text33_title"
+        android:layout_toRightOf="@+id/text33_title"
+        android:text="------"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_4" />
 
 
     <TextView
         android:id="@+id/text11_title"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text1_title"
-        android:layout_below="@+id/text1_title"
-        android:layout_marginTop="6dp"
+        android:layout_alignLeft="@+id/text33_title"
+        android:layout_below="@+id/text33_title"
         android:text="小车位置X"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -186,79 +270,11 @@
         android:textColor="@color/app_color_theme_4" />
 
     <TextView
-        android:id="@+id/text31_title"
+        android:id="@+id/text34_title"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text16_title"
         android:layout_below="@+id/text16_title"
-        android:text="+5V电压"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:id="@+id/text31_value"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/text31_title"
-        android:layout_toRightOf="@+id/text31_title"
-        android:text="------"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/app_color_theme_4" />
-
-    <TextView
-        android:id="@+id/text32_title"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text31_title"
-        android:layout_below="@+id/text31_title"
-        android:text="+12V电压"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:id="@+id/text32_value"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/text32_title"
-        android:layout_toRightOf="@+id/text32_title"
-        android:text="------"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/app_color_theme_4" />
-
-    <TextView
-        android:id="@+id/text33_title"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text32_title"
-        android:layout_below="@+id/text32_title"
-        android:text="+24V电压"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
-
-    <TextView
-        android:id="@+id/text33_value"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/text33_title"
-        android:layout_toRightOf="@+id/text33_title"
-        android:text="------"
-        android:textSize="14sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/app_color_theme_4" />
-
-
-
-    <TextView
-        android:id="@+id/text34_title"
-        android:layout_width="90dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text33_title"
-        android:layout_below="@+id/text33_title"
         android:text="驱动轮"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -386,12 +402,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_4" />
 
-    <com.example.yqc.customview.BatteryView
-        android:id="@+id/battery_24v"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:layout_alignLeft="@+id/text54_title"
-        android:layout_below="@+id/text54_title" />
+
 
     <TextView
         android:id="@+id/text2_title"

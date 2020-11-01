@@ -20,6 +20,13 @@ public class StringTool {
         return pattern.matcher(str).matches();
     }
 
+    /*Java 验证数字是否合法包括小数*/
+    public static boolean StringIsNumber(String str){
+        Pattern pattern = Pattern.compile("[0-9]*.?[0-9]?");
+        Matcher matcher = pattern.matcher((CharSequence) str);
+        return  matcher.matches();
+    }
+
     /*Java 解析接受到的数据*/
     public static boolean getReadString(byte[] headbetys,byte[] bodybetys) {
         //检验数据合法性

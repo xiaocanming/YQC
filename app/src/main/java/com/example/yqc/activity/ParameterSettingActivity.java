@@ -1,7 +1,11 @@
 package com.example.yqc.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.example.yqc.R;
+import com.example.yqc.util.Log4jConfigure;
 import com.example.yqc.util.StringTool;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUITopBarLayout;
@@ -18,6 +24,8 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
+
+import java.io.File;
 
 public class ParameterSettingActivity extends AppCompatActivity {
     private QMUITopBarLayout mTopBar;
@@ -58,6 +66,49 @@ public class ParameterSettingActivity extends AppCompatActivity {
                             }
                         })
                         .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+    private QMUICommonListItemView itemWithLogFile;
+    View.OnClickListener itemWithLogFileOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+
+                String path="";
+                if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                    path= Environment.getExternalStorageDirectory()
+                            + Log4jConfigure.DEFAULT_LOG_DIR + Log4jConfigure.DEFAULT_LOG_FILE_NAME;
+                } else {
+                    path= "//data//data//" + Log4jConfigure.PACKAGE_NAME + "//files"
+                            + File.separator+ Log4jConfigure.DEFAULT_LOG_FILE_NAME;
+                }
+                final String finalPath = path;
+                new QMUIDialog.MessageDialogBuilder(ParameterSettingActivity.this)
+                        .setTitle("Log日志")
+                        .setMessage(finalPath)
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction(0, "打开", QMUIDialogAction.ACTION_PROP_POSITIVE, new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                                //调用系统文件管理器打开指定路径目录
+                                File dir = new File(finalPath);
+                                File parentFlie = new File(dir.getParent());
+//                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                                intent.setDataAndType(Uri.fromFile(parentFlie), "*/*");
+//                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                                startActivity(intent);
+
+                            }
+                        })
+                        .create().show();
             }
         }
     };
@@ -116,7 +167,13 @@ public class ParameterSettingActivity extends AppCompatActivity {
                 QMUICommonListItemView.HORIZONTAL,
                 QMUICommonListItemView.ACCESSORY_TYPE_NONE);
         itemWithDirectionTimeinterval.setTag("Set_DirectionTimeinterval");
-
+        //打开日志LOG
+        itemWithLogFile = mGroupListView.createItemView(
+                ContextCompat.getDrawable(ParameterSettingActivity.this, R.mipmap.icon_listitem_file),
+                "Log日志",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
 
         QMUIGroupListView.newSection(ParameterSettingActivity.this)
                 .setTitle("参数设置")
@@ -124,6 +181,7 @@ public class ParameterSettingActivity extends AppCompatActivity {
 //                .addItemView(itemWithSendTimeinterval, itemWithOnClickListener)
                 .addItemView(itemWithReceiveTimeinterval, itemWithOnClickListener)
                 .addItemView(itemWithDirectionTimeinterval, itemWithOnClickListener)
+                .addItemView(itemWithLogFile, itemWithLogFileOnClickListener)
                 .addTo(mGroupListView);
 
     }

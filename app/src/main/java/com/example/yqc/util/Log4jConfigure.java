@@ -10,11 +10,11 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
 
 public class Log4jConfigure {
     private static final int MAX_FILE_SIZE = 1024 * 1024 * 10;
-    private static final String DEFAULT_LOG_DIR = "//YQC//Log//";
-    private static final String DEFAULT_LOG_FILE_NAME = "YQC.log";
-    private static final String TAG = "Log4jConfigure";
+    public static final String                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             DEFAULT_LOG_DIR = "//YQC//Log//";
+    public static final String DEFAULT_LOG_FILE_NAME = "YQC.log";
+    public static final String TAG = "Log4jConfigure";
     // 对应AndroidManifest文件中的package
-    private static final String PACKAGE_NAME = "com.example.yqc";
+    public static final String PACKAGE_NAME = "com.example.yqc";
 
     public static void configure(String fileName) {
         final LogConfigurator logConfigurator = new LogConfigurator();
