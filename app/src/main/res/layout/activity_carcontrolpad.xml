@@ -37,28 +37,18 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
-    <TextView
-        android:id="@+id/text1_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/thr_bar"
-        android:text="小车数据"
-        android:textSize="18sp"
-        android:layout_marginLeft="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
+
 
     <TextView
         android:id="@+id/text55_title"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text1_title"
-        android:layout_below="@+id/text1_title"
-        android:layout_marginTop="6dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/thr_bar"
+        android:layout_marginLeft="20dp"
         android:text="电量"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
 
@@ -67,7 +57,10 @@
         android:layout_width="90dp"
         android:layout_height="30dp"
         android:layout_alignBottom="@+id/text55_title"
-        android:layout_toRightOf="@+id/text55_title"/>
+        android:layout_marginLeft="-90dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@+id/text55_title"
+        />
 
 
     <TextView
@@ -76,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text55_title"
         android:layout_below="@+id/text55_title"
-        android:text="+5V电压"
+        android:text="+24V电压"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -120,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text32_title"
         android:layout_below="@+id/text32_title"
-        android:text="+24V电压"
+        android:text="+5V电压"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -402,28 +395,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_4" />
 
-
-
-    <TextView
-        android:id="@+id/text2_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/text11_value"
-        android:text="驱动数据"
-        android:textSize="18sp"
-        android:layout_marginLeft="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" />
-
     <TextView
         android:id="@+id/text21_title"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/text2_title"
-        android:layout_below="@+id/text2_title"
-        android:layout_marginTop="6dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/text31_value"
+        android:layout_marginLeft="20dp"
         android:text="左前轮角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"

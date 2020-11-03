@@ -937,9 +937,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mTextView26.setText(VAL_TurnWheel_Mast_Angle);
             mTextView27.setText(VAL_TurnWheel_Sailboard_Angle);
             //    控制数据
-            mTextView31.setText(VAL_Voltage_5V);
+            mTextView31.setText(VAL_Voltage_24V);
             mTextView32.setText(VAL_Voltage_12V);
-            mTextView33.setText(VAL_Voltage_24V);
+            mTextView33.setText(VAL_Voltage_5V);
             mTextView34.setText(VAL_Wheel_Status);
             mTextView35.setText(VAL_TurnWheel_Status);
             //九轴传感器
