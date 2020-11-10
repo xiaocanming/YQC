@@ -313,7 +313,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text35_title"
         android:layout_below="@+id/text35_title"
-        android:text="磁场X坐标"
+        android:text="X磁场强度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -335,7 +335,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text51_title"
         android:layout_below="@+id/text51_title"
-        android:text="磁场Y坐标"
+        android:text="Y磁场强度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -357,7 +357,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text52_title"
         android:layout_below="@+id/text52_title"
-        android:text="磁场Z坐标"
+        android:text="真实角度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -379,7 +379,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text53_title"
         android:layout_below="@+id/text53_title"
-        android:text="预留1"
+        android:text="温度"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />

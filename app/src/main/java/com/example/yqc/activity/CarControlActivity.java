@@ -611,7 +611,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
         ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
         DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
-        TimerSetList = sp.getStringSet("Set_TimerSet",new HashSet<String>() );
+        TimerSetList = sp.getStringSet("Set_TimerSetInterval",new HashSet<String>() );
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
         LeftX = sp.getInt("Set_LeftX", 0);
         LeftY = sp.getInt("Set_LeftY",0);
