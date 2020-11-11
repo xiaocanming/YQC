@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YQC</string>
+    <string name="app_name">月球车</string>
     <!-- Strings  -->
     <string name="set_hostip">192.168.17.254</string>
     <integer name="set_hostport">23456</integer>

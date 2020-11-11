@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initGroupList() {
         QMUIGroupListView.newSection(this)
-                .addItemView(mAboutGroupListView.createItemView("月球车单独控制器"), new View.OnClickListener() {
+                .addItemView(mAboutGroupListView.createItemView("月球车控制器"), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
