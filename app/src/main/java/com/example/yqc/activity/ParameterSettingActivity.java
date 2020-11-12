@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -114,6 +115,17 @@ public class ParameterSettingActivity extends AppCompatActivity {
     };
 
 
+    //打开演示指令
+    private QMUICommonListItemView itemWithIsShowDemoSwitch;
+    View.OnClickListener itemWithIsShowDemoSwitchOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                ((QMUICommonListItemView) v).getSwitch().toggle();
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,13 +187,28 @@ public class ParameterSettingActivity extends AppCompatActivity {
                 QMUICommonListItemView.HORIZONTAL,
                 QMUICommonListItemView.ACCESSORY_TYPE_NONE);
 
+
+        //演示指令开关
+        itemWithIsShowDemoSwitch = mGroupListView.createItemView("演示指令显示开关");
+        itemWithIsShowDemoSwitch.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_SWITCH);
+        itemWithIsShowDemoSwitch.getSwitch().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    SaveSharedPreferencesInt(getResources().getString(R.string.set_tag_isshowdemo),1);
+                }else {
+                    SaveSharedPreferencesInt(getResources().getString(R.string.set_tag_isshowdemo),0);
+                }
+            }
+        });
+
         QMUIGroupListView.newSection(ParameterSettingActivity.this)
                 .setTitle("参数设置")
                 .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
-//                .addItemView(itemWithSendTimeinterval, itemWithOnClickListener)
                 .addItemView(itemWithReceiveTimeinterval, itemWithOnClickListener)
                 .addItemView(itemWithDirectionTimeinterval, itemWithOnClickListener)
                 .addItemView(itemWithLogFile, itemWithLogFileOnClickListener)
+                .addItemView(itemWithIsShowDemoSwitch, itemWithIsShowDemoSwitchOnClickListener)
                 .addTo(mGroupListView);
 
     }
@@ -193,11 +220,12 @@ public class ParameterSettingActivity extends AppCompatActivity {
         int SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
         int ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
         int DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
+        boolean IsShowDemo = sp.getInt(getResources().getString(R.string.set_tag_isshowdemo),0)==1?true:false;
 
         itemWithSendTimeinterval.setDetailText(String.valueOf(SendTimeinterval));
         itemWithReceiveTimeinterval.setDetailText(String.valueOf(ReceiveTimeinterval));
         itemWithDirectionTimeinterval.setDetailText(String.valueOf(DirectionTimeinterval));
-
+        itemWithIsShowDemoSwitch.getSwitch().setChecked(IsShowDemo);
     }
 
     private void SaveSharedPreferencesInt(String tag,int value ) {

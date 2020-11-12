@@ -26,10 +26,19 @@ public class ShowController extends HomeController{
     private QMUIFloatLayout mFloatLayout;
 
     private static final String SET_FILENAME = "ano_set_filename";
+    private static boolean IsShowDemo;
     public ShowController(Context context) {
         super(context);
         LayoutInflater.from(context).inflate(R.layout.fragment_show, this);
+        initSetting();
         initView();
+    }
+
+    private void initSetting() {
+        // 得到SP对象   
+        SharedPreferences sp = getContext().getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
+        // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
+        IsShowDemo = sp.getInt(getResources().getString(R.string.set_tag_isshowdemo),0)==1?true:false;
     }
 
     private void initView() {
@@ -67,6 +76,23 @@ public class ShowController extends HomeController{
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(textViewSize, textViewSize);
         mFloatLayout.addView(MyRoundButton1, lp);
         mFloatLayout.addView(MyRoundButton2, lp);
+
+        //演示指令
+        if(IsShowDemo){
+            MyRoundButton MyRoundButton3= new MyRoundButton(getContext());
+            MyRoundButton3.setText("开始演示");
+            MyRoundButton3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DefaultSendBean bean = new DefaultSendBean();
+                    bean.setThreebyte((byte) 0x02);
+                    bean.setFourbyte((byte)0xA5);
+                    sendDataByteOnce(bean);
+                    LogTool.d("开始演示",StringTool.byteToString(bean.parse()));
+                }
+            });
+            mFloatLayout.addView(MyRoundButton3, lp);
+        }
 
     }
 

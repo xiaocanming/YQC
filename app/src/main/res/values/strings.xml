@@ -11,6 +11,9 @@
     <string name="set_camerapassword">Aa12345678</string>
     <!-- 定时器设置  -->
     <string name="set_timersetshow">无计划</string>
+    <!-- 偏好设置Tag  -->
+    <string name="set_tag_isshowdemo">Set_IsShowDemo</string>
+
 
     <string name="btn_set">飞控设置</string>
     <string name="btn_col">体感飞行控制</string>
