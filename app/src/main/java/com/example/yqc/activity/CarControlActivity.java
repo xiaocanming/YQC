@@ -376,22 +376,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             }
         });
 
-        //急停
+        //恢复运动
         qmuiRoundButton2 = (QMUIRoundButton) findViewById(R.id.button2);
         qmuiRoundButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x04);
-                bean.setFourbyte((byte) 0xA5);
-                SendData_ByteOnce(bean);
-                LogTool.d("急停",StringTool.byteToString(bean.parse()));
-            }
-        });
-
-        //恢复运动
-        qmuiRoundButton3 = (QMUIRoundButton) findViewById(R.id.button3);
-        qmuiRoundButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DefaultSendBean bean = new DefaultSendBean();
@@ -399,6 +386,35 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
                 LogTool.d("恢复运动",StringTool.byteToString(bean.parse()));
+            }
+        });
+
+        //查看接收数据
+        textView = new TextView(CarControlActivity.this);
+        textView.setLineSpacing(QMUIDisplayHelper.dp2px(CarControlActivity.this, 4), 1.0f);
+        int padding = QMUIDisplayHelper.dp2px(CarControlActivity.this, 20);
+        textView.setPadding(padding, padding, padding, padding);
+        textView.setText("数据接收中...");
+        textView.setTextColor(ContextCompat.getColor(CarControlActivity.this, R.color.app_color_description));
+        qmuiRoundButton3 = (QMUIRoundButton) findViewById(R.id.button3);
+        qmuiRoundButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatetextView=true;
+                QMUIPopup mNormalPopup = QMUIPopups.popup(CarControlActivity.this, QMUIDisplayHelper.dp2px(CarControlActivity.this, 250), QMUIDisplayHelper.dp2px(CarControlActivity.this, 120))
+                        .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
+                        .view(textView)
+                        .edgeProtection(QMUIDisplayHelper.dp2px(CarControlActivity.this, 20))
+                        .dimAmount(0.6f)
+                        .skinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
+                        .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
+                        .onDismiss(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                updatetextView=false;
+                            }
+                        })
+                        .show(v);
             }
         });
 
@@ -453,32 +469,17 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         });
 
 
-        //查看接收数据
-        textView = new TextView(CarControlActivity.this);
-        textView.setLineSpacing(QMUIDisplayHelper.dp2px(CarControlActivity.this, 4), 1.0f);
-        int padding = QMUIDisplayHelper.dp2px(CarControlActivity.this, 20);
-        textView.setPadding(padding, padding, padding, padding);
-        textView.setText("数据接收中...");
-        textView.setTextColor(ContextCompat.getColor(CarControlActivity.this, R.color.app_color_description));
+        //急停
         qmuiRoundButtonrz = (QMUIRoundButton) findViewById(R.id.btn_rz);
         qmuiRoundButtonrz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatetextView=true;
-                QMUIPopup mNormalPopup = QMUIPopups.popup(CarControlActivity.this, QMUIDisplayHelper.dp2px(CarControlActivity.this, 250), QMUIDisplayHelper.dp2px(CarControlActivity.this, 120))
-                        .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
-                        .view(textView)
-                        .edgeProtection(QMUIDisplayHelper.dp2px(CarControlActivity.this, 20))
-                        .dimAmount(0.6f)
-                        .skinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
-                        .animStyle(QMUIPopup.ANIM_GROW_FROM_CENTER)
-                        .onDismiss(new PopupWindow.OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                updatetextView=false;
-                            }
-                        })
-                        .show(v);
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x04);
+                bean.setFourbyte((byte) 0xA5);
+                SendData_ByteOnce(bean);
+                setButtonEnble(false);
+                LogTool.d("急停",StringTool.byteToString(bean.parse()));
             }
         });
 
@@ -1164,15 +1165,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         homeComponentsController.setButtonEnble(enble);
         homeUtilController.setButtonEnble(enble);
         qmuiRoundButton1.setEnabled(enble);
-        qmuiRoundButton1.setTextColor(getResources().getColor(R.color.white));
+        qmuiRoundButton1.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButton2.setEnabled(enble);
-        qmuiRoundButton2.setTextColor(getResources().getColor(R.color.white));
+        qmuiRoundButton2.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButton3.setEnabled(enble);
-        qmuiRoundButton3.setTextColor(getResources().getColor(R.color.white));
+        qmuiRoundButton3.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButton4.setEnabled(enble);
-        qmuiRoundButton4.setTextColor(getResources().getColor(R.color.white));
+        qmuiRoundButton4.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButtonrz.setEnabled(enble);
-        qmuiRoundButtonrz.setTextColor(getResources().getColor(R.color.white));
+        qmuiRoundButtonrz.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
     }
 
 

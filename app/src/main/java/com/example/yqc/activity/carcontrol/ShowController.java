@@ -102,7 +102,7 @@ public class ShowController extends HomeController{
         for(int i=0;i<currentChildCount;i++){
             MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
             button.setEnabled(enble);
-            button.setTextColor(getResources().getColor(R.color.white));
+            button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         }
     }
 }
