@@ -395,12 +395,24 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_4" />
 
+
+    <TextView
+        android:id="@+id/text2_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/text31_value"
+        android:layout_marginLeft="-30dp"
+        android:text="月球车遥测"
+        android:textSize="18sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/colorHelper_square_alpha_background" />
+
     <TextView
         android:id="@+id/text21_title"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/text2_title"
         android:layout_toRightOf="@+id/text31_value"
         android:layout_marginLeft="20dp"
         android:text="左前轮角度"

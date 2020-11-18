@@ -198,7 +198,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     public static String VAL_AttitudeSensor_X="",VAL_AttitudeSensor_Y="",VAL_AttitudeSensor_Z="";
     public static String VAL_Reserved_Fields1="";
     //TCP的body长度
-    public static final int  BodyLength= 48;
+    public static final int  BodyLength= 49;
 
     //调节阶段用于查看接收的数据
     private TextView textView;
@@ -927,7 +927,13 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mTextView13.setText(VAL_Z_Ordinate);
             mTextView14.setText(VAL_SelfDetection_Status);
             mTextView15.setText(VAL_Sport_Mode);
-            mTextView16.setText(VAL_Sport_Sign);
+            if(VAL_Sport_Sign.equals("正常")){
+                mTextView16.setTextColor(getResources().getColor(R.color.app_color_theme_4));
+                mTextView16.setText(VAL_Sport_Sign);
+            }else {
+                mTextView16.setTextColor(getResources().getColor(R.color.app_color_theme_1));
+                mTextView16.setText(VAL_Sport_Sign);
+            }
             //    状态数据
             mTextView21.setText(VAL_TurnWheel_A_Angle);
             mTextView22.setText(VAL_TurnWheel_B_Angle);
@@ -974,7 +980,41 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 LogTool.d("速度",StringTool.byteToString(bean.parse()));
             }
             int[] controllerangle=MathTool.getRad(SingleRockerView.Value_X,SingleRockerView.Value_Y);
-            if(sendtype==1){
+            if(MathTool.isDouble(controllerangle)){
+                if(sendtype==1){
+                    if(controllerangle[0]==1){
+                        DefaultSendBean bean=new DefaultSendBean();
+                        bean.setThreebyte((byte) 0x0C);
+                        bean.setFourbyte((byte) 0x01);
+                        SendData_ByteOnce(bean);
+                        LogTool.d("向前",StringTool.byteToString(bean.parse()));
+                    }
+                    if(controllerangle[1]==1){
+                        DefaultSendBean bean=new DefaultSendBean();
+                        bean.setThreebyte((byte) 0x0C);
+                        bean.setFourbyte((byte) 0x02);
+                        SendData_ByteOnce(bean);
+                        LogTool.d("向后",StringTool.byteToString(bean.parse()));
+                    }
+                    sendtype=2;
+                }else {
+                    if(controllerangle[2]==1){
+                        DefaultSendBean bean=new DefaultSendBean();
+                        bean.setThreebyte((byte) 0x0D);
+                        bean.setFourbyte((byte)(controllerangle[4] & 0xFF));
+                        SendData_ByteOnce(bean);
+                        LogTool.d("向左",StringTool.byteToString(bean.parse()));
+                    }
+                    if(controllerangle[3]==1){
+                        DefaultSendBean bean=new DefaultSendBean();
+                        bean.setThreebyte((byte) 0x0E);
+                        bean.setFourbyte((byte)(controllerangle[4] & 0xFF));
+                        SendData_ByteOnce(bean);
+                        LogTool.d("向右",StringTool.byteToString(bean.parse()));
+                    }
+                    sendtype=1;
+                }
+            }else {
                 if(controllerangle[0]==1){
                     DefaultSendBean bean=new DefaultSendBean();
                     bean.setThreebyte((byte) 0x0C);
@@ -989,8 +1029,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     SendData_ByteOnce(bean);
                     LogTool.d("向后",StringTool.byteToString(bean.parse()));
                 }
-                sendtype=2;
-            }else {
                 if(controllerangle[2]==1){
                     DefaultSendBean bean=new DefaultSendBean();
                     bean.setThreebyte((byte) 0x0D);
@@ -1005,7 +1043,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     SendData_ByteOnce(bean);
                     LogTool.d("向右",StringTool.byteToString(bean.parse()));
                 }
-                sendtype=1;
             }
         }
     };

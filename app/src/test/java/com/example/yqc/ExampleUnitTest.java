@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.io.Console;
 
 import static com.example.yqc.util.StringTool.Bytes2Int_BE;
+import static com.example.yqc.util.StringTool.byte2short;
 import static org.junit.Assert.*;
 
 /**
@@ -26,15 +27,13 @@ public class ExampleUnitTest {
         bytes[1] = (byte) 0x43;
 
         bytes[2] = (byte) 0xFF;
-        bytes[3] = (byte) 0x84;
+        bytes[3] = (byte) 0xDE;
 
         short a= BitConverter.toShort(bytes,0);
         short b= BitConverter.toShort(bytes,2);
 
-        String AAAAAA =  String.valueOf(Bytes2Int_BE(bytes[0],bytes[1])/10.0);
-        String BBBBBB =  String.valueOf(BitConverter.toShort(bytes,0)/10.0);
-        String CCCCCC =  String.valueOf(BitConverter.toInt(bytes,0)/10.0);
-        String DDDDDD =  String.valueOf(BitConverter.toLong(bytes,0)/10.0);
+        String AAAAAA =  String.valueOf(byte2short(bytes,0)/10.0);
+        String BBBBBB =  String.valueOf(byte2short(bytes,2)/10.0);
 
         String abbb=String.valueOf(a/10.0);
         String acccc=String.valueOf(b/10.0);

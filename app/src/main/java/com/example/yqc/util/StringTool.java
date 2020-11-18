@@ -41,22 +41,22 @@ public class StringTool {
             return false;
         }
         //获取5V电压值
-        CarControlActivity.VAL_Voltage_5V = String.valueOf(Bytes2Int_BE(bodybetys[0], bodybetys[1]) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_5V = String.valueOf(byte2short(bodybetys, 0) / 10.0) + " V";
         //获取12V电压值
-        CarControlActivity.VAL_Voltage_12V = String.valueOf(Bytes2Int_BE(bodybetys[2], bodybetys[3]) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_12V = String.valueOf(byte2short(bodybetys, 2) / 10.0) + " V";
         //获取24V电压值
-        CarControlActivity.VAL_Voltage_24V = String.valueOf(Bytes2Int_BE(bodybetys[4], bodybetys[5]) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_24V = String.valueOf(byte2short(bodybetys, 4) / 10.0) + " V";
         //显示电池
         int battery = 0;
-        float voltage24v = Bytes2Int_BE(bodybetys[4], bodybetys[5]) / 10;
+        float voltage24v = byte2short(bodybetys, 4) / 10;
         if (voltage24v < 20) {
             battery = 0;
         }
-        if (voltage24v > 25) {
+        if (voltage24v > 26) {
             battery = 100;
         }
-        if (20 <= voltage24v && voltage24v <= 25) {
-            battery = (int) Math.round((voltage24v - 20.0) / (25.0 - 20.0) * 100);
+        if (20 <= voltage24v && voltage24v <= 26) {
+            battery = (int) Math.round((voltage24v - 20.0) / (26.0 - 20.0) * 100);
         }
         CarControlActivity.VAL_Voltage_24V_Int = battery;
         //获取六个驱动轮电机驱动控制器状态
@@ -78,19 +78,19 @@ public class StringTool {
             CarControlActivity.VAL_TurnWheel_Status = abnormal;
         }
         //前转向轮1角度传感器角度
-        CarControlActivity.VAL_TurnWheel_A_Angle = String.valueOf(Bytes2Int_BE(bodybetys[10], bodybetys[11]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_A_Angle = String.valueOf(byte2short(bodybetys, 10) / 10.0) + " °";
         //前转向轮2角度传感器角度
-        CarControlActivity.VAL_TurnWheel_B_Angle = String.valueOf(Bytes2Int_BE(bodybetys[12], bodybetys[13]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_B_Angle = String.valueOf(byte2short(bodybetys, 12) / 10.0) + " °";
         //后转向轮1角度传感器角度
-        CarControlActivity.VAL_TurnWheel_C_Angle = String.valueOf(Bytes2Int_BE(bodybetys[14], bodybetys[15]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_C_Angle = String.valueOf(byte2short(bodybetys, 14) / 10.0) + " °";
         //后转向轮2角度传感器角度
-        CarControlActivity.VAL_TurnWheel_D_Angle = String.valueOf(Bytes2Int_BE(bodybetys[16], bodybetys[17]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_D_Angle = String.valueOf(byte2short(bodybetys, 16) / 10.0) + " °";
         //桅杆起伏角度传感器角度
-        CarControlActivity.VAL_Updown_Mast_Angle = String.valueOf(Bytes2Int_BE(bodybetys[18], bodybetys[19]) / 10.0) + " °";
+        CarControlActivity.VAL_Updown_Mast_Angle = String.valueOf(byte2short(bodybetys, 18) / 10.0) + " °";
         //云台偏航角度
-        CarControlActivity.VAL_TurnWheel_Mast_Angle = String.valueOf(Bytes2Int_BE(bodybetys[20], bodybetys[21]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_Mast_Angle = String.valueOf(byte2short(bodybetys, 20) / 10.0) + " °";
         //帆板角度传感器角度
-        CarControlActivity.VAL_TurnWheel_Sailboard_Angle = String.valueOf(Bytes2Int_BE(bodybetys[22], bodybetys[23]) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_Sailboard_Angle = String.valueOf(byte2short(bodybetys, 22) / 10.0) + " °";
         //YQC自检状态
         int selfdetectionstatus = ByteInt_Single(bodybetys[24]);
         if (selfdetectionstatus == Integer.parseInt("01", 16)) {
@@ -128,6 +128,21 @@ public class StringTool {
             case 2:
                 CarControlActivity.VAL_Sport_Sign = "遇到障碍物";
                 break;
+            case 3:
+                CarControlActivity.VAL_Sport_Sign = "驱动器故障";
+                break;
+            case 4:
+                CarControlActivity.VAL_Sport_Sign = "转向轮角度超限";
+                break;
+            case 5:
+                CarControlActivity.VAL_Sport_Sign = "桅杆角度超限";
+                break;
+            case 6:
+                CarControlActivity.VAL_Sport_Sign = "帆板角度超限";
+                break;
+            case 7:
+                CarControlActivity.VAL_Sport_Sign = "云台角度超限";
+                break;
             default:
                 CarControlActivity.VAL_Sport_Sign = "数据异常";
         }
@@ -154,15 +169,15 @@ public class StringTool {
         //TOF右后距离
         CarControlActivity.VAL_TOF_RightBack = numToMString(ByteInt_Single(bodybetys[37]));
         //姿态传感器磁场X坐标
-        CarControlActivity.VAL_AttitudeSensor_X = String.valueOf(BitConverter.toShort(bodybetys, 38) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_X = String.valueOf(byte2short(bodybetys, 38) / 10.0);
         //姿态传感器磁场Y坐标
-        CarControlActivity.VAL_AttitudeSensor_Y = String.valueOf(BitConverter.toShort(bodybetys, 40) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_Y = String.valueOf(byte2short(bodybetys, 40) / 10.0);
         //真实角度
-        CarControlActivity.VAL_AttitudeSensor_Z = String.valueOf(Bytes2Int_BE(bodybetys[42], bodybetys[43]) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_Z = String.valueOf(byte2short(bodybetys, 42) / 10.0)+ " °";
         //云台俯仰
-        CarControlActivity.VAL_Yuntai_Angle = String.valueOf(Bytes2Int_BE(bodybetys[44], bodybetys[45]) / 10.0) + " °";
+        CarControlActivity.VAL_Yuntai_Angle = String.valueOf(byte2short(bodybetys, 44) / 10.0) + " °";
         //温度
-        CarControlActivity.VAL_Reserved_Fields1 = String.valueOf(ByteInt_Single(bodybetys[46]) / 10.0) + " ℃";
+        CarControlActivity.VAL_Reserved_Fields1 = String.valueOf(byte2short(bodybetys, 46) / 10.0) + " ℃";
         return true;
     }
 
@@ -187,6 +202,20 @@ public class StringTool {
         int iRst = (byte1 & 0xFF) << 8;
         iRst |= byte2 & 0xFF;
         return iRst;
+    }
+
+    /**
+     * 转换byte数组为short（大端）
+     *
+     * @return
+     */
+    public static short byte2short(byte[] b,int startindex){
+        short l = 0;
+        for (int i = 0; i < 2; i++) {
+            l<<=8; //<<=和我们的 +=是一样的，意思就是 l = l << 8
+            l |= (b[startindex+i] & 0xff); //和上面也是一样的  l = l | (b[i]&0xff)
+        }
+        return l;
     }
 
     /**

@@ -175,4 +175,20 @@ public class MathTool {
         }
         return matharray;
     }
+
+    /**
+     * 判断是否有两条数据
+     */
+    public static boolean isDouble(int[] bytes) {
+        int count=0;
+        for (int i=0;i<4;i++) {
+            if(bytes[i]==1){
+                count++;
+            }
+        }
+        if(count>=2){
+            return true;
+        }
+        return  false;
+    }
 }

@@ -75,7 +75,7 @@ public class BatteryView extends View {
          * 设置电池画笔
          */
         mBatteryPaint = new Paint();
-        mBatteryPaint.setColor(Color.GRAY);
+        mBatteryPaint.setColor(Color.RED);
         mBatteryPaint.setAntiAlias(true);
         mBatteryPaint.setStyle(Style.STROKE);
         mBatteryPaint.setStrokeWidth(mBatteryStroke);
@@ -115,8 +115,10 @@ public class BatteryView extends View {
         canvas.drawRoundRect(mCapRect, 2f, 2f, mBatteryPaint);// 画电池盖
         if(mPower<20){
             mPowerPaint.setColor(Color.RED);
+            mBatteryPaint.setColor(Color.RED);
         }else {
             mPowerPaint.setColor(Color.GREEN);
+            mBatteryPaint.setColor(Color.GRAY);
         }
         canvas.drawRect(mPowerRect, mPowerPaint);// 画电量
         canvas.restore();
