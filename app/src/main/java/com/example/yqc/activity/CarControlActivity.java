@@ -76,6 +76,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class CarControlActivity extends AppCompatActivity  implements SurfaceHolder.Callback {
@@ -179,8 +182,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private static long ReceiveTimeinterval ;
     private static long SendTimeinterval ;
 
-    private Timer send_timer = new Timer( );
-    private int sendtype = 1;
+
 //    private Timer getsenddate_timer = new Timer( );
     private Timer run_timer = new Timer( );
     private final Handler ui_handler = new Handler();
@@ -189,6 +191,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private  IConnectionManager mManager;
     private ConnectionInfo mInfo;
     private OkSocketOptions mOkOptions;
+    // 通过静态方法创建ScheduledExecutorService的实例
+    private ScheduledExecutorService mScheduledExecutorService = Executors.newScheduledThreadPool(5);
+    private int sendtype = 1;
 
     //回传数据
     public static int VAL_Voltage_24V_Int=0;
@@ -360,7 +365,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 //        //获取陀螺仪数据的任务
 //        getsenddate_timer.schedule(getsenddate_task,1000,DirectionTimeinterval);
         //发送陀螺仪数据的任务
-        send_timer.schedule(send_task,1000,DirectionTimeinterval);
+        // 循环任务，按照上一次任务的发起时间计算下一次任务的开始时间
+        mScheduledExecutorService.scheduleAtFixedRate(send_task, 1000, DirectionTimeinterval, TimeUnit.MILLISECONDS);
         //发送定时任务
         run_timer.schedule(run_task,60000,60000);
         // 停止运动
@@ -967,7 +973,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         }
     };
 
-    TimerTask send_task = new TimerTask( ) {
+
+    Runnable send_task = new Runnable( ) {
         public void run ( )
         {
             //是否发送速度
@@ -1215,11 +1222,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (send_timer != null)
-        {
-            send_timer.cancel( );
-            send_timer = null;
-        }
+        mScheduledExecutorService.shutdown();
         if (run_timer != null)
         {
             run_timer.cancel( );
