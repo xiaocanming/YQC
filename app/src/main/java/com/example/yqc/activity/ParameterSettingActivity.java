@@ -79,7 +79,7 @@ public class ParameterSettingActivity extends AppCompatActivity {
 
                 String path="";
                 if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-                    path= Environment.getExternalStorageDirectory()
+                    path= "内部存储"
                             + Log4jConfigure.DEFAULT_LOG_DIR + Log4jConfigure.DEFAULT_LOG_FILE_NAME;
                 } else {
                     path= "//data//data//" + Log4jConfigure.PACKAGE_NAME + "//files"
@@ -89,19 +89,19 @@ public class ParameterSettingActivity extends AppCompatActivity {
                 new QMUIDialog.MessageDialogBuilder(ParameterSettingActivity.this)
                         .setTitle("Log日志")
                         .setMessage(finalPath)
-                        .addAction("取消", new QMUIDialogAction.ActionListener() {
-                            @Override
-                            public void onClick(QMUIDialog dialog, int index) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .addAction(0, "打开", QMUIDialogAction.ACTION_PROP_POSITIVE, new QMUIDialogAction.ActionListener() {
+//                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+//                            @Override
+//                            public void onClick(QMUIDialog dialog, int index) {
+//                                dialog.dismiss();
+//                            }
+//                        })
+                        .addAction(0, "确定", QMUIDialogAction.ACTION_PROP_POSITIVE, new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
                                 dialog.dismiss();
                                 //调用系统文件管理器打开指定路径目录
-                                File dir = new File(finalPath);
-                                File parentFlie = new File(dir.getParent());
+//                                File dir = new File(finalPath);
+//                                File parentFlie = new File(dir.getParent());
 //                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //                                intent.setDataAndType(Uri.fromFile(parentFlie), "*/*");
 //                                intent.addCategory(Intent.CATEGORY_OPENABLE);
