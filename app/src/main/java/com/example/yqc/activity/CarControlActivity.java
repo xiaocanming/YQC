@@ -50,6 +50,7 @@ import com.hikvision.netsdk.NET_DVR_PREVIEWINFO;
 import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.util.QMUIDeviceHelper;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.qmuiteam.qmui.widget.popup.QMUIPopup;
@@ -138,7 +139,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     //恢复运动
     private QMUIRoundButton qmuiRoundButton3;
     //接收数据
-    private QMUIRoundButton qmuiRoundButtonrz;
+    private QMUIRadiusImageView qmuiRoundButtonrz;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -476,7 +477,17 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 
 
         //急停
-        qmuiRoundButtonrz = (QMUIRoundButton) findViewById(R.id.btn_rz);
+        qmuiRoundButtonrz = (QMUIRadiusImageView) findViewById(R.id.btn_rz);
+        qmuiRoundButtonrz.setBorderColor(
+                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_border_color));
+        qmuiRoundButtonrz.setBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 2));
+        qmuiRoundButtonrz.setCornerRadius(QMUIDisplayHelper.dp2px(CarControlActivity.this, 10));
+        qmuiRoundButtonrz.setSelectedMaskColor(
+                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_mask_color));
+        qmuiRoundButtonrz.setSelectedBorderColor(
+                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_border_color));
+        qmuiRoundButtonrz.setSelectedBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 3));
+        qmuiRoundButtonrz.setTouchSelectModeEnabled(false);
         qmuiRoundButtonrz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -488,6 +499,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 LogTool.d("急停",StringTool.byteToString(bean.parse()));
             }
         });
+        qmuiRoundButtonrz.setClickable(false);
 
         //使能运动
         QMUIRoundButton qmuiRoundButtonsn = (QMUIRoundButton) findViewById(R.id.btn_sn);
@@ -1179,8 +1191,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         qmuiRoundButton3.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButton4.setEnabled(enble);
         qmuiRoundButton4.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
-        qmuiRoundButtonrz.setEnabled(enble);
-        qmuiRoundButtonrz.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+        qmuiRoundButtonrz.setClickable(enble);
+        qmuiRoundButtonrz.setTouchSelectModeEnabled(enble);
     }
 
 
