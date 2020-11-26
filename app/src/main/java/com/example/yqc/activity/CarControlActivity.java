@@ -142,6 +142,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private QMUIRoundButton qmuiRoundButton3;
     //接收数据
     private QMUIRadiusImageView qmuiRoundButtonrz;
+    //速度固化
+    private QMUIRoundButton qmuiRoundButtonsugh;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -168,6 +170,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private static int ipaddrport ;
     private String username = "";
     private String password = ""; // fill in with appkey
+    private static int  carvalTHR;
 
     //摄像头
     private int m_iLogID = -1; // return by NET_DVR_Login_v30
@@ -518,6 +521,19 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 LogTool.d("使能运动",StringTool.byteToString(bean.parse()));
             }
         });
+
+        //速度固化
+        qmuiRoundButtonsugh = (QMUIRoundButton) findViewById(R.id.btn_sugh);
+        qmuiRoundButtonsugh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //当前油门
+                int new_VAL_THR = ThrottleView.Value * 10 / ThrottleView.Value_max ;
+                int VAL_THR=new_VAL_THR>=5?5:new_VAL_THR;
+                SaveSharedPreferencesInt("Set_CarvalTHR",VAL_THR);
+                initSetting();
+            }
+        });
     }
 
     private boolean initeSdk() {
@@ -584,6 +600,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
+                    //发送演示速度
+                    sendhandler.post(runnable);//定期执行
+                    sendhandler.postDelayed(runRemove, 250);//过6秒后执行
                     LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                 }
                 //手动模式
@@ -602,6 +621,29 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             }
         });
     }
+
+    private Handler sendhandler = new Handler();
+    private Runnable runnable  = new Runnable(){//推送runnable，定期2s执行一次
+        @Override
+        public void run() {
+            handler.postDelayed(runnable, 100);
+            DefaultSendBean bean = new DefaultSendBean();
+            bean.setThreebyte((byte) 0x1C);
+            bean.setFourbyte((byte)(carvalTHR & 0xFF));
+            SendData_ByteOnce(bean);
+            LogTool.d("演示速度",StringTool.byteToString(bean.parse()));
+        }
+    };
+    private Runnable runRemove  = new Runnable(){//移除runnable，在6s后移除
+
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            handler.removeCallbacks(runnable);
+        }
+
+    };
+
 
     private void initPagers() {
         HomeController.HomeControlListener listener = new HomeController.HomeControlListener() {
@@ -646,6 +688,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         ipaddrport = sp.getInt("Set_CameraPort",getResources().getInteger(R.integer.set_cameraport));
         username = sp.getString("Set_CameraUserName",getResources().getString(R.string.set_camerausername));
         password = sp.getString("Set_CameraPassWord",getResources().getString(R.string.set_camerapassword));
+        carvalTHR=sp.getInt("Set_CarvalTHR", 5);
     }
 
     private void initTcp() {
@@ -1207,6 +1250,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         qmuiRoundButton4.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         qmuiRoundButtonrz.setClickable(enble);
         qmuiRoundButtonrz.setTouchSelectModeEnabled(enble);
+        qmuiRoundButtonsugh.setEnabled(enble);
+        qmuiRoundButtonsugh.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
     }
 
 

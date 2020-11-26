@@ -946,6 +946,27 @@
 
 
     <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/btn_sugh"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:singleLine="false"
+        android:gravity="center"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btn_group"
+        android:layout_above="@+id/btn_sn"
+        android:layout_marginBottom="4dp"
+        android:text="速度\n固化"
+        android:textSize="14sp"
+        app:qmui_borderColor="@color/button_text"
+        app:qmui_borderWidth="2dp"
+        android:textColor="@color/app_color_description"
+        app:qmui_radius="4dp"
+        android:enabled="false"
+        />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
         android:id="@+id/btn_sn"
         android:layout_width="60dp"
         android:layout_height="60dp"
