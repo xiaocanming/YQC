@@ -74,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -986,6 +987,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mTextView53.setText(VAL_AttitudeSensor_Z);
             mTextView54.setText(VAL_Reserved_Fields1);
             mTextView56.setText(VAL_Reserved_Fields2);
+
+            //判断桅杆起立的按钮是否生效
+            if( !CarControlActivity.VAL_TurnWheel_Sailboard_Angle.equals("")){
+                if (Float.valueOf(CarControlActivity.VAL_TurnWheel_Sailboard_Angle.split(" ")[0]) >=60.0f){
+                    homeComponentsController.setButtonEnble(false,"桅杆起立");
+                }else {
+                    homeComponentsController.setButtonEnble(true,"桅杆起立");
+                }
+            }
         }
     };
 

@@ -30,4 +30,8 @@ public class HomeController extends QMUIWindowInsetLayout {
     public void setButtonEnble(boolean enble){
 
     }
+
+    public void setButtonEnble(boolean enble,String tag){
+
+    }
 }

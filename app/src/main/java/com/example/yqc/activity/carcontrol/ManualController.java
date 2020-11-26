@@ -70,9 +70,9 @@ public class ManualController extends HomeController{
                 LogTool.d("位置复位", StringTool.byteToString(bean.parse()));
             }
         });
-        //桅杆倒下
+        //桅杆复位
         MyRoundButton MyRoundButton2= new MyRoundButton(getContext());
-        MyRoundButton2.setText("桅杆倒下");
+        MyRoundButton2.setText("桅杆复位");
         MyRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
-                LogTool.d("桅杆倒下",StringTool.byteToString(bean.parse()));
+                LogTool.d("桅杆复位",StringTool.byteToString(bean.parse()));
             }
         });
         //桅杆起立
@@ -378,6 +378,17 @@ public class ManualController extends HomeController{
             MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
             button.setEnabled(enble);
             button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+        }
+    }
+    @Override
+    public void setButtonEnble(boolean enble,String tag){
+        int currentChildCount = mFloatLayout.getChildCount();
+        for(int i=0;i<currentChildCount;i++){
+            MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+            if(button.getText().equals(tag)){
+                button.setEnabled(enble);
+                button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+            }
         }
     }
     TimerTask send_task = new TimerTask( ) {
