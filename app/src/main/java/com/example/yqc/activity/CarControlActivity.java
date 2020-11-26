@@ -121,6 +121,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private TextView mTextView52;
     private TextView mTextView53;
     private TextView mTextView54;
+    private TextView mTextView56;
     //    连接状态
     private TextView mTextViewTcpStatus;
     //    连接状态
@@ -202,9 +203,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     public static String VAL_TurnWheel_A_Angle="",VAL_TurnWheel_B_Angle="",VAL_TurnWheel_C_Angle="",VAL_TurnWheel_D_Angle="",VAL_Updown_Mast_Angle="",VAL_TurnWheel_Mast_Angle="", VAL_TurnWheel_Sailboard_Angle="",VAL_SelfDetection_Status="",VAL_Sport_Mode="",VAL_Sport_Sign="",VAL_X_Ordinate="",VAL_Y_Ordinate="",VAL_Z_Ordinate="";
     public static String VAL_TOF_Front1="",VAL_TOF_Front2="",VAL_TOF_LeftFront="",VAL_TOF_RightFront="",VAL_TOF_Back1="",VAL_TOF_Back2="",VAL_TOF_LeftBack="",VAL_TOF_RightBack="",VAL_Yuntai_Angle="";
     public static String VAL_AttitudeSensor_X="",VAL_AttitudeSensor_Y="",VAL_AttitudeSensor_Z="";
-    public static String VAL_Reserved_Fields1="";
+    public static String VAL_Reserved_Fields1="",VAL_Reserved_Fields2="";
     //TCP的body长度
-    public static final int  BodyLength= 49;
+    public static final int  BodyLength= 58;
 
     //调节阶段用于查看接收的数据
     private TextView textView;
@@ -330,6 +331,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         mTextView52=findViewById(R.id.text52_value);
         mTextView53=findViewById(R.id.text53_value);
         mTextView54=findViewById(R.id.text54_value);
+        mTextView56=findViewById(R.id.text56_value);
         //    连接状态
         mTextViewTcpStatus=findViewById(R.id.tcpstatus);
         mTextViewCarmerStatus=findViewById(R.id.carmerstatus);
@@ -478,9 +480,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 
         //急停
         qmuiRoundButtonrz = (QMUIRadiusImageView) findViewById(R.id.btn_rz);
-        qmuiRoundButtonrz.setBorderColor(
-                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_border_color));
-        qmuiRoundButtonrz.setBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 2));
+//        qmuiRoundButtonrz.setBorderColor(
+//                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_border_color));
+//        qmuiRoundButtonrz.setBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 2));
         qmuiRoundButtonrz.setCornerRadius(QMUIDisplayHelper.dp2px(CarControlActivity.this, 10));
         qmuiRoundButtonrz.setSelectedMaskColor(
                 ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_mask_color));
@@ -488,6 +490,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_border_color));
         qmuiRoundButtonrz.setSelectedBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 3));
         qmuiRoundButtonrz.setTouchSelectModeEnabled(false);
+        qmuiRoundButtonrz.setCircle(true);
         qmuiRoundButtonrz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -982,6 +985,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mTextView52.setText(VAL_AttitudeSensor_Y);
             mTextView53.setText(VAL_AttitudeSensor_Z);
             mTextView54.setText(VAL_Reserved_Fields1);
+            mTextView56.setText(VAL_Reserved_Fields2);
         }
     };
 

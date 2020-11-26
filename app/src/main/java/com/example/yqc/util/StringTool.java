@@ -153,31 +153,33 @@ public class StringTool {
         //获取Z坐标
         CarControlActivity.VAL_Z_Ordinate = numToMString(ByteInt_Single(bodybetys[29]));
         //TOF前1距离
-        CarControlActivity.VAL_TOF_Front1 = numToMString(ByteInt_Single(bodybetys[30]));
+        CarControlActivity.VAL_TOF_Front1 = String.valueOf(byte2short(bodybetys, 30) / 100.0)+ " m";
         //TOF前2距离
-        CarControlActivity.VAL_TOF_Front2 = numToMString(ByteInt_Single(bodybetys[31]));
+        CarControlActivity.VAL_TOF_Front2 = String.valueOf(byte2short(bodybetys, 32) / 100.0)+ " m";
         //TOF左前距离
-        CarControlActivity.VAL_TOF_LeftFront = numToMString(ByteInt_Single(bodybetys[32]));
+        CarControlActivity.VAL_TOF_LeftFront = String.valueOf(byte2short(bodybetys, 34) / 100.0)+ " m";
         //TOF右前距离
-        CarControlActivity.VAL_TOF_RightFront = numToMString(ByteInt_Single(bodybetys[33]));
+        CarControlActivity.VAL_TOF_RightFront = String.valueOf(byte2short(bodybetys, 36) / 100.0)+ " m";
         //TOF后1距离
-        CarControlActivity.VAL_TOF_Back1 = numToMString(ByteInt_Single(bodybetys[34]));
+        CarControlActivity.VAL_TOF_Back1 = String.valueOf(byte2short(bodybetys, 38) / 100.0)+ " m";
         //TOF后2距离
-        CarControlActivity.VAL_TOF_Back2 = numToMString(ByteInt_Single(bodybetys[35]));
+        CarControlActivity.VAL_TOF_Back2 = String.valueOf(byte2short(bodybetys, 40) / 100.0)+ " m";
         //TOF左后距离
-        CarControlActivity.VAL_TOF_LeftBack = numToMString(ByteInt_Single(bodybetys[36]));
+        CarControlActivity.VAL_TOF_LeftBack = String.valueOf(byte2short(bodybetys, 42) / 100.0)+ " m";
         //TOF右后距离
-        CarControlActivity.VAL_TOF_RightBack = numToMString(ByteInt_Single(bodybetys[37]));
+        CarControlActivity.VAL_TOF_RightBack = String.valueOf(byte2short(bodybetys, 44) / 100.0)+ " m";
         //姿态传感器磁场X坐标
-        CarControlActivity.VAL_AttitudeSensor_X = String.valueOf(byte2short(bodybetys, 38) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_X = String.valueOf(byte2short(bodybetys, 46) / 10.0);
         //姿态传感器磁场Y坐标
-        CarControlActivity.VAL_AttitudeSensor_Y = String.valueOf(byte2short(bodybetys, 40) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_Y = String.valueOf(byte2short(bodybetys, 48) / 10.0);
         //真实角度
-        CarControlActivity.VAL_AttitudeSensor_Z = String.valueOf(byte2short(bodybetys, 42) / 10.0)+ " °";
+        CarControlActivity.VAL_AttitudeSensor_Z = String.valueOf(byte2short(bodybetys, 50) / 10.0)+ " °";
         //云台俯仰
-        CarControlActivity.VAL_Yuntai_Angle = String.valueOf(byte2short(bodybetys, 44) / 10.0) + " °";
+        CarControlActivity.VAL_Yuntai_Angle = String.valueOf(byte2short(bodybetys, 52) / 10.0) + " °";
         //温度
-        CarControlActivity.VAL_Reserved_Fields1 = String.valueOf(byte2short(bodybetys, 46) / 10.0) + " ℃";
+        CarControlActivity.VAL_Reserved_Fields1 = String.valueOf(byte2short(bodybetys, 54) / 10.0) + " ℃";
+        //预留字段
+        CarControlActivity.VAL_Reserved_Fields2 = String.valueOf(ByteInt_Single(bodybetys[56]));
         return true;
     }
 

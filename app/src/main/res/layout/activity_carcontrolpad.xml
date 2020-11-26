@@ -395,6 +395,28 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_4" />
 
+    <TextView
+        android:id="@+id/text56_title"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/text54_title"
+        android:layout_below="@+id/text54_title"
+        android:text="预留字段"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/text56_value"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/text56_title"
+        android:layout_toRightOf="@+id/text56_title"
+        android:text="------"
+        android:textSize="14sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_color_theme_4" />
+
 
     <TextView
         android:id="@+id/text2_title"
