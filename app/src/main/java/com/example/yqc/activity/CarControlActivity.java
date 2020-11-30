@@ -436,51 +436,73 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         qmuiRoundButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] itemstitle = new String[]{"左端停止X坐标", "左端停止Y坐标", "右端停止X坐标","右端停止Y坐标", "中间停止X坐标", "中间停止Y坐标"};
-                final String[] itemstag = new String[]{"Set_LeftX", "Set_LeftY", "Set_RightX","Set_RightY", "Set_MiddleX", "Set_MiddleY"};
-                final byte[] itemsbyte = new byte[]{(byte) 0x0F, (byte) 0x10, (byte) 0x12,(byte) 0x13, (byte) 0x14, (byte) 0x15};
-                final String[] itemsshow = new String[]{"左端停止X坐标:"+String.valueOf(LeftX/10.0)+" m", "左端停止Y坐标:"+String.valueOf(LeftY/10.0)+" m", "右端停止X坐标:"+String.valueOf(RightX/10.0)+" m","右端停止Y坐标:"+String.valueOf(RightY/10.0)+" m", "中间停止X坐标:"+String.valueOf(MiddleX/10.0)+" m", "中间停止Y坐标:"+String.valueOf(MiddleY/10.0)+" m"};
-                new QMUIDialog.MenuDialogBuilder(CarControlActivity.this)
-                        .setSkinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
-                        .addItems(itemsshow, new DialogInterface.OnClickListener() {
+                //设置密码
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(CarControlActivity.this);
+                builder.setTitle("密码")
+                        .setPlaceholder("请输入管理员密码")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, final int which) {
+                            public void onClick(QMUIDialog dialog, int index) {
                                 dialog.dismiss();
-                                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(CarControlActivity.this);
-                                builder.setTitle(itemstitle[which])
-                                        .setPlaceholder("请输入您的坐标值(m)")
-                                        .setInputType(InputType.TYPE_CLASS_TEXT)
-                                        .addAction("取消", new QMUIDialogAction.ActionListener() {
-                                            @Override
-                                            public void onClick(QMUIDialog dialog, int index) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .addAction("确定", new QMUIDialogAction.ActionListener() {
-                                            @Override
-                                            public void onClick(QMUIDialog dialog, int index) {
-                                                String text = builder.getEditText().getText().toString();
-                                                if(StringTool.StringIsNumber(text)){
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if (text.equals(getResources().getString(R.string.admin_password))) {
+                                    dialog.dismiss();
+                                    final String[] itemstitle = new String[]{"左端停止X坐标", "左端停止Y坐标", "右端停止X坐标","右端停止Y坐标", "中间停止X坐标", "中间停止Y坐标"};
+                                    final String[] itemstag = new String[]{"Set_LeftX", "Set_LeftY", "Set_RightX","Set_RightY", "Set_MiddleX", "Set_MiddleY"};
+                                    final byte[] itemsbyte = new byte[]{(byte) 0x0F, (byte) 0x10, (byte) 0x12,(byte) 0x13, (byte) 0x14, (byte) 0x15};
+                                    final String[] itemsshow = new String[]{"左端停止X坐标:"+String.valueOf(LeftX/10.0)+" m", "左端停止Y坐标:"+String.valueOf(LeftY/10.0)+" m", "右端停止X坐标:"+String.valueOf(RightX/10.0)+" m","右端停止Y坐标:"+String.valueOf(RightY/10.0)+" m", "中间停止X坐标:"+String.valueOf(MiddleX/10.0)+" m", "中间停止Y坐标:"+String.valueOf(MiddleY/10.0)+" m"};
+                                    new QMUIDialog.MenuDialogBuilder(CarControlActivity.this)
+                                            .setSkinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
+                                            .addItems(itemsshow, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, final int which) {
                                                     dialog.dismiss();
-                                                    DefaultSendBean bean = new DefaultSendBean();
-                                                    bean.setThreebyte(itemsbyte[which]);
-                                                    bean.setFourbyte((byte)( Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))) & 0xFF));
-                                                    SendData_ByteOnce(bean);
-                                                    LogTool.d("边界设置",StringTool.byteToString(bean.parse()));
-                                                    SaveSharedPreferencesInt(itemstag[which],Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))));
-                                                    initSetting();
-                                                }else {
-                                                    Toast.makeText(CarControlActivity.this, "请输入有效的坐标值,精度保留一位小数" , Toast.LENGTH_SHORT).show();
+                                                    final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(CarControlActivity.this);
+                                                    builder.setTitle(itemstitle[which])
+                                                            .setPlaceholder("请输入您的坐标值(m)")
+                                                            .setInputType(InputType.TYPE_CLASS_TEXT)
+                                                            .addAction("取消", new QMUIDialogAction.ActionListener() {
+                                                                @Override
+                                                                public void onClick(QMUIDialog dialog, int index) {
+                                                                    dialog.dismiss();
+                                                                }
+                                                            })
+                                                            .addAction("确定", new QMUIDialogAction.ActionListener() {
+                                                                @Override
+                                                                public void onClick(QMUIDialog dialog, int index) {
+                                                                    String text = builder.getEditText().getText().toString();
+                                                                    if(StringTool.StringIsNumber(text)){
+                                                                        dialog.dismiss();
+                                                                        DefaultSendBean bean = new DefaultSendBean();
+                                                                        bean.setThreebyte(itemsbyte[which]);
+                                                                        bean.setFourbyte((byte)( Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))) & 0xFF));
+                                                                        SendData_ByteOnce(bean);
+                                                                        LogTool.d("边界设置",StringTool.byteToString(bean.parse()));
+                                                                        SaveSharedPreferencesInt(itemstag[which],Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0))));
+                                                                        initSetting();
+                                                                    }else {
+                                                                        Toast.makeText(CarControlActivity.this, "请输入有效的坐标值,精度保留一位小数" , Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            })
+                                                            .create(com.qmuiteam.qmui.R.style.QMUI_Dialog).show();
                                                 }
-                                            }
-                                        })
-                                        .create(com.qmuiteam.qmui.R.style.QMUI_Dialog).show();
+                                            })
+                                            .create(com.qmuiteam.qmui.R.style.QMUI_Dialog).show();
+                                } else {
+                                    Toast.makeText(CarControlActivity.this, "请输入正确的密码", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         })
                         .create(com.qmuiteam.qmui.R.style.QMUI_Dialog).show();
             }
         });
-
 
         //急停
         qmuiRoundButtonrz = (QMUIRadiusImageView) findViewById(R.id.btn_rz);
@@ -576,6 +598,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setThreebyte((byte) 0x0B);
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
+                    //发送演示速度
+                    handcount=0;
+                    sendhandler.postDelayed(runnable,delayMillis);//定期执行
                     LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                 }
                 //手动模式
@@ -601,8 +626,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     bean.setFourbyte((byte) 0x02);
                     SendData_ByteOnce(bean);
                     //发送演示速度
-                    sendhandler.post(runnable);//定期执行
-                    sendhandler.postDelayed(runRemove, 250);//过6秒后执行
+                    handcount=0;
+                    sendhandler.postDelayed(runnable,delayMillis);//定期执行
                     LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                 }
                 //手动模式
@@ -622,28 +647,59 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         });
     }
 
+    private int handcount=0;
+    private final int delayMillis = 100;
     private Handler sendhandler = new Handler();
     private Runnable runnable  = new Runnable(){//推送runnable，定期2s执行一次
         @Override
         public void run() {
-            handler.postDelayed(runnable, 100);
-            DefaultSendBean bean = new DefaultSendBean();
-            bean.setThreebyte((byte) 0x1C);
-            bean.setFourbyte((byte)(carvalTHR & 0xFF));
-            SendData_ByteOnce(bean);
-            LogTool.d("演示速度",StringTool.byteToString(bean.parse()));
+            if (handcount==3){
+                sendhandler.removeCallbacks(runnable);
+            }else {
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x1D);
+                bean.setFourbyte((byte)(carvalTHR & 0xFF));
+                SendData_ByteOnce(bean);
+                LogTool.d("演示速度",StringTool.byteToString(bean.parse()));
+                //边界设置
+                final byte[] itemsbyte = new byte[]{(byte) 0x0F, (byte) 0x10, (byte) 0x12,(byte) 0x13, (byte) 0x14, (byte) 0x15};
+
+                for(int i = 0; i<6; i++){
+                    try {
+                        Thread.sleep(delayMillis);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    DefaultSendBean beanset = new DefaultSendBean();
+                    beanset.setThreebyte(itemsbyte[i]);
+                    switch (i){
+                        case 0:
+                            beanset.setFourbyte((byte)( LeftX & 0xFF));
+                            break;
+                        case 1:
+                            beanset.setFourbyte((byte)( LeftY & 0xFF));
+                            break;
+                        case 2:
+                            beanset.setFourbyte((byte)( RightX & 0xFF));
+                            break;
+                        case 3:
+                            beanset.setFourbyte((byte)( RightY & 0xFF));
+                            break;
+                        case 4:
+                            beanset.setFourbyte((byte)( MiddleX & 0xFF));
+                        case 5:
+                            beanset.setFourbyte((byte)( MiddleY & 0xFF));
+                            break;
+                    }
+                    SendData_ByteOnce(beanset);
+                    LogTool.d("边界设置",StringTool.byteToString(beanset.parse()));
+
+                }
+                handcount++;
+                sendhandler.postDelayed(runnable, delayMillis);
+            }
         }
     };
-    private Runnable runRemove  = new Runnable(){//移除runnable，在6s后移除
-
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            handler.removeCallbacks(runnable);
-        }
-
-    };
-
 
     private void initPagers() {
         HomeController.HomeControlListener listener = new HomeController.HomeControlListener() {

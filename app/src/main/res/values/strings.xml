@@ -13,6 +13,8 @@
     <string name="set_timersetshow">无计划</string>
     <!-- 偏好设置Tag  -->
     <string name="set_tag_isshowdemo">Set_IsShowDemo</string>
+    <!-- 管理员密码  -->
+    <string name="admin_password">123456</string>
 
 
     <string name="btn_set">飞控设置</string>

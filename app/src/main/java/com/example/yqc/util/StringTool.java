@@ -113,6 +113,9 @@ public class StringTool {
             case 3:
                 CarControlActivity.VAL_Sport_Mode = "手动控制模式";
                 break;
+            case 4:
+                CarControlActivity.VAL_Sport_Mode = "低功耗模式";
+                break;
             default:
                 CarControlActivity.VAL_Sport_Mode = "数据异常";
         }
