@@ -842,6 +842,24 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_1" />
 
+    <ImageView
+        android:id="@+id/circularview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Logo"
+        android:layout_alignBottom="@+id/tcpstatus"
+        android:layout_toRightOf="@+id/tcpstatus"
+        android:layout_marginLeft="20dp"
+        android:src="@mipmap/circulargrey"
+        android:visibility="visible"/>
+
+    <com.example.breatheview.BreatheView
+        android:id="@+id/breatheview"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignBottom="@+id/tcpstatus"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/tcpstatus" />
 
     <com.qmuiteam.qmui.widget.tab.QMUITabSegment
         android:id="@+id/tabs"

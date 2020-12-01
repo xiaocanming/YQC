@@ -2,6 +2,7 @@ package com.example.yqc.activity;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.example.breatheview.BreatheView;
 import com.example.yqc.R;
 import com.example.yqc.activity.carcontrol.HomeController;
 import com.example.yqc.activity.carcontrol.ManualController;
@@ -81,6 +84,9 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 
 public class CarControlActivity extends AppCompatActivity  implements SurfaceHolder.Callback {
@@ -144,6 +150,10 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private QMUIRadiusImageView qmuiRoundButtonrz;
     //速度固化
     private QMUIRoundButton qmuiRoundButtonsugh;
+
+    //呼吸灯
+    private BreatheView breatheView;
+    private ImageView circularView;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -345,8 +355,16 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         //摄像头
         m_osurfaceView = (SurfaceView) findViewById(R.id.Sur_Player);
         m_osurfaceView.getHolder().addCallback(this);
-
-
+        //呼吸灯
+        breatheView=(BreatheView) findViewById(R.id.breatheview);
+        circularView=(ImageView) findViewById(R.id.circularview);
+        breatheView.setInterval(2000) //设置闪烁间隔时间
+                .setCoreRadius(5f)//设置中心圆半径
+                .setDiffusMaxWidth(20f)//设置闪烁圆的最大半径
+                .setDiffusColor(Color.parseColor("#1afa29"))//设置闪烁圆的颜色
+                .setCoreColor(Color.parseColor("#d81e06"));//设置中心圆的颜色
+        circularView.setImageResource(R.mipmap.circulargrey);
+        circularView.setVisibility(VISIBLE);
         //摄像头初始化
         handler=new Handler();
         startStep=2;
@@ -988,14 +1006,14 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 params.height=QMUIDisplayHelper.dp2px(CarControlActivity.this, 300);
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 addContentView(playView[i], params);
-                playView[i].setVisibility(View.INVISIBLE);
+                playView[i].setVisibility(INVISIBLE);
 
             }
         }
 
         if (bSingle) {
             for (int i = 0; i < 4; ++i) {
-                playView[i].setVisibility(View.INVISIBLE);
+                playView[i].setVisibility(INVISIBLE);
             }
             playView[0].setParam(QMUIDisplayHelper.dp2px(CarControlActivity.this, 450) ,QMUIDisplayHelper.dp2px(CarControlActivity.this, 300));
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -1007,7 +1025,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             // params.
             params.gravity = Gravity.TOP | Gravity.RIGHT;
             playView[0].setLayoutParams(params);
-            playView[0].setVisibility(View.VISIBLE);
+            playView[0].setVisibility(VISIBLE);
         }
     }
 
@@ -1036,11 +1054,10 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         }
     }
 
+    private int uitime;
     private final Runnable ui_task = new Runnable() {
         @Override
         public void run() {
-            // TODO Auto-generated method stub
-            ui_handler.postDelayed(this, 30);
             //电池显示
             batteryView.setPower(VAL_Voltage_24V_Int);
             //小车数据
@@ -1095,6 +1112,31 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     homeComponentsController.setButtonEnble(true,"桅杆起立");
                 }
             }
+            // TODO Auto-generated method stub
+            int uidelayMillis = 30;
+            if(uitime>1000){
+                breatheView.onStop();
+                circularView.setImageResource(R.mipmap.circulargrey);
+                circularView.setVisibility(VISIBLE);
+            }else {
+                if(VAL_Sport_Mode.equals("低功耗模式")){
+                    if(circularView.getVisibility()==VISIBLE){
+                        circularView.setVisibility(INVISIBLE);
+                        breatheView.onStart();
+                    }
+                }
+                else if(VAL_Sport_Mode.equals("")){
+                    breatheView.onStop();
+                    circularView.setImageResource(R.mipmap.circulargrey);
+                    circularView.setVisibility(VISIBLE);
+                }else {
+                    breatheView.onStop();
+                    circularView.setImageResource(R.mipmap.circulargreen);
+                    circularView.setVisibility(VISIBLE);
+                }
+                uitime=uitime+uidelayMillis;
+            }
+            ui_handler.postDelayed(this, uidelayMillis);
         }
     };
 
@@ -1238,6 +1280,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 //                //喂狗操作
 //                mManager.getPulseManager().feed();
 //            }
+            uitime=0;
             if(updatetextView){
                 String responseString=StringTool.byteToString(data.getHeadBytes())+StringTool.byteToString(data.getBodyBytes());
                 textView.setText(responseString);
@@ -1292,6 +1335,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         // 将内存中的数据写到XML文件中去   
         editor.commit();
     }
+
 
     private void setButtonEnble(boolean enble){
         homeComponentsController.setButtonEnble(enble);
