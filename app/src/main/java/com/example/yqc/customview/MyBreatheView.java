@@ -28,6 +28,7 @@ public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateL
     private float circleY;
     private int durrarion;
     private Runnable heartBeatRunnable;
+    private boolean polling;
 
     public MyBreatheView(Context context) {
         this(context, (AttributeSet)null);
@@ -50,6 +51,7 @@ public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateL
         this.heartBeatRunnable = new Runnable() {
             public void run() {
                 MyBreatheView.this.connect();
+                polling=!polling;
                 MyBreatheView.this.mHandler.postDelayed(this, MyBreatheView.this.HEART_BEAT_RATE);
             }
         };
@@ -139,12 +141,22 @@ public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateL
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (this.mIsDiffuse) {
-            this.mPaint.setColor(this.mDiffusionColor);
+            //设置闪烁圆颜色
+            if(polling){
+                this.mPaint.setColor(Color.parseColor("#FDFDFD"));
+            }else {
+                this.mPaint.setColor(Color.parseColor("#1295D9"));
+            }
             this.mPaint.setAlpha((int)((float)this.color - (float)this.color * this.mFraction));
             canvas.drawCircle(this.circleX, this.circleY, this.mCoreRadius + this.mMaxWidth * this.mFraction, this.mPaint);
             this.mPaint.setAntiAlias(true);
             this.mPaint.setAlpha(255);
-            this.mPaint.setColor(this.mCoreColor);
+            //设置中心圆颜色
+            if(polling){
+                this.mPaint.setColor(Color.parseColor("#FDFDFD"));
+            }else {
+                this.mPaint.setColor(Color.parseColor("#1295D9"));
+            }
             canvas.drawCircle(this.circleX, this.circleY, this.mCoreRadius, this.mPaint);
         }
 

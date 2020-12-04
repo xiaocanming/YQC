@@ -63,5 +63,4 @@ dependencies {
     implementation 'com.tonystark.android:socket:4.1.0'
     //添加时间选择器
     implementation 'com.contrarywind:Android-PickerView:3.2.7'
-    implementation 'com.github.Jeromeer:BreatheView:0.1.3'
 }

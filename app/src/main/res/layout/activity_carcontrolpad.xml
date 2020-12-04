@@ -853,7 +853,7 @@
         android:src="@mipmap/circulargrey"
         android:visibility="visible"/>
 
-    <com.example.breatheview.BreatheView
+    <com.example.yqc.customview.MyBreatheView
         android:id="@+id/breatheview"
         android:layout_width="25dp"
         android:layout_height="25dp"

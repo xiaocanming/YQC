@@ -274,10 +274,10 @@ public class ManualController extends HomeController{
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton9DOWN=true;
-                        return true;
+                        return false;
                     case MotionEvent.ACTION_UP:
                         MyRoundButton9DOWN=false;
-                        return true;
+                        return false;
                 }
                 return false;
             }
@@ -292,10 +292,10 @@ public class ManualController extends HomeController{
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton10DOWN=true;
-                        return true;
+                        return false;
                     case MotionEvent.ACTION_UP:
                         MyRoundButton10DOWN=false;
-                        return true;
+                        return false;
                 }
                 return false;
             }
@@ -310,10 +310,10 @@ public class ManualController extends HomeController{
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton11DOWN=true;
-                        return true;
+                        return false;
                     case MotionEvent.ACTION_UP:
                         MyRoundButton11DOWN=false;
-                        return true;
+                        return false;
                 }
                 return false;
             }
@@ -328,10 +328,10 @@ public class ManualController extends HomeController{
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton12DOWN=true;
-                        return true;
+                        return false;
                     case MotionEvent.ACTION_UP:
                         MyRoundButton12DOWN=false;
-                        return true;
+                        return false;
                 }
                 return false;
             }

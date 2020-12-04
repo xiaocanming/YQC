@@ -49,4 +49,6 @@
     <string name="btn_jies">解锁</string>
     <string name="btn_jiaozhun">校准</string>
 
+    <declare-styleable name="MyBreatheView"><attr format="integer" name="duration"/></declare-styleable>
+
 </resources>

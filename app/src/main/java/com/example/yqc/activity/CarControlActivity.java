@@ -28,13 +28,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.example.breatheview.BreatheView;
 import com.example.yqc.R;
 import com.example.yqc.activity.carcontrol.HomeController;
 import com.example.yqc.activity.carcontrol.ManualController;
 import com.example.yqc.activity.carcontrol.ShowController;
 import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.BatteryView;
+import com.example.yqc.customview.MyBreatheView;
 import com.example.yqc.customview.MyRoundButton;
 import com.example.yqc.customview.NoScrollViewPager;
 import com.example.yqc.customview.PlaySurfaceView;
@@ -152,7 +152,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private QMUIRoundButton qmuiRoundButtonsugh;
 
     //呼吸灯
-    private BreatheView breatheView;
+    private MyBreatheView breatheView;
     private ImageView circularView;
 
     private HomeController homeUtilController;
@@ -356,13 +356,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         m_osurfaceView = (SurfaceView) findViewById(R.id.Sur_Player);
         m_osurfaceView.getHolder().addCallback(this);
         //呼吸灯
-        breatheView=(BreatheView) findViewById(R.id.breatheview);
+        breatheView=(MyBreatheView) findViewById(R.id.breatheview);
         circularView=(ImageView) findViewById(R.id.circularview);
-        breatheView.setInterval(2000) //设置闪烁间隔时间
-                .setCoreRadius(5f)//设置中心圆半径
-                .setDiffusMaxWidth(20f)//设置闪烁圆的最大半径
-                .setDiffusColor(Color.parseColor("#1afa29"))//设置闪烁圆的颜色
-                .setCoreColor(Color.parseColor("#d81e06"));//设置中心圆的颜色
+//        breatheView.setInterval(1000) //设置闪烁间隔时间
+//                .setCoreRadius(5f)//设置中心圆半径
+//                .setDiffusMaxWidth(20f)//设置闪烁圆的最大半径
+//                .setDiffusColor(Color.parseColor("#1afa29"))//设置闪烁圆的颜色
+//                .setCoreColor(Color.parseColor("#d81e06"));//设置中心圆的颜色
+        breatheView.setCoreRadius(25f)//设置中心圆半径
+                .setDiffusMaxWidth(0f);//设置闪烁圆的最大半径
         circularView.setImageResource(R.mipmap.circulargrey);
         circularView.setVisibility(VISIBLE);
         //摄像头初始化
@@ -705,6 +707,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                             break;
                         case 4:
                             beanset.setFourbyte((byte)( MiddleX & 0xFF));
+                            break;
                         case 5:
                             beanset.setFourbyte((byte)( MiddleY & 0xFF));
                             break;
