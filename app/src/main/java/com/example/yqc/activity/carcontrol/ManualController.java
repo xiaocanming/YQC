@@ -70,9 +70,9 @@ public class ManualController extends HomeController{
                 LogTool.d("位置复位", StringTool.byteToString(bean.parse()));
             }
         });
-        //桅杆复位
+        //桅杆收拢
         MyRoundButton MyRoundButton2= new MyRoundButton(getContext());
-        MyRoundButton2.setText("桅杆复位");
+        MyRoundButton2.setText("桅杆收拢");
         MyRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
-                LogTool.d("桅杆复位",StringTool.byteToString(bean.parse()));
+                LogTool.d("桅杆收拢",StringTool.byteToString(bean.parse()));
             }
         });
         //桅杆起立

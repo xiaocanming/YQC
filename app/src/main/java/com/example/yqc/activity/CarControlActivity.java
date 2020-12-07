@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Chronometer;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -154,6 +156,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     //呼吸灯
     private MyBreatheView breatheView;
     private ImageView circularView;
+
+    //计时器
+    private Chronometer ch;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -363,10 +368,26 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 //                .setDiffusMaxWidth(20f)//设置闪烁圆的最大半径
 //                .setDiffusColor(Color.parseColor("#1afa29"))//设置闪烁圆的颜色
 //                .setCoreColor(Color.parseColor("#d81e06"));//设置中心圆的颜色
-        breatheView.setCoreRadius(25f)//设置中心圆半径
-                .setDiffusMaxWidth(0f);//设置闪烁圆的最大半径
+        breatheView.setCoreRadius(20f)//设置中心圆半径
+                .setDiffusMaxWidth(5f);//设置闪烁圆的最大半径
         circularView.setImageResource(R.mipmap.circulargrey);
         circularView.setVisibility(VISIBLE);
+        //获取计时器组件
+        ch = (Chronometer) findViewById(R.id.test);
+
+        //摄像头重连
+        QMUIRadiusImageView qmuiRadiusCarmerconnet = (QMUIRadiusImageView) findViewById(R.id.btn_carmerconnet);
+        qmuiRadiusCarmerconnet.setCornerRadius(QMUIDisplayHelper.dp2px(CarControlActivity.this, 10));
+        qmuiRadiusCarmerconnet.setSelectedBorderColor(
+                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_border_color));
+        qmuiRadiusCarmerconnet.setSelectedBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 1));
+        qmuiRadiusCarmerconnet.setCircle(true);
+        qmuiRadiusCarmerconnet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                start_preview_sub();
+            }
+        });
         //摄像头初始化
         handler=new Handler();
         startStep=2;
@@ -560,6 +581,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 bean.setFourbyte((byte) 0xA5);
                 SendData_ByteOnce(bean);
                 setButtonEnble(true);
+                if(mTabSegment.getSelectedIndex()==Pager.Manual.ordinal()){
+                    Start_Chronometer();
+                }
                 LogTool.d("使能运动",StringTool.byteToString(bean.parse()));
             }
         });
@@ -727,6 +751,11 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             @Override
             public void sendDataByteOnce(DefaultSendBean bean) {
                 SendData_ByteOnce(bean);
+            }
+
+            @Override
+            public void startChronometer() {
+                Start_Chronometer();
             }
         };
 
@@ -1125,6 +1154,11 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 if(VAL_Sport_Mode.equals("低功耗模式")){
                     if(circularView.getVisibility()==VISIBLE){
                         circularView.setVisibility(INVISIBLE);
+                        breatheView.setInterval(2000l);
+                        breatheView.onStart();
+                    }
+                    if(breatheView.getInterval()!=2000l){
+                        breatheView.setInterval(2000l);
                         breatheView.onStart();
                     }
                 }
@@ -1133,9 +1167,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     circularView.setImageResource(R.mipmap.circulargrey);
                     circularView.setVisibility(VISIBLE);
                 }else {
-                    breatheView.onStop();
-                    circularView.setImageResource(R.mipmap.circulargreen);
-                    circularView.setVisibility(VISIBLE);
+                    if(circularView.getVisibility()==VISIBLE){
+                        circularView.setVisibility(INVISIBLE);
+                        breatheView.setInterval(1000l);
+                        breatheView.onStart();
+                    }
+                    if(breatheView.getInterval()!=1000l){
+                        breatheView.setInterval(1000l);
+                        breatheView.onStart();
+                    }
                 }
                 uitime=uitime+uidelayMillis;
             }
@@ -1355,6 +1395,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         qmuiRoundButtonrz.setTouchSelectModeEnabled(enble);
         qmuiRoundButtonsugh.setEnabled(enble);
         qmuiRoundButtonsugh.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+    }
+
+    private void Start_Chronometer(){
+        //设置开始计时时间
+        ch.setBase(SystemClock.elapsedRealtime());
+        int hour = (int) ((SystemClock.elapsedRealtime() - ch.getBase()) / 1000 / 60);
+        ch.setFormat("0"+String.valueOf(hour)+":%s");
+        //启动计时器
+        ch.start();
     }
 
 

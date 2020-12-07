@@ -13,8 +13,6 @@ import android.view.View;
 import com.example.yqc.R;
 
 public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateListener {
-    private int mDiffusionColor;
-    private int mCoreColor;
     private float mCoreRadius;
     private float mMaxWidth;
     private int color;
@@ -40,8 +38,6 @@ public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateL
 
     public MyBreatheView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.mDiffusionColor = Color.parseColor("#303F9F");
-        this.mCoreColor = Color.parseColor("#FF4081");
         this.mCoreRadius = 30.0F;
         this.mMaxWidth = 40.0F;
         this.color = 255;
@@ -97,19 +93,13 @@ public class MyBreatheView extends View implements ValueAnimator.AnimatorUpdateL
         return this;
     }
 
-    public MyBreatheView setDiffusColor(int color) {
-        this.mDiffusionColor = color;
-        return this;
-    }
-
-    public MyBreatheView setCoreColor(int coreColor) {
-        this.mCoreColor = coreColor;
-        return this;
-    }
-
     public MyBreatheView setInterval(long durataion) {
         this.HEART_BEAT_RATE = durataion;
         return this;
+    }
+
+    public long getInterval() {
+        return this.HEART_BEAT_RATE;
     }
 
     public void invalidate() {

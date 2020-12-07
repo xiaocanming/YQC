@@ -55,6 +55,7 @@ public class ShowController extends HomeController{
                 bean.setThreebyte((byte) 0x01);
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
+                startChronometer();
                 LogTool.d("单程演示",StringTool.byteToString(bean.parse()));
             }
         });
@@ -68,6 +69,7 @@ public class ShowController extends HomeController{
                 bean.setThreebyte((byte) 0x01);
                 bean.setFourbyte((byte) 0x02);
                 sendDataByteOnce(bean);
+                startChronometer();
                 LogTool.d("往复演示",StringTool.byteToString(bean.parse()));
             }
         });
@@ -88,6 +90,7 @@ public class ShowController extends HomeController{
                     bean.setThreebyte((byte) 0x02);
                     bean.setFourbyte((byte)0xA5);
                     sendDataByteOnce(bean);
+                    startChronometer();
                     LogTool.d("开始演示",StringTool.byteToString(bean.parse()));
                 }
             });

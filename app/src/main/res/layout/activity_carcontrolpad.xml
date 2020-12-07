@@ -27,6 +27,16 @@
     </RelativeLayout>
 
 
+    <Chronometer
+        android:id="@+id/test"
+        android:textSize="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:format="00:00:00"
+        android:textColor="@color/app_color_theme_4"
+        android:layout_alignRight="@+id/Play"
+        android:layout_below="@+id/Play"
+        android:layout_marginTop="5dp"/>
 
     <com.example.yqc.customview.ThrottleView
         android:id="@+id/thr_bar"
@@ -797,6 +807,8 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"/>
 
+
+
     <TextView
         android:id="@+id/carmerstatustitle"
         android:layout_width="wrap_content"
@@ -818,6 +830,16 @@
         android:layout_toRightOf="@+id/carmerstatustitle"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_1" />
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/btn_carmerconnet"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@mipmap/circulargreen"
+        android:layout_alignBottom="@+id/carmerstatus"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/carmerstatus"
+     />
 
     <TextView
         android:id="@+id/tcpstatustitle"
