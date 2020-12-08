@@ -232,7 +232,7 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//禁止屏幕变暗
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//禁止屏幕变暗
         setContentView(R.layout.activity_carcontrolpad);
 
         if (!initeSdk()) {
@@ -377,11 +377,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 
         //摄像头重连
         QMUIRadiusImageView qmuiRadiusCarmerconnet = (QMUIRadiusImageView) findViewById(R.id.btn_carmerconnet);
-        qmuiRadiusCarmerconnet.setCornerRadius(QMUIDisplayHelper.dp2px(CarControlActivity.this, 10));
-        qmuiRadiusCarmerconnet.setSelectedBorderColor(
-                ContextCompat.getColor(CarControlActivity.this, R.color.radiusImageView_selected_border_color));
-        qmuiRadiusCarmerconnet.setSelectedBorderWidth(QMUIDisplayHelper.dp2px(CarControlActivity.this, 1));
-        qmuiRadiusCarmerconnet.setCircle(true);
         qmuiRadiusCarmerconnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

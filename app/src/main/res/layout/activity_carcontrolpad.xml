@@ -831,15 +831,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_color_theme_1" />
 
-    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-        android:id="@+id/btn_carmerconnet"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:src="@mipmap/circulargreen"
-        android:layout_alignBottom="@+id/carmerstatus"
-        android:layout_marginLeft="20dp"
-        android:layout_toRightOf="@+id/carmerstatus"
-     />
+
 
     <TextView
         android:id="@+id/tcpstatustitle"
@@ -882,6 +874,21 @@
         android:layout_alignBottom="@+id/tcpstatus"
         android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/tcpstatus" />
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/btn_carmerconnet"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/circulargreen"
+        android:layout_alignBottom="@+id/breatheview"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/breatheview"
+        app:qmui_border_color="?attr/qmui_config_color_gray_6"
+        app:qmui_border_width="1dp"
+        app:qmui_corner_radius="4dp"
+        app:qmui_selected_border_color="@color/radiusImageView_selected_border_color"
+        app:qmui_selected_border_width="1dp"
+        />
 
     <com.qmuiteam.qmui.widget.tab.QMUITabSegment
         android:id="@+id/tabs"
