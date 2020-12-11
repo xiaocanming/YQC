@@ -777,8 +777,8 @@ public class CarControlActivity extends AppCompatActivity  {
                 })
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
-//        mManager.registerReceiver(adapter);
-//        mManager.connect();
+        mManager.registerReceiver(adapter);
+        mManager.connect();
     }
 
     private DeviceBean getDeviceBean() {
