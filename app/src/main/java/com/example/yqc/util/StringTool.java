@@ -31,11 +31,9 @@ public class StringTool {
     /*Java 解析接受到的数据*/
     public static boolean getReadString(byte[] headbetys, byte[] bodybetys) {
         //检验数据合法性
-        if (headbetys[0] != (byte) 0xAA || headbetys[1] != (byte) 0x55) {
-            return false;
-        }
         byte sum = 0;
-        for (int i = 0; i < 2; i++) sum += headbetys[i];
+        sum+=(byte) 0xAA;
+        sum+=(byte) 0x55;
         for (int i = 0; i < CarControlActivity.BodyLength - 1; i++) sum += bodybetys[i];
         if (bodybetys[CarControlActivity.BodyLength - 1] != sum) {
             return false;

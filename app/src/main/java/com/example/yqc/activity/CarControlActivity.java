@@ -1,6 +1,10 @@
 package com.example.yqc.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -39,10 +43,10 @@ import com.example.yqc.customview.BatteryView;
 import com.example.yqc.customview.MyBreatheView;
 import com.example.yqc.customview.MyRoundButton;
 import com.example.yqc.customview.NoScrollViewPager;
-import com.example.yqc.customview.PlaySurfaceView;
 import com.example.yqc.customview.SingleRockerView;
 import com.example.yqc.customview.ThrottleView;
-import com.example.yqc.jna.HCNetSDKJNAInstance;
+import com.example.yqc.hkws.DeviceBean;
+import com.example.yqc.hkws.HC_DVRManager;
 import com.example.yqc.util.CubbyHole;
 import com.example.yqc.util.LogTool;
 import com.example.yqc.util.MathTool;
@@ -91,7 +95,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 
-public class CarControlActivity extends AppCompatActivity  implements SurfaceHolder.Callback {
+public class CarControlActivity extends AppCompatActivity  {
     private BatteryView batteryView;
     //    小车数据
     private TextView mTextView11;
@@ -188,13 +192,11 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
     private static int  carvalTHR;
 
     //摄像头
-    private int m_iLogID = -1; // return by NET_DVR_Login_v30
-    private int m_iPlayID = -1; // return by NET_DVR_RealPlay_V40
-    private int m_iPlaybackID = -1; // return by NET_DVR_PlayBackByTime
-    private NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = null;
-    private int m_iStartChan = 0; // start channel number
-    private int m_iChanNum = 0; // channel number
-    private static PlaySurfaceView[] playView = new PlaySurfaceView[4];
+    private final StartRenderingReceiver receiver = new StartRenderingReceiver();
+    /**
+     * 返回标记
+     */
+    private boolean backflag;
 
     private final String TAG = "CarControlActivity";
 
@@ -235,10 +237,8 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//禁止屏幕变暗
         setContentView(R.layout.activity_carcontrolpad);
 
-        if (!initeSdk()) {
-            this.finish();
-            return;
-        }
+        // 设置用于发广播的上下文
+        HC_DVRManager.getInstance().setContext(getApplicationContext());
         initSetting();
         initView();
         initTcp();
@@ -247,68 +247,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
 
     }
 
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        m_osurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-        Log.i(TAG, "surface is created");
-
-
-        if(playView[0]==null){
-            return;
-        }
-        playView[0].m_hHolder = surfaceHolder;
-        Surface surface = surfaceHolder.getSurface();
-        if (true == surface.isValid()) {
-            if (m_iPlayID != -1) {
-                if (-1 == HCNetSDK.getInstance().NET_DVR_RealPlaySurfaceChanged(m_iPlayID, 0, surfaceHolder)) {
-                    Log.e(TAG, "Player setVideoWindow failed!");
-                }
-            } else {
-                if (-1 == HCNetSDK.getInstance().NET_DVR_PlayBackSurfaceChanged(m_iPlaybackID, 0, surfaceHolder)) {
-                    Log.e(TAG, "Player setVideoWindow failed!");
-                }
-            }
-
-        }
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        Log.i(TAG, "surface changed");
-    }
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-        Log.i(TAG, "Player setVideoWindow release!");
-        if (-1 == m_iPlayID && -1 == m_iPlaybackID) {
-            return;
-        }
-        if (true == surfaceHolder.getSurface().isValid()) {
-            if (m_iPlayID != -1) {
-                if (-1 == HCNetSDK.getInstance().NET_DVR_RealPlaySurfaceChanged(m_iPlayID, 0, null)) {
-                    Log.e(TAG, "Player setVideoWindow failed!");
-                }
-            } else {
-                if (-1 == HCNetSDK.getInstance().NET_DVR_PlayBackSurfaceChanged(m_iPlaybackID, 0, null)) {
-                    Log.e(TAG, "Player setVideoWindow failed!");
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("m_iPlayID", m_iPlayID);
-        super.onSaveInstanceState(outState);
-        Log.i(TAG, "onSaveInstanceState");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        m_iPlayID = savedInstanceState.getInt("m_iPlayID");
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.i(TAG, "onRestoreInstanceState");
-    }
 
     private void initView() {
         //电池
@@ -359,7 +297,25 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         mTabSegment=findViewById(R.id.tabs);
         //摄像头
         m_osurfaceView = (SurfaceView) findViewById(R.id.Sur_Player);
-        m_osurfaceView.getHolder().addCallback(this);
+        m_osurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                Log.d("DEBUG", getLocalClassName() + " surfaceDestroyed");
+                m_osurfaceView.destroyDrawingCache();
+            }
+
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Log.d("DEBUG", getLocalClassName() + " surfaceCreated");
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format,
+                                       int width, int height) {
+                Log.d("DEBUG", getLocalClassName() + " surfaceChanged");
+            }
+        });
         //呼吸灯
         breatheView=(MyBreatheView) findViewById(R.id.breatheview);
         circularView=(ImageView) findViewById(R.id.circularview);
@@ -380,25 +336,15 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         qmuiRadiusCarmerconnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start_preview_sub();
+                startPlay();
             }
         });
         //摄像头初始化
         handler=new Handler();
-        startStep=2;
         Runnable runnable=new Runnable(){
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                //要做的事情，这里再次调用此Runnable对象，以实现每两秒实现一次的定时器操作
-                if(startStep==2){
-                    login_sub();
-                    startStep=3;
-                    handler.postDelayed(this, 500);
-                }
-                else if(startStep==3){
-                    start_preview_sub();
-                }
+                startPlay();
             }
         };
         handler.postDelayed(runnable, 5000);
@@ -597,16 +543,6 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         });
     }
 
-    private boolean initeSdk() {
-        // init net sdk
-        if (!HCNetSDK.getInstance().NET_DVR_Init()) {
-            Log.e(TAG, "HCNetSDK init is failed!");
-            return false;
-        }
-        HCNetSDK.getInstance().NET_DVR_SetLogToFile(3, "/mnt/sdcard/sdklog/", true);
-        return true;
-    }
-
     private void initTabs() {
         QMUITabBuilder builder = mTabSegment.tabBuilder();
 
@@ -792,6 +728,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
         carvalTHR=sp.getInt("Set_CarvalTHR", 5);
     }
 
+    private static  byte heard1;
+    private static  boolean socketstatus=true;
+
     private void initTcp() {
         final Handler handler = new Handler();
         mInfo = new ConnectionInfo(HostIP, HostPort);
@@ -808,17 +747,29 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 .setReaderProtocol(new IReaderProtocol() {
                     @Override
                     public int getHeaderLength() {
-                        return 2;
+                        if(socketstatus){
+                            return 2;
+                        }else {
+                            return 1;
+                        }
                     }
 
                     @Override
                     public int getBodyLength(byte[] header, ByteOrder byteOrder) {
-                        if(header[0]==(byte) 0xAA&&header[1]==(byte) 0x55){
-                            return BodyLength;
-                        }else {
-                            if(BodyLength%2==0){
-                                return 1;
+                        if(socketstatus){
+                            if(header[0]==(byte) 0xAA&&header[1]==(byte) 0x55){
+                                return BodyLength;
                             }else {
+                                socketstatus=false;
+                                heard1=header[0];
+                                return 0;
+                            }
+                        }else {
+                            if(heard1==(byte) 0xAA&&header[0]==(byte) 0x55){
+                                socketstatus=true;
+                                return BodyLength;
+                            }else {
+                                heard1=header[0];
                                 return 0;
                             }
                         }
@@ -826,246 +777,51 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 })
                 .build();
         mManager = OkSocket.open(mInfo).option(mOkOptions);
-        mManager.registerReceiver(adapter);
-        mManager.connect();
+//        mManager.registerReceiver(adapter);
+//        mManager.connect();
     }
 
-    private void login_sub() {
-        try {
-            if (m_iLogID < 0) {
-                // login on the device
-                m_iLogID = loginDevice();
-                if (m_iLogID < 0) {
-                    Log.e(TAG, "This device logins failed!");
-                    mTextViewCarmerStatus.setText("登录失败");
-                    mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
-                    Toast toast=Toast.makeText(getApplicationContext(), "无法连接设备,请重新登陆", Toast.LENGTH_SHORT);
-                    toast.show();
-                    return;
-                } else {
-                    Log.i(TAG, "m_iLogID=" + m_iLogID);
+    private DeviceBean getDeviceBean() {
+        DeviceBean bean = new DeviceBean();
+        bean.setIP(ipaddr);
+        bean.setPort(String.valueOf(ipaddrport));
+        bean.setUserName(username);
+        bean.setPassWord(password);
+        bean.setChannel("0");
+        return bean;
+    }
+
+    protected void startPlay() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(HC_DVRManager.ACTION_START_RENDERING);
+        filter.addAction(HC_DVRManager.ACTION_DVR_OUTLINE);
+        registerReceiver(receiver, filter);
+
+        mTextViewCarmerStatus.setText("连接中……");
+        mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+        if (backflag) {
+            backflag = false;
+            new Thread() {
+                @Override
+                public void run() {
+                    HC_DVRManager.getInstance().setSurfaceHolder(
+                            m_osurfaceView.getHolder());
+                    HC_DVRManager.getInstance().realPlay();
                 }
-                // get instance of exception callback and set
-                ExceptionCallBack oexceptionCbf = getExceptiongCbf();
-                if (oexceptionCbf == null) {
-                    Log.e(TAG, "ExceptionCallBack object is failed!");
-                    mTextViewCarmerStatus.setText("1设备出错");
-                    mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
-                    Toast toast=Toast.makeText(getApplicationContext(), "设备出错，请检查", Toast.LENGTH_SHORT);
-                    toast.show();
-                    return;
+            }.start();
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    HC_DVRManager.getInstance().setDeviceBean(getDeviceBean());
+                    HC_DVRManager.getInstance().setSurfaceHolder(
+                            m_osurfaceView.getHolder());
+                    HC_DVRManager.getInstance().initSDK();
+                    HC_DVRManager.getInstance().loginDevice();
+                    HC_DVRManager.getInstance().realPlay();
                 }
-
-                if (!HCNetSDK.getInstance().NET_DVR_SetExceptionCallBack(oexceptionCbf)) {
-                    Log.e(TAG, "NET_DVR_SetExceptionCallBack is failed!");
-                    mTextViewCarmerStatus.setText("2设备出错");
-                    mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
-                    Toast toast=Toast.makeText(getApplicationContext(), "设备出错，请检查", Toast.LENGTH_SHORT);
-                    toast.show();
-                    return;
-                }
-
-                //m_oLoginBtn.setText("Logout");
-                Log.i(TAG, "Login sucess");
-            } else {
-                // whether we have logout
-                if (!HCNetSDK.getInstance().NET_DVR_Logout_V30(m_iLogID)) {
-                    Log.e(TAG, " NET_DVR_Logout is failed!");
-                    mTextViewCarmerStatus.setText("3设备出错");
-                    mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
-                    //if (!HCNetSDKJNAInstance.getInstance().NET_DVR_DeleteOpenEzvizUser(m_iLogID)) {
-                    //		Log.e(TAG, " NET_DVR_DeleteOpenEzvizUser is failed!");
-                    return;
-                }
-                //m_oLoginBtn.setText("Login");
-                m_iLogID = -1;
-            }
-
-        } catch (Exception err) {
-            Log.e(TAG, "error: " + err.toString());
+            }.start();
         }
-
-    }
-
-    private int loginDevice()
-    {
-        int iLogID = -1;
-        iLogID = loginNormalDevice();
-        // iLogID = JNATest.TEST_EzvizLogin();
-        // iLogID = loginEzvizDevice();
-        return iLogID;
-    }
-
-    private int loginNormalDevice()
-    {
-        // get instance
-        m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
-        if (null == m_oNetDvrDeviceInfoV30)
-        {
-            Log.e(TAG, "HKNetDvrDeviceInfoV30 new is failed!");
-            return -1;
-        }
-        String strIP = ipaddr;//m_oIPAddr.getText().toString();
-        int nPort =ipaddrport; //Integer.parseInt(m_oPort.getText().toString());
-        String strUser = username;//m_oUser.getText().toString();
-        String strPsd =password;//"admin123";
-
-        // call NET_DVR_Login_v30 to login on, port 8000 as default
-        int iLogID = HCNetSDK.getInstance().NET_DVR_Login_V30(strIP, nPort, strUser, strPsd, m_oNetDvrDeviceInfoV30);
-        if (iLogID < 0)
-        {
-            Log.e(TAG, "NET_DVR_Login is failed!Err:" + HCNetSDK.getInstance().NET_DVR_GetLastError());
-            return -1;
-        }
-
-        if (m_oNetDvrDeviceInfoV30.byChanNum > 0)
-        {
-            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartChan;
-            m_iChanNum = m_oNetDvrDeviceInfoV30.byChanNum;
-        }
-        else if (m_oNetDvrDeviceInfoV30.byIPChanNum > 0)
-        {
-            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartDChan;
-            m_iChanNum = m_oNetDvrDeviceInfoV30.byIPChanNum + m_oNetDvrDeviceInfoV30.byHighDChanNum * 256;
-        }
-
-        if (m_iChanNum > 1)
-        {
-            ChangeSingleSurFace(false);
-        }
-        else
-        {
-            ChangeSingleSurFace(true);
-        }
-        Log.i(TAG, "NET_DVR_Login is Successful!");
-        return iLogID;
-    }
-
-    private void start_preview_sub() {
-        try {
-
-            if (m_iLogID < 0) {
-                Log.e(TAG, "please login on device first");
-                return;
-            }
-
-            if (m_iPlaybackID >= 0) {
-                Log.i(TAG, "Please stop palyback first");
-                return;
-            }
-
-
-            if (m_iPlayID < 0) {
-                startSinglePreview();
-
-            } else {
-                stopSinglePreview();
-            }
-        } catch (Exception ex) {
-            Log.e(TAG, ex.toString());
-        }
-    }
-
-    private void stopSinglePreview()
-    {
-        if (m_iPlayID < 0)
-        {
-            Log.e(TAG, "m_iPlayID < 0");
-            return;
-        }
-
-        if(HCNetSDKJNAInstance.getInstance().NET_DVR_CloseSound())
-        {
-            Log.e(TAG, "NET_DVR_CloseSound Succ!");
-        }
-
-        // net sdk stop preview
-        if (!HCNetSDK.getInstance().NET_DVR_StopRealPlay(m_iPlayID))
-        {
-            Log.e(TAG, "StopRealPlay is failed!Err:" + HCNetSDK.getInstance().NET_DVR_GetLastError());
-            return;
-        }
-        Log.i(TAG, "NET_DVR_StopRealPlay succ");
-        m_iPlayID = -1;
-    }
-    private void startSinglePreview()
-    {
-        if (m_iPlaybackID >= 0)
-        {
-            Log.i(TAG, "Please stop palyback first");
-            return;
-        }
-
-        Log.i(TAG, "m_iStartChan:" + m_iStartChan);
-
-        NET_DVR_PREVIEWINFO previewInfo = new NET_DVR_PREVIEWINFO();
-        previewInfo.lChannel = m_iStartChan;
-        previewInfo.dwStreamType = 0; // main stream
-        previewInfo.bBlocked = 1;
-        previewInfo.hHwnd = playView[0].m_hHolder;
-
-        m_iPlayID = HCNetSDK.getInstance().NET_DVR_RealPlay_V40(m_iLogID, previewInfo, null);
-        if (m_iPlayID < 0)
-        {
-            mTextViewCarmerStatus.setText("RealPlay报错");
-            mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
-            Log.e(TAG, "NET_DVR_RealPlay is failed!Err:" + HCNetSDK.getInstance().NET_DVR_GetLastError());
-            return;
-        }
-        mTextViewCarmerStatus.setText("已连接");
-        mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_4));
-    }
-
-    private void ChangeSingleSurFace(boolean bSingle) {
-        DisplayMetrics metric = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metric);
-
-        for (int i = 0; i < 4; i++) {
-            if (playView[i] == null) {
-                playView[i] = new PlaySurfaceView(this);
-                playView[i].setParam(QMUIDisplayHelper.dp2px(CarControlActivity.this, 450),QMUIDisplayHelper.dp2px(CarControlActivity.this, 300));
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT);
-                params.topMargin = QMUIDisplayHelper.dp2px(CarControlActivity.this, 10);//playView[i].getM_iHeight() - (i / 2) * playView[i].getM_iHeight();
-                params.rightMargin = QMUIDisplayHelper.dp2px(CarControlActivity.this, 10);
-                params.width=QMUIDisplayHelper.dp2px(CarControlActivity.this, 450);
-                params.height=QMUIDisplayHelper.dp2px(CarControlActivity.this, 300);
-                params.gravity = Gravity.TOP | Gravity.RIGHT;
-                addContentView(playView[i], params);
-                playView[i].setVisibility(INVISIBLE);
-
-            }
-        }
-
-        if (bSingle) {
-            for (int i = 0; i < 4; ++i) {
-                playView[i].setVisibility(INVISIBLE);
-            }
-            playView[0].setParam(QMUIDisplayHelper.dp2px(CarControlActivity.this, 450) ,QMUIDisplayHelper.dp2px(CarControlActivity.this, 300));
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT);
-            params.topMargin = QMUIDisplayHelper.dp2px(CarControlActivity.this, 10);//playView[3].getM_iHeight() - (3 / 2) * playView[3].getM_iHeight();
-//            params.bottomMargin = 0;
-            params.rightMargin = QMUIDisplayHelper.dp2px(CarControlActivity.this, 10);
-            // params.
-            params.gravity = Gravity.TOP | Gravity.RIGHT;
-            playView[0].setLayoutParams(params);
-            playView[0].setVisibility(VISIBLE);
-        }
-    }
-
-    private ExceptionCallBack getExceptiongCbf()
-    {
-        ExceptionCallBack oExceptionCbf = new ExceptionCallBack()
-        {
-            public void fExceptionCallBack(int iType, int iUserID, int iHandle)
-            {
-                System.out.println("recv exception, type:" + iType);
-            }
-        };
-        return oExceptionCbf;
     }
 
     public void SendData_ByteOnce(DefaultSendBean bean) {
@@ -1324,7 +1080,9 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                 textView.setText(responseString);
                 Log.d(TAG,responseString);
             }
-            StringTool.getReadString(data.getHeadBytes(),data.getBodyBytes());
+            if(data.getBodyBytes().length==BodyLength){
+                StringTool.getReadString(data.getHeadBytes(),data.getBodyBytes());
+            }
         }
 
     };
@@ -1431,11 +1189,24 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         dialog.dismiss();
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                HC_DVRManager.getInstance().stopPlay();
+                            }
+                        }.start();
                         finish();
                     }
                 })
                 .create().show();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -1451,10 +1222,29 @@ public class CarControlActivity extends AppCompatActivity  implements SurfaceHol
             mManager.unRegisterReceiver(adapter);
         }
 
-        stopSinglePreview();
-        HCNetSDK.getInstance().NET_DVR_Logout_V30(m_iLogID);
-        HCNetSDK.getInstance().NET_DVR_Cleanup();
+        new Thread() {
+            @Override
+            public void run() {
+                HC_DVRManager.getInstance().logoutDevice();
+                HC_DVRManager.getInstance().freeSDK();
+            }
+        }.start();
 
+    }
+
+    // 广播接收器
+    private class StartRenderingReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (HC_DVRManager.ACTION_START_RENDERING.equals(intent.getAction())) {
+                mTextViewCarmerStatus.setText("已连接");
+                mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_4));
+            }
+            if (HC_DVRManager.ACTION_DVR_OUTLINE.equals(intent.getAction())) {
+                mTextViewCarmerStatus.setText("连接失败");
+                mTextViewCarmerStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+            }
+        }
     }
 }
 

@@ -7,8 +7,8 @@
     android:background="@color/black"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/Play"
+    <SurfaceView
+        android:id="@+id/Sur_Player"
         android:layout_width="450dp"
         android:layout_height="300dp"
         android:layout_alignParentTop="true"
@@ -16,16 +16,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        >
-        <SurfaceView
-            android:id="@+id/Sur_Player"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            app:backgroundTint="@color/colorPrimary"  />
-
-    </RelativeLayout>
-
+        app:backgroundTint="@color/colorPrimary"  />
 
     <Chronometer
         android:id="@+id/test"
@@ -34,8 +25,8 @@
         android:layout_height="wrap_content"
         android:format="00:00:00"
         android:textColor="@color/app_color_theme_4"
-        android:layout_alignRight="@+id/Play"
-        android:layout_below="@+id/Play"
+        android:layout_alignRight="@+id/Sur_Player"
+        android:layout_below="@+id/Sur_Player"
         android:layout_marginTop="5dp"/>
 
     <com.example.yqc.customview.ThrottleView
@@ -808,15 +799,14 @@
         android:layout_marginBottom="10dp"/>
 
 
-
     <TextView
         android:id="@+id/carmerstatustitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="摄像头状态："
         android:textSize="18sp"
-        android:layout_alignLeft="@+id/Play"
-        android:layout_below="@+id/Play"
+        android:layout_alignLeft="@+id/Sur_Player"
+        android:layout_below="@+id/Sur_Player"
         android:layout_marginTop="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -824,7 +814,7 @@
         android:id="@+id/carmerstatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="正在连接"
+        android:text="未连接"
         android:textSize="18sp"
         android:layout_alignBottom="@+id/carmerstatustitle"
         android:layout_toRightOf="@+id/carmerstatustitle"
@@ -881,7 +871,7 @@
         android:layout_height="50dp"
         android:src="@mipmap/circulargreen"
         android:layout_alignBottom="@+id/breatheview"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="40dp"
         android:layout_toRightOf="@+id/breatheview"
         app:qmui_border_color="?attr/qmui_config_color_gray_6"
         app:qmui_border_width="1dp"
