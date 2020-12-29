@@ -80,6 +80,7 @@ import com.xuhao.didi.socket.client.sdk.client.connection.NoneReconnect;
 
 import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -185,6 +186,10 @@ public class CarControlActivity extends AppCompatActivity  {
     private static int RightY ;
     private static int MiddleX ;
     private static int MiddleY ;
+    private static int MagneticFieldA ;
+    private static int MagneticFieldB ;
+    private static int MagneticFieldY1 ;
+    private static int MagneticFieldY2;
     private String ipaddr = "";
     private static int ipaddrport ;
     private String username = "";
@@ -671,6 +676,51 @@ public class CarControlActivity extends AppCompatActivity  {
                     LogTool.d("边界设置",StringTool.byteToString(beanset.parse()));
 
                 }
+                //发送磁场角度
+                List<Integer> MagneticFieldlist=new ArrayList<Integer>();
+                MagneticFieldlist.add(MagneticFieldA);
+                MagneticFieldlist.add(MagneticFieldB);
+                MagneticFieldlist.add(MagneticFieldY1);
+                MagneticFieldlist.add(MagneticFieldY2);
+                for(int i=0;i<MagneticFieldlist.size();i++){
+                    byte[] bytes=StringTool.toLH(MagneticFieldlist.get(i));
+                    DefaultSendBean bean1 = new DefaultSendBean();
+                    DefaultSendBean bean2 = new DefaultSendBean();
+                    switch (i){
+                        case 0:
+                            bean1.setThreebyte((byte)0x1E);
+                            bean2.setThreebyte((byte)0x1F);
+                            break;
+                        case 1:
+                            bean1.setThreebyte((byte)0x20);
+                            bean2.setThreebyte((byte)0x21);
+                            break;
+                        case 2:
+                            bean1.setThreebyte((byte)0x22);
+                            bean2.setThreebyte((byte)0x23);
+                            break;
+                        case 3:
+                            bean1.setThreebyte((byte)0x24);
+                            bean2.setThreebyte((byte)0x25);
+                            break;
+                    }
+                    bean1.setFourbyte((byte)( bytes[1] & 0xFF));
+                    bean2.setFourbyte((byte)( bytes[0] & 0xFF));
+                    try {
+                        Thread.sleep(delayMillis);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    SendData_ByteOnce(bean1);
+                    try {
+                        Thread.sleep(delayMillis);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    SendData_ByteOnce(bean2);
+                    LogTool.d("角度设置",StringTool.byteToString(bean1.parse()));
+                    LogTool.d("角度设置",StringTool.byteToString(bean2.parse()));
+                }
                 handcount++;
                 sendhandler.postDelayed(runnable, delayMillis);
             }
@@ -721,6 +771,10 @@ public class CarControlActivity extends AppCompatActivity  {
         RightY = sp.getInt("Set_RightY",0);
         MiddleX = sp.getInt("Set_MiddleX",0);
         MiddleY = sp.getInt("Set_MiddleY",0);
+        MagneticFieldA = sp.getInt("Set_MagneticFieldA",getResources().getInteger(R.integer.set_magneticfielda));
+        MagneticFieldB = sp.getInt("Set_MagneticFieldB",getResources().getInteger(R.integer.set_magneticfieldb));
+        MagneticFieldY1 = sp.getInt("Set_MagneticFieldY1",getResources().getInteger(R.integer.set_magneticfieldy1));
+        MagneticFieldY2 = sp.getInt("Set_MagneticFieldY2",getResources().getInteger(R.integer.set_magneticfieldy2));
         ipaddr = sp.getString("Set_CameraIP", getResources().getString(R.string.set_cameraip));
         ipaddrport = sp.getInt("Set_CameraPort",getResources().getInteger(R.integer.set_cameraport));
         username = sp.getString("Set_CameraUserName",getResources().getString(R.string.set_camerausername));

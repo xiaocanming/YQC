@@ -2,6 +2,8 @@ package com.example.yqc.util;
 
 import com.example.yqc.activity.CarControlActivity;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -219,6 +221,17 @@ public class StringTool {
             l |= (b[startindex+i] & 0xff); //和上面也是一样的  l = l | (b[i]&0xff)
         }
         return l;
+    }
+
+    /**
+     * int 转 byte[]   低字节在前（低字节序）
+     * @return
+     */
+    public static byte[] toLH(int n) {
+        byte[] b = new byte[4];
+        b[0] = (byte) (n & 0xff);
+        b[1] = (byte) (n >> 8 & 0xff);
+        return b;
     }
 
     /**

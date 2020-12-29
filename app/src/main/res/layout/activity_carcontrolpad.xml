@@ -638,7 +638,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text41_title"
         android:layout_below="@+id/text41_title"
-        android:text="TOF左前距离"
+        android:text="左前距离"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -660,7 +660,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text42_title"
         android:layout_below="@+id/text42_title"
-        android:text="TOF右前距离"
+        android:text="右前距离"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -727,7 +727,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text45_title"
         android:layout_below="@+id/text45_title"
-        android:text="TOF左后距离"
+        android:text="左后距离"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />
@@ -749,7 +749,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text46_title"
         android:layout_below="@+id/text46_title"
-        android:text="TOF右后距离"
+        android:text="右后距离"
         android:textSize="14sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />

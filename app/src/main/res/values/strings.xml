@@ -15,6 +15,11 @@
     <string name="set_tag_isshowdemo">Set_IsShowDemo</string>
     <!-- 管理员密码  -->
     <string name="admin_password">123456</string>
+    <!--    角度设置-->
+    <integer name="set_magneticfielda">0</integer>
+    <integer name="set_magneticfieldb">0</integer>
+    <integer name="set_magneticfieldy1">0</integer>
+    <integer name="set_magneticfieldy2">0</integer>
 
 
     <string name="btn_set">飞控设置</string>
