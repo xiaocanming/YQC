@@ -161,6 +161,7 @@ public class HC_DVRManager {
                     Log.i(TAG, "开始实时播放！");
                 }
             } else {
+                context.sendBroadcast(new Intent(ACTION_START_RENDERING));
                 Log.d(TAG, "正在播放中？");
             }
         } catch (Exception e) {

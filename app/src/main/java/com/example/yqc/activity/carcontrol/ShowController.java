@@ -92,7 +92,7 @@ public class ShowController extends HomeController{
             public void onClick(View v) {
                 final String[] itemstitle = new String[]{"A点磁场角度", "B点磁场角度", "Y轴正方向磁场角度","Y轴负方向磁场角度"};
                 final String[] itemstag = new String[]{"Set_MagneticFieldA", "Set_MagneticFieldB", "Set_MagneticFieldY1","Set_MagneticFieldY2"};
-                final String[] itemsshow = new String[]{"A点磁场角度"+String.valueOf(MagneticFieldA/10.0)+" °", "B点磁场角度"+String.valueOf(MagneticFieldB/10.0)+" °", "Y轴正方向磁场角度"+String.valueOf(MagneticFieldY1/10.0)+" °","Y轴负方向磁场角度"+String.valueOf(MagneticFieldY2/10.0)+" °"};
+                final String[] itemsshow = new String[]{"A点磁场角度 "+String.valueOf(MagneticFieldA/10.0)+" °", "B点磁场角度 "+String.valueOf(MagneticFieldB/10.0)+" °", "Y轴正方向磁场角度 "+String.valueOf(MagneticFieldY1/10.0)+" °","Y轴负方向磁场角度 "+String.valueOf(MagneticFieldY2/10.0)+" °"};
                 new QMUIDialog.MenuDialogBuilder(getContext())
                         .setSkinManager(QMUISkinManager.defaultInstance(getContext()))
                         .addItems(itemsshow, new DialogInterface.OnClickListener() {
@@ -103,6 +103,7 @@ public class ShowController extends HomeController{
                                 builder.setTitle(itemstitle[which])
                                         .setPlaceholder("请输入您的磁场角度")
                                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                                        .setDefaultText(itemsshow[which].split(" ")[1])
                                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                                             @Override
                                             public void onClick(QMUIDialog dialog, int index) {

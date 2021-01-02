@@ -38,7 +38,7 @@ public class ParameterSettingActivity extends AppCompatActivity {
     private QMUICommonListItemView itemWithDirectionTimeinterval;
     private QMUICommonListItemView itemWithReceiveTimeinterval;
     private QMUICommonListItemView itemWithSendTimeinterval;
-    View.OnClickListener itemWithOnClickListener = new View.OnClickListener() {
+    View.OnClickListener itemWithDirectionTimeintervalWithOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             final String tag=v.getTag().toString();
@@ -47,6 +47,73 @@ public class ParameterSettingActivity extends AppCompatActivity {
                 builder.setTitle("时间间隔")
                         .setPlaceholder("单位（ms）")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(DirectionTimeinterval))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if(StringTool.isInteger(text)){
+                                    SaveSharedPreferencesInt(tag,Integer.valueOf(text));
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                }else {
+                                    Toast.makeText(ParameterSettingActivity.this, "请输入有效的时间间隔" , Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+    View.OnClickListener itemWithReceiveTimeintervalWithOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String tag=v.getTag().toString();
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(ParameterSettingActivity.this);
+                builder.setTitle("时间间隔")
+                        .setPlaceholder("单位（ms）")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(ReceiveTimeinterval))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if(StringTool.isInteger(text)){
+                                    SaveSharedPreferencesInt(tag,Integer.valueOf(text));
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                }else {
+                                    Toast.makeText(ParameterSettingActivity.this, "请输入有效的时间间隔" , Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+    View.OnClickListener itemWithSendTimeintervalWithOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final String tag=v.getTag().toString();
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(ParameterSettingActivity.this);
+                builder.setTitle("时间间隔")
+                        .setPlaceholder("单位（ms）")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(SendTimeinterval))
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -205,21 +272,25 @@ public class ParameterSettingActivity extends AppCompatActivity {
         QMUIGroupListView.newSection(ParameterSettingActivity.this)
                 .setTitle("参数设置")
                 .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
-                .addItemView(itemWithReceiveTimeinterval, itemWithOnClickListener)
-                .addItemView(itemWithDirectionTimeinterval, itemWithOnClickListener)
+                .addItemView(itemWithReceiveTimeinterval, itemWithReceiveTimeintervalWithOnClickListener)
+                .addItemView(itemWithDirectionTimeinterval, itemWithDirectionTimeintervalWithOnClickListener)
                 .addItemView(itemWithLogFile, itemWithLogFileOnClickListener)
                 .addItemView(itemWithIsShowDemoSwitch, itemWithIsShowDemoSwitchOnClickListener)
                 .addTo(mGroupListView);
 
     }
 
+    private int SendTimeinterval;
+    private int ReceiveTimeinterval;
+    private int DirectionTimeinterval;
+
     private void initGroupListView() {
         // 得到SP对象 
         SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值  
-        int SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
-        int ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
-        int DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
+        SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
+        ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
+        DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
         boolean IsShowDemo = sp.getInt(getResources().getString(R.string.set_tag_isshowdemo),0)==1?true:false;
 
         itemWithSendTimeinterval.setDetailText(String.valueOf(SendTimeinterval));

@@ -20,7 +20,7 @@ public class ThrottleView extends View {
 
     public static int Value = 0;
     public static int Value_height = 0;
-    public static int Value_max = 255;
+    public static int Value_max = 10;
 
     public int top = 10;
     public int bottom = 10;

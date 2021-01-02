@@ -49,6 +49,7 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("IP地址")
                         .setPlaceholder("请输入您的IP地址")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(HostIP)
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -82,10 +83,10 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("端口号")
                         .setPlaceholder("请输入您的端口号")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(HostPort))
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
-
                                 dialog.dismiss();
                             }
                         })
@@ -118,6 +119,7 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("摄像头Ip地址")
                         .setPlaceholder("请输入您的摄像头Ip地址")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(CameraIP)
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -151,6 +153,7 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("摄像头端口号")
                         .setPlaceholder("请输入您的摄像头端口号")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(CameraPort))
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -184,6 +187,7 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("用户名")
                         .setPlaceholder("请输入摄像头的用户名")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(CameraUserName)
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -213,6 +217,7 @@ public class SettingActivity extends AppCompatActivity {
                 builder.setTitle("密码")
                         .setPlaceholder("请输入摄像头的密码")
                         .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(CameraPassWord)
                         .addAction("取消", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
@@ -254,7 +259,7 @@ public class SettingActivity extends AppCompatActivity {
                         .addAction("删除", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
-                                AddSharedPreferencesSet("Set_TimerSet","",item.getDetailText().toString());
+                                AddSharedPreferencesSet("Set_TimerSet1","",item.getDetailText().toString());
                                 initGroupListView();
                                 dialog.dismiss();
                             }
@@ -300,10 +305,10 @@ public class SettingActivity extends AppCompatActivity {
             public void onTimeSelect(Date date, View v) {
                 if (v instanceof QMUICommonListItemView){
                     QMUICommonListItemView item=(QMUICommonListItemView)v;
-                    AddSharedPreferencesSet("Set_TimerSet", getTime(date),item.getDetailText().toString());
+                    AddSharedPreferencesSet("Set_TimerSet1", getTime(date),item.getDetailText().toString());
                     initGroupListView();
                 }else {
-                    AddSharedPreferencesSet("Set_TimerSet",getTime(date),"");
+                    AddSharedPreferencesSet("Set_TimerSet1",getTime(date),"");
                     initGroupListView();
                 }
             }
@@ -394,25 +399,31 @@ public class SettingActivity extends AppCompatActivity {
                 .addTo(mGroupListView);
     }
 
+    private  String HostIP;
+    private  int HostPort;
+    private  String CameraIP;
+    private  int CameraPort;
+    private  String CameraUserName;
+    private  String CameraPassWord;
     private void initGroupListView() {
         // 得到SP对象 
         SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值  
-        String HostIP = sp.getString("Set_HostIP", getResources().getString(R.string.set_hostip));
-        int HostPort = sp.getInt("Set_HostPort", getResources().getInteger(R.integer.set_hostport));
+        HostIP = sp.getString("Set_HostIP", getResources().getString(R.string.set_hostip));
+        HostPort = sp.getInt("Set_HostPort", getResources().getInteger(R.integer.set_hostport));
         itemWithIP.setDetailText(HostIP);
         itemWithPort.setDetailText(String.valueOf(HostPort));
         //获取摄像头相关设置
-        String CameraIP = sp.getString("Set_CameraIP", getResources().getString(R.string.set_cameraip));
-        int CameraPort = sp.getInt("Set_CameraPort", getResources().getInteger(R.integer.set_cameraport));
-        String CameraUserName = sp.getString("Set_CameraUserName", getResources().getString(R.string.set_camerausername));
-        String CameraPassWord = sp.getString("Set_CameraPassWord", getResources().getString(R.string.set_camerapassword));
+        CameraIP = sp.getString("Set_CameraIP", getResources().getString(R.string.set_cameraip));
+        CameraPort = sp.getInt("Set_CameraPort", getResources().getInteger(R.integer.set_cameraport));
+        CameraUserName = sp.getString("Set_CameraUserName", getResources().getString(R.string.set_camerausername));
+        CameraPassWord = sp.getString("Set_CameraPassWord", getResources().getString(R.string.set_camerapassword));
         itemWithCameraIP.setDetailText(CameraIP);
         itemWithCameraPort.setDetailText(String.valueOf(CameraPort));
         itemWithCameraUserName.setDetailText(CameraUserName);
         itemWithCameraPassWord.setDetailText(CameraPassWord);
 
-        Set<String> SetList = sp.getStringSet("Set_TimerSet",new HashSet<String>() );
+        Set<String> SetList =sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
         int size = QMUIDisplayHelper.dp2px(SettingActivity.this, 20);
         if(sectionTimer!=null){
             sectionTimer.removeFrom(mGroupListView);
@@ -450,7 +461,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void AddSharedPreferencesSet(String tag,String value,String oldvalue) {
         SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
-        Set<String> SetList = sp.getStringSet(tag,new HashSet<String>() );
+        Set<String> SetList=new HashSet<String>(sp.getStringSet(tag, new HashSet<String>()));
         if(!oldvalue.equals("")){
             SetList.remove(oldvalue);
         }

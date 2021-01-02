@@ -4,6 +4,9 @@ import com.example.yqc.activity.CarControlActivity;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,11 +44,11 @@ public class StringTool {
             return false;
         }
         //获取5V电压值
-        CarControlActivity.VAL_Voltage_5V = String.valueOf(byte2short(bodybetys, 0) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_5V = String.format("%.1f",byte2short(bodybetys, 0) / 10.0) + " V";
         //获取12V电压值
-        CarControlActivity.VAL_Voltage_12V = String.valueOf(byte2short(bodybetys, 2) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_12V = String.format("%.1f",byte2short(bodybetys, 2) / 10.0) + " V";
         //获取24V电压值
-        CarControlActivity.VAL_Voltage_24V = String.valueOf(byte2short(bodybetys, 4) / 10.0) + " V";
+        CarControlActivity.VAL_Voltage_24V = String.format("%.1f",byte2short(bodybetys, 4) / 10.0) + " V";
         //显示电池
         int battery = 0;
         float voltage24v = byte2short(bodybetys, 4) / 10;
@@ -78,19 +81,19 @@ public class StringTool {
             CarControlActivity.VAL_TurnWheel_Status = abnormal;
         }
         //前转向轮1角度传感器角度
-        CarControlActivity.VAL_TurnWheel_A_Angle = String.valueOf(byte2short(bodybetys, 10) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_A_Angle = String.format("%.1f",byte2short(bodybetys, 10) / 10.0) + " °";
         //前转向轮2角度传感器角度
-        CarControlActivity.VAL_TurnWheel_B_Angle = String.valueOf(byte2short(bodybetys, 12) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_B_Angle = String.format("%.1f",byte2short(bodybetys, 12) / 10.0) + " °";
         //后转向轮1角度传感器角度
-        CarControlActivity.VAL_TurnWheel_C_Angle = String.valueOf(byte2short(bodybetys, 14) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_C_Angle = String.format("%.1f",byte2short(bodybetys, 14) / 10.0) + " °";
         //后转向轮2角度传感器角度
-        CarControlActivity.VAL_TurnWheel_D_Angle = String.valueOf(byte2short(bodybetys, 16) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_D_Angle = String.format("%.1f",byte2short(bodybetys, 16) / 10.0) + " °";
         //桅杆起伏角度传感器角度
-        CarControlActivity.VAL_Updown_Mast_Angle = String.valueOf(byte2short(bodybetys, 18) / 10.0) + " °";
+        CarControlActivity.VAL_Updown_Mast_Angle = String.format("%.1f",byte2short(bodybetys, 18) / 10.0) + " °";
         //云台偏航角度
-        CarControlActivity.VAL_TurnWheel_Mast_Angle = String.valueOf(byte2short(bodybetys, 20) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_Mast_Angle = String.format("%.1f",byte2short(bodybetys, 20) / 10.0) + " °";
         //帆板角度传感器角度
-        CarControlActivity.VAL_TurnWheel_Sailboard_Angle = String.valueOf(byte2short(bodybetys, 22) / 10.0) + " °";
+        CarControlActivity.VAL_TurnWheel_Sailboard_Angle = String.format("%.1f",byte2short(bodybetys, 22) / 10.0) + " °";
         //YQC自检状态
         int selfdetectionstatus = ByteInt_Single(bodybetys[24]);
         if (selfdetectionstatus == Integer.parseInt("01", 16)) {
@@ -146,6 +149,9 @@ public class StringTool {
             case 7:
                 CarControlActivity.VAL_Sport_Sign = "云台角度超限";
                 break;
+            case 8:
+                CarControlActivity.VAL_Sport_Sign = "UWB故障";
+                break;
             default:
                 CarControlActivity.VAL_Sport_Sign = "数据异常";
         }
@@ -156,32 +162,32 @@ public class StringTool {
         //获取Z坐标
         CarControlActivity.VAL_Z_Ordinate = numToMString(ByteInt_Single(bodybetys[29]));
         //TOF前1距离
-        CarControlActivity.VAL_TOF_Front1 = String.valueOf(byte2short(bodybetys, 30) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_Front1 = String.format("%.1f",byte2short(bodybetys, 30) / 100.0)+ " m";
         //TOF前2距离
-        CarControlActivity.VAL_TOF_Front2 = String.valueOf(byte2short(bodybetys, 32) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_Front2 = String.format("%.1f",byte2short(bodybetys, 32) / 100.0)+ " m";
         //TOF左前距离
-        CarControlActivity.VAL_TOF_LeftFront = String.valueOf(byte2short(bodybetys, 34) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_LeftFront = String.format("%.1f",byte2short(bodybetys, 34) / 100.0)+ " m";
         //TOF右前距离
-        CarControlActivity.VAL_TOF_RightFront = String.valueOf(byte2short(bodybetys, 36) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_RightFront = String.format("%.1f",byte2short(bodybetys, 36) / 100.0)+ " m";
         //TOF后1距离
-        CarControlActivity.VAL_TOF_Back1 = String.valueOf(byte2short(bodybetys, 38) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_Back1 = String.format("%.1f",byte2short(bodybetys, 38) / 100.0)+ " m";
         //TOF后2距离
-        CarControlActivity.VAL_TOF_Back2 = String.valueOf(byte2short(bodybetys, 40) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_Back2 = String.format("%.1f",byte2short(bodybetys, 40) / 100.0)+ " m";
         //TOF左后距离
-        CarControlActivity.VAL_TOF_LeftBack = String.valueOf(byte2short(bodybetys, 42) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_LeftBack = String.format("%.1f",byte2short(bodybetys, 42) / 100.0)+ " m";
         //TOF右后距离
-        CarControlActivity.VAL_TOF_RightBack = String.valueOf(byte2short(bodybetys, 44) / 100.0)+ " m";
+        CarControlActivity.VAL_TOF_RightBack = String.format("%.1f",byte2short(bodybetys, 44) / 100.0)+ " m";
         //姿态传感器磁场X坐标
-        CarControlActivity.VAL_AttitudeSensor_X = String.valueOf(byte2short(bodybetys, 46) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_X = String.format("%.1f",byte2short(bodybetys, 46) / 10.0);
         //姿态传感器磁场Y坐标
-        CarControlActivity.VAL_AttitudeSensor_Y = String.valueOf(byte2short(bodybetys, 48) / 10.0);
+        CarControlActivity.VAL_AttitudeSensor_Y = String.format("%.1f",byte2short(bodybetys, 48) / 10.0);
         //真实角度
-        CarControlActivity.VAL_AttitudeSensor_Z = String.valueOf(byte2short(bodybetys, 50) / 10.0)+ " °";
+        CarControlActivity.VAL_AttitudeSensor_Z = String.format("%.1f",byte2short(bodybetys, 50) / 10.0)+ " °";
         //云台俯仰
-        CarControlActivity.VAL_Yuntai_Angle = String.valueOf(byte2short(bodybetys, 52) / 10.0) + " °";
+        CarControlActivity.VAL_Yuntai_Angle = String.format("%.1f",byte2short(bodybetys, 52) / 10.0) + " °";
         //温度
-        CarControlActivity.VAL_Reserved_Fields1 = String.valueOf(byte2short(bodybetys, 54) / 10.0) + " ℃";
-        //预留字段
+        CarControlActivity.VAL_Reserved_Fields1 = String.format("%.1f",(byte2short(bodybetys, 54) / 10.0) - 10) + " ℃";
+        //演示次数
         CarControlActivity.VAL_Reserved_Fields2 = String.valueOf(ByteInt_Single(bodybetys[56]));
         return true;
     }
@@ -221,6 +227,30 @@ public class StringTool {
             l |= (b[startindex+i] & 0xff); //和上面也是一样的  l = l | (b[i]&0xff)
         }
         return l;
+    }
+
+    public static String TimeDifference(Set<String> tiems){
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
+        String nowtime = sdf.format(calendar.getTime());
+        int i=0;
+        String timeDifference="--:--";
+        for (String time:tiems) {
+            String[] timesplit=time.split(":");
+            String[] nowtimesplit=nowtime.split(":");
+            int hours=Integer.parseInt(timesplit[0])-Integer.parseInt(nowtimesplit[0]);
+            int minutes=Integer.parseInt(timesplit[1])-Integer.parseInt(nowtimesplit[1]);
+            int difference=hours*60+minutes;
+            if(difference>=0){
+                if(difference<i||i==0){
+                    i=difference;
+                    long hh = difference / 60 % 60;
+                    long mm = difference  % 60;
+                    timeDifference=(String.valueOf(hh).length()==1?"0"+String.valueOf(hh):String.valueOf(hh))+":"+(String.valueOf(mm).length()==1?"0"+String.valueOf(mm):String.valueOf(mm));
+                }
+            }
+        }
+        return "演示倒计时 "+timeDifference;
     }
 
     /**

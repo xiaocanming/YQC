@@ -365,7 +365,7 @@ public class ManualController extends HomeController{
         mFloatLayout.addView(MyRoundButton10,lp);
         mFloatLayout.addView(MyRoundButton11,lp);
         mFloatLayout.addView(MyRoundButton12,lp);
-        mFloatLayout.addView(MyRoundButton13,lp);
+//        mFloatLayout.addView(MyRoundButton13,lp);
 
         //发送陀螺仪数据的任务
         send_timer.schedule(send_task,1000,DirectionTimeinterval);

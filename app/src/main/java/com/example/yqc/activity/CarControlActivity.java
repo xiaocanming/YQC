@@ -98,6 +98,7 @@ import static android.view.View.VISIBLE;
 
 public class CarControlActivity extends AppCompatActivity  {
     private BatteryView batteryView;
+    private ThrottleView throttleView;
     //    小车数据
     private TextView mTextView11;
     private TextView mTextView12;
@@ -164,6 +165,7 @@ public class CarControlActivity extends AppCompatActivity  {
 
     //计时器
     private Chronometer ch;
+    private TextView TimeDifference;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -195,6 +197,7 @@ public class CarControlActivity extends AppCompatActivity  {
     private String username = "";
     private String password = ""; // fill in with appkey
     private static int  carvalTHR;
+    private static int  realtimecarvalTHR;
 
     //摄像头
     private final StartRenderingReceiver receiver = new StartRenderingReceiver();
@@ -254,6 +257,11 @@ public class CarControlActivity extends AppCompatActivity  {
 
 
     private void initView() {
+        //设置油门
+        throttleView=findViewById(R.id.thr_bar);
+        throttleView.Value_height=realtimecarvalTHR*100;
+        throttleView.Value=realtimecarvalTHR;
+        VAL_THR=realtimecarvalTHR;
         //电池
         batteryView=findViewById(R.id.battery_24v);
         //    小车数据
@@ -335,6 +343,7 @@ public class CarControlActivity extends AppCompatActivity  {
         circularView.setVisibility(VISIBLE);
         //获取计时器组件
         ch = (Chronometer) findViewById(R.id.test);
+        TimeDifference = (TextView) findViewById(R.id.timedifference);
 
         //摄像头重连
         QMUIRadiusImageView qmuiRadiusCarmerconnet = (QMUIRadiusImageView) findViewById(R.id.btn_carmerconnet);
@@ -358,11 +367,11 @@ public class CarControlActivity extends AppCompatActivity  {
         ui_handler.postDelayed(ui_task, ReceiveTimeinterval);
 //        //获取陀螺仪数据的任务
 //        getsenddate_timer.schedule(getsenddate_task,1000,DirectionTimeinterval);
-        //发送陀螺仪数据的任务
+        // 发送陀螺仪数据的任务
         // 循环任务，按照上一次任务的发起时间计算下一次任务的开始时间
         mScheduledExecutorService.scheduleAtFixedRate(send_task, 1000, DirectionTimeinterval, TimeUnit.MILLISECONDS);
         //发送定时任务
-        run_timer.schedule(run_task,60000,60000);
+        run_timer.schedule(run_task,1000,60000);
         // 停止运动
         qmuiRoundButton1 = (QMUIRoundButton) findViewById(R.id.button1);
         qmuiRoundButton1.setOnClickListener(new View.OnClickListener() {
@@ -376,16 +385,17 @@ public class CarControlActivity extends AppCompatActivity  {
             }
         });
 
-        //恢复运动
+        //恢复运动 禁止运动
         qmuiRoundButton2 = (QMUIRoundButton) findViewById(R.id.button2);
         qmuiRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DefaultSendBean bean = new DefaultSendBean();
-                bean.setThreebyte((byte) 0x60);
-                bean.setFourbyte((byte) 0xA5);
-                SendData_ByteOnce(bean);
-                LogTool.d("恢复运动",StringTool.byteToString(bean.parse()));
+//                DefaultSendBean bean = new DefaultSendBean();
+//                bean.setThreebyte((byte) 0x60);
+//                bean.setFourbyte((byte) 0xA5);
+//                SendData_ByteOnce(bean);
+//                LogTool.d("恢复运动",StringTool.byteToString(bean.parse()));
+                setButtonEnble(false);
             }
         });
 
@@ -401,7 +411,7 @@ public class CarControlActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 updatetextView=true;
-                QMUIPopup mNormalPopup = QMUIPopups.popup(CarControlActivity.this, QMUIDisplayHelper.dp2px(CarControlActivity.this, 250), QMUIDisplayHelper.dp2px(CarControlActivity.this, 120))
+                QMUIPopup mNormalPopup = QMUIPopups.popup(CarControlActivity.this, QMUIDisplayHelper.dp2px(CarControlActivity.this, 350), QMUIDisplayHelper.dp2px(CarControlActivity.this, 120))
                         .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
                         .view(textView)
                         .edgeProtection(QMUIDisplayHelper.dp2px(CarControlActivity.this, 20))
@@ -443,7 +453,7 @@ public class CarControlActivity extends AppCompatActivity  {
                                     final String[] itemstitle = new String[]{"左端停止X坐标", "左端停止Y坐标", "右端停止X坐标","右端停止Y坐标", "中间停止X坐标", "中间停止Y坐标"};
                                     final String[] itemstag = new String[]{"Set_LeftX", "Set_LeftY", "Set_RightX","Set_RightY", "Set_MiddleX", "Set_MiddleY"};
                                     final byte[] itemsbyte = new byte[]{(byte) 0x0F, (byte) 0x10, (byte) 0x12,(byte) 0x13, (byte) 0x14, (byte) 0x15};
-                                    final String[] itemsshow = new String[]{"左端停止X坐标:"+String.valueOf(LeftX/10.0)+" m", "左端停止Y坐标:"+String.valueOf(LeftY/10.0)+" m", "右端停止X坐标:"+String.valueOf(RightX/10.0)+" m","右端停止Y坐标:"+String.valueOf(RightY/10.0)+" m", "中间停止X坐标:"+String.valueOf(MiddleX/10.0)+" m", "中间停止Y坐标:"+String.valueOf(MiddleY/10.0)+" m"};
+                                    final String[] itemsshow = new String[]{"左端停止X坐标 "+String.valueOf(LeftX/10.0)+" m", "左端停止Y坐标 "+String.valueOf(LeftY/10.0)+" m", "右端停止X坐标 "+String.valueOf(RightX/10.0)+" m","右端停止Y坐标 "+String.valueOf(RightY/10.0)+" m", "中间停止X坐标 "+String.valueOf(MiddleX/10.0)+" m", "中间停止Y坐标 "+String.valueOf(MiddleY/10.0)+" m"};
                                     new QMUIDialog.MenuDialogBuilder(CarControlActivity.this)
                                             .setSkinManager(QMUISkinManager.defaultInstance(CarControlActivity.this))
                                             .addItems(itemsshow, new DialogInterface.OnClickListener() {
@@ -454,6 +464,7 @@ public class CarControlActivity extends AppCompatActivity  {
                                                     builder.setTitle(itemstitle[which])
                                                             .setPlaceholder("请输入您的坐标值(m)")
                                                             .setInputType(InputType.TYPE_CLASS_TEXT)
+                                                            .setDefaultText(itemsshow[which].split(" ")[1])
                                                             .addAction("取消", new QMUIDialogAction.ActionListener() {
                                                                 @Override
                                                                 public void onClick(QMUIDialog dialog, int index) {
@@ -540,7 +551,7 @@ public class CarControlActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 //当前油门
-                int new_VAL_THR = ThrottleView.Value * 10 / ThrottleView.Value_max ;
+                int new_VAL_THR = ThrottleView.Value;
                 int VAL_THR=new_VAL_THR>=5?5:new_VAL_THR;
                 SaveSharedPreferencesInt("Set_CarvalTHR",VAL_THR);
                 initSetting();
@@ -763,7 +774,7 @@ public class CarControlActivity extends AppCompatActivity  {
         SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
         ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
         DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
-        TimerSetList = sp.getStringSet("Set_TimerSet",new HashSet<String>() );
+        TimerSetList = sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
         LeftX = sp.getInt("Set_LeftX", 0);
         LeftY = sp.getInt("Set_LeftY",0);
@@ -780,6 +791,7 @@ public class CarControlActivity extends AppCompatActivity  {
         username = sp.getString("Set_CameraUserName",getResources().getString(R.string.set_camerausername));
         password = sp.getString("Set_CameraPassWord",getResources().getString(R.string.set_camerapassword));
         carvalTHR=sp.getInt("Set_CarvalTHR", 5);
+        realtimecarvalTHR=sp.getInt("Set_RealtimeCarvalTHR", 0);
     }
 
     private static  byte heard1;
@@ -943,10 +955,14 @@ public class CarControlActivity extends AppCompatActivity  {
 
             //判断桅杆起立的按钮是否生效
             if( !CarControlActivity.VAL_TurnWheel_Sailboard_Angle.equals("")){
-                if (Float.valueOf(CarControlActivity.VAL_TurnWheel_Sailboard_Angle.split(" ")[0]) >=60.0f){
-                    homeComponentsController.setButtonEnble(false,"桅杆起立");
-                }else {
-                    homeComponentsController.setButtonEnble(true,"桅杆起立");
+                if(CarStatus){
+                    if (Float.valueOf(CarControlActivity.VAL_TurnWheel_Sailboard_Angle.split(" ")[0]) >=60.0f){
+                        homeComponentsController.setButtonEnble(false,"桅杆起立");
+                    }else {
+                        if(CarStatus){
+                            homeComponentsController.setButtonEnble(true,"桅杆起立");
+                        }
+                    }
                 }
             }
             // TODO Auto-generated method stub
@@ -992,10 +1008,15 @@ public class CarControlActivity extends AppCompatActivity  {
     Runnable send_task = new Runnable( ) {
         public void run ( )
         {
+            //判断车子状态为禁止直接返回
+            if(!CarStatus){
+                return;
+            }
             //是否发送速度
-            int new_VAL_THR = ThrottleView.Value * 10 / ThrottleView.Value_max ;
+            int new_VAL_THR = ThrottleView.Value;
             if(new_VAL_THR!=VAL_THR){
                 VAL_THR=new_VAL_THR;
+                SaveSharedPreferencesInt("Set_RealtimeCarvalTHR",VAL_THR);
                 DefaultSendBean bean=new DefaultSendBean();
                 bean.setThreebyte((byte) 0x03);
                 bean.setFourbyte((byte)(VAL_THR & 0xFF));
@@ -1084,6 +1105,12 @@ public class CarControlActivity extends AppCompatActivity  {
                 SendData_ByteOnce(bean);
                 LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
             }
+            TimeDifference.post(new Runnable() {
+                @Override
+                public void run() {
+                    TimeDifference.setText(StringTool.TimeDifference(TimerSetList));
+                }
+            });
         }
     };
 
@@ -1095,6 +1122,11 @@ public class CarControlActivity extends AppCompatActivity  {
 //            OkSocket.open(info)
 //                    .getPulseManager()
 //                    .pulse();//开始心跳,开始心跳后,心跳管理器会自动进行心跳触发
+            DefaultSendBean bean=new DefaultSendBean();
+            bean.setThreebyte((byte) 0x03);
+            bean.setFourbyte((byte)(VAL_THR & 0xFF));
+            SendData_ByteOnce(bean);
+            LogTool.d("速度",StringTool.byteToString(bean.parse()));
         }
 
         @Override
@@ -1187,7 +1219,9 @@ public class CarControlActivity extends AppCompatActivity  {
     }
 
 
+    private boolean CarStatus=false;
     private void setButtonEnble(boolean enble){
+        CarStatus=enble;
         homeComponentsController.setButtonEnble(enble);
         homeUtilController.setButtonEnble(enble);
         qmuiRoundButton1.setEnabled(enble);
