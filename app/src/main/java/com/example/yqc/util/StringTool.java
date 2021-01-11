@@ -230,27 +230,53 @@ public class StringTool {
     }
 
     public static String TimeDifference(Set<String> tiems){
+        LogTool.d("TimeDifference", "开始计算倒计时时间");
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
         String nowtime = sdf.format(calendar.getTime());
         int i=0;
+        int high=0;
+        int low=0;
+        int exit=0;
         String timeDifference="--:--";
+        LogTool.d("TimeDifference", "当前时间："+nowtime);
         for (String time:tiems) {
+            LogTool.d("TimeDifference", "倒计时时间："+time);
             String[] timesplit=time.split(":");
             String[] nowtimesplit=nowtime.split(":");
             int hours=Integer.parseInt(timesplit[0])-Integer.parseInt(nowtimesplit[0]);
             int minutes=Integer.parseInt(timesplit[1])-Integer.parseInt(nowtimesplit[1]);
             int difference=hours*60+minutes;
-            if(difference>=0){
-                if(difference<i||i==0){
-                    i=difference;
-                    long hh = difference / 60 % 60;
-                    long mm = difference  % 60;
-                    timeDifference=(String.valueOf(hh).length()==1?"0"+String.valueOf(hh):String.valueOf(hh))+":"+(String.valueOf(mm).length()==1?"0"+String.valueOf(mm):String.valueOf(mm));
+            LogTool.d("TimeDifference", "时间差："+String.valueOf(difference));
+            if(difference>0){
+                LogTool.d("TimeDifference", "累加1");
+                if(exit==1&&i==0){
+                    LogTool.d("TimeDifference", "跳出循环");
+                    continue;
+                }else {
+                    LogTool.d("TimeDifference", "累加2");
+                    if(difference<i||i==0){
+                        exit=1;
+                        i=difference;
+                        long hh = difference / 60 % 60;
+                        long mm = difference  % 60;
+                        timeDifference=(String.valueOf(hh).length()==1?"0"+String.valueOf(hh):String.valueOf(hh))+":"+(String.valueOf(mm).length()==1?"0"+String.valueOf(mm):String.valueOf(mm));
+                        LogTool.d("TimeDifference", "显示数据1："+timeDifference);
+                    }
                 }
+            }else if(difference==0){
+                exit=1;
+                i=0;
+                timeDifference="00:00";
+                LogTool.d("TimeDifference", "显示数据2："+timeDifference);
+            }else {
+                high++;
+                LogTool.d("TimeDifference", "累加3");
             }
         }
-        return "演示倒计时 "+timeDifference;
+        LogTool.d("TimeDifference", "显示数据3"+"("+String.valueOf(tiems.size())+"/"+String.valueOf(high+exit)+")"+timeDifference);
+        LogTool.d("TimeDifference", "结束计算倒计时时间");
+        return "("+String.valueOf(tiems.size())+"/"+String.valueOf(high+exit)+")"+timeDifference;
     }
 
     /**

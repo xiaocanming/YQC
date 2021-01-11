@@ -27,10 +27,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class SettingActivity extends AppCompatActivity {
     private QMUITopBarLayout mTopBar;
@@ -424,6 +426,13 @@ public class SettingActivity extends AppCompatActivity {
         itemWithCameraPassWord.setDetailText(CameraPassWord);
 
         Set<String> SetList =sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
+        Set<String> sortSet = new TreeSet<String>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);//降序排列
+            }
+        });
+        sortSet.addAll(SetList);
         int size = QMUIDisplayHelper.dp2px(SettingActivity.this, 20);
         if(sectionTimer!=null){
             sectionTimer.removeFrom(mGroupListView);
@@ -431,7 +440,7 @@ public class SettingActivity extends AppCompatActivity {
         sectionTimer=QMUIGroupListView.newSection(SettingActivity.this);
         sectionTimer.setTitle("定时器设置");
         sectionTimer.setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT);
-        for (String str : SetList) {
+        for (String str : sortSet) {
             //定时器
             QMUICommonListItemView itemWithTimer = mGroupListView.createItemView(
                     ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_cycle),

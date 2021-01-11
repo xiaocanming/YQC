@@ -1,9 +1,11 @@
 package com.example.yqc;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -19,6 +21,7 @@ import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 public class MainActivity extends AppCompatActivity {
     private QMUIGroupListView mAboutGroupListView;
     private QMUITopBarLayout mTopBar;
+    private TextView versionNameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mAboutGroupListView = findViewById(R.id.about_list);
         mTopBar = findViewById(R.id.topbar);
+        versionNameView=findViewById(R.id.copyright);
+        String versionName = "";
+        try {
+            PackageManager manager = this.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            versionName = info.versionName;
+        }catch (Exception e){
+            versionName="0.0";
+        }
+        versionNameView.setText("月球车 V"+ versionName);
     }
 
     private void initTopBar() {
