@@ -1,5 +1,6 @@
 package com.example.yqc.activity;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,7 +13,9 @@ import androidx.core.content.ContextCompat;
 
 import com.bigkoo.pickerview.TimePickerView;
 import com.example.yqc.R;
+import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.BerNpickerView;
+import com.example.yqc.util.LogTool;
 import com.example.yqc.util.StringTool;
 import com.qmuiteam.qmui.skin.QMUISkinManager;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -41,6 +44,7 @@ public class SettingActivity extends AppCompatActivity {
     private static final String SET_FILENAME = "ano_set_filename";
     private int mCurrentDialogStyle = com.qmuiteam.qmui.R.style.QMUI_Dialog;
     private TimePickerView pvTime;
+    private BerNpickerView nvTime;
     //Ip地址
     private QMUICommonListItemView itemWithIP;
     View.OnClickListener itemWithIPOnClickListener = new View.OnClickListener() {
@@ -302,6 +306,7 @@ public class SettingActivity extends AppCompatActivity {
     private void initView() {
         mTopBar = findViewById(R.id.topbar);
         mGroupListView = findViewById(R.id.groupListView);
+        //单个时间选择器
         pvTime = new TimePickerView.Builder(SettingActivity.this, new TimePickerView.OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
@@ -319,6 +324,56 @@ public class SettingActivity extends AppCompatActivity {
                 .isDialog(true) //默认设置false ，内部实现将DecorView 作为它的父控件。
                 .setLineSpacingMultiplier(2.0f)
                 .build();
+        //时间间隔选择器
+        nvTime = new BerNpickerView.Builder(SettingActivity.this, new BerNpickerView.OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(List datalist, View v) {
+                List<String> timeList = getTimeLag(datalist.get(0).toString(),datalist.get(1).toString(),datalist.get(2).toString(),datalist.get(3).toString(),datalist.get(4).toString());
+                if(timeList.size()>0){
+                    AddSharedPreferencesSet("Set_TimerSet1", timeList);
+                    initGroupListView();
+                }else {
+                    Toast.makeText(SettingActivity.this, "时间段不合法", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        })
+                .setTotal(5)
+                .setTitleText("开始时间-结束时间-间隔时长")
+                .build();
+        List<String> sH = new ArrayList<>();
+        List<String> eH = new ArrayList<>();
+        List<String> sM = new ArrayList<>();
+        List<String> eM = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            String hour = String.valueOf(i);
+            /*判断如果为个位数则在前面拼接‘0’*/
+            if (hour.length() < 2) {
+                hour = "0" + hour;
+            }
+            sH.add(hour);
+            eH.add(hour);
+        }
+        for (int i = 0; i < 60; i++) {
+            String minute = String.valueOf(i);
+            /*判断如果为个位数则在前面拼接‘0’*/
+            if (minute.length() < 2) {
+                minute = "0" + minute;
+            }
+            sM.add(minute);
+            eM.add(minute);
+        }
+        List<String> iv = new ArrayList<>();
+        for (int i = 10; i <= 120; i = i+10) {
+            iv.add(i + "分");
+        }
+        List<List<String>> timelist = new ArrayList<>();
+        timelist.add(sH);
+        timelist.add(sM);
+        timelist.add(eH);
+        timelist.add(eM);
+        timelist.add(iv);
+        nvTime.setNPicker(timelist);
     }
 
     private void initTopBar() {
@@ -333,10 +388,27 @@ public class SettingActivity extends AppCompatActivity {
         });
         mTopBar.addRightImageButton(R.mipmap.icon_topbar_add, QMUIViewHelper.generateViewId()).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Calendar selectedDate = Calendar.getInstance();//系统当前时间
-                pvTime.setDate(selectedDate);
-                pvTime.show(view);
+            public void onClick(final View view) {
+                final String[] itemsshow = new String[]{"时间点选择", "时间间隔选择"};
+                new QMUIDialog.MenuDialogBuilder(SettingActivity.this)
+                        .setSkinManager(QMUISkinManager.defaultInstance(SettingActivity.this))
+                        .addItems(itemsshow, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, final int which) {
+                                dialog.dismiss();
+                                switch (which){
+                                    case 0:
+                                        Calendar selectedDate = Calendar.getInstance();//系统当前时间
+                                        pvTime.setDate(selectedDate);
+                                        pvTime.show(view);
+                                        break;
+                                    case 1:
+                                        nvTime.show(view);
+                                        break;
+                                }
+                            }
+                        })
+                        .create(com.qmuiteam.qmui.R.style.QMUI_Dialog).show();
             }
         });
     }
@@ -484,6 +556,19 @@ public class SettingActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    private void AddSharedPreferencesSet(String tag,List<String> values) {
+        SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
+        Set<String> SetList=new HashSet<String>(sp.getStringSet(tag, new HashSet<String>()));
+        // 得到编辑器对象   
+        SharedPreferences.Editor editor = getSharedPreferences(SET_FILENAME, MODE_PRIVATE).edit();
+        for (String value:values) {
+            SetList.add(value);
+        }
+        editor.putStringSet(tag,SetList);
+        // 将内存中的数据写到XML文件中去   
+        editor.commit();
+    }
+
     private void SaveSharedPreferencesInt(String tag, int value) {
         // 得到编辑器对象   
         SharedPreferences.Editor editor = getSharedPreferences(SET_FILENAME, MODE_PRIVATE).edit();
@@ -491,5 +576,49 @@ public class SettingActivity extends AppCompatActivity {
         editor.putInt(tag, value);
         // 将内存中的数据写到XML文件中去   
         editor.commit();
+    }
+
+    /**
+     * 根据时间段和时间间隔获取时间
+     *
+     * @return
+     */
+    public List<String> getTimeLag(String startH, String startM, String endH, String endM, String interval) {
+        //校验参数
+        int sh = Integer.parseInt(startH);
+        int sm = Integer.parseInt(startM);
+        int eh = Integer.parseInt(endH);
+        int em = Integer.parseInt(endM);
+        int iv = Integer.parseInt(interval.substring(0, interval.length() - 1));
+        ArrayList<String> list = new ArrayList<String>();//创建集合存储所有时间点
+        if(sh==eh){
+            if(sm>=em){
+                return  list;
+            }
+        }
+        if(sh>eh){
+            return  list;
+        }
+        for (int h = sh, m = sm; h <= eh; m += iv) {//创建循环，指定间隔五分钟
+            if (m >= 60) {//判断分钟累计到60时清零，小时+1
+                h++;
+                m = m-60;
+            }
+            if (h == eh && m > em) {//判断小时累计到24时跳出循环，不添加到集合
+                break;
+            }
+            /*转换为字符串*/
+            String hour = String.valueOf(h);
+            String minute = String.valueOf(m);
+            /*判断如果为个位数则在前面拼接‘0’*/
+            if (hour.length() < 2) {
+                hour = "0" + hour;
+            }
+            if (minute.length() < 2) {
+                minute = "0" + minute;
+            }
+            list.add(hour + ":" + minute);//拼接为HH:mm格式，添加到集合
+        }
+        return list;
     }
 }

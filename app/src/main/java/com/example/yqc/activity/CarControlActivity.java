@@ -958,9 +958,13 @@ public class CarControlActivity extends AppCompatActivity  {
                 if(CarStatus){
                     if (Float.valueOf(CarControlActivity.VAL_TurnWheel_Sailboard_Angle.split(" ")[0]) >=60.0f){
                         homeComponentsController.setButtonEnble(false,"桅杆起立");
+                        homeComponentsController.setButtonEnble(false,"云台向左");
+                        homeComponentsController.setButtonEnble(false,"云台向右");
                     }else {
                         if(CarStatus){
                             homeComponentsController.setButtonEnble(true,"桅杆起立");
+                            homeComponentsController.setButtonEnble(true,"云台向左");
+                            homeComponentsController.setButtonEnble(true,"云台向右");
                         }
                     }
                 }
@@ -1094,16 +1098,18 @@ public class CarControlActivity extends AppCompatActivity  {
     TimerTask run_task = new TimerTask( ) {
         public void run ( )
         {
-            //是否发送速度
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
-            String dateStr = sdf.format(calendar.getTime());
-            if(TimerSetList.contains(dateStr)){
-                DefaultSendBean bean=new DefaultSendBean();
-                bean.setThreebyte((byte) 0x02);
-                bean.setFourbyte((byte)0xA5);
-                SendData_ByteOnce(bean);
-                LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
+            if(mTabSegment.getSelectedIndex()==0){
+                //是否发送速度
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
+                String dateStr = sdf.format(calendar.getTime());
+                if(TimerSetList.contains(dateStr)){
+                    DefaultSendBean bean=new DefaultSendBean();
+                    bean.setThreebyte((byte) 0x02);
+                    bean.setFourbyte((byte)0xA5);
+                    SendData_ByteOnce(bean);
+                    LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
+                }
             }
             TimeDifference.post(new Runnable() {
                 @Override

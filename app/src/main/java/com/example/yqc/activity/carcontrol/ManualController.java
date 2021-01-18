@@ -360,11 +360,11 @@ public class ManualController extends HomeController{
         mFloatLayout.addView(MyRoundButton5,lp);
         mFloatLayout.addView(MyRoundButton6,lp);
 //        mFloatLayout.addView(MyRoundButton7,lp);
-        mFloatLayout.addView(MyRoundButton8,lp);
         mFloatLayout.addView(MyRoundButton9,lp);
         mFloatLayout.addView(MyRoundButton10,lp);
         mFloatLayout.addView(MyRoundButton11,lp);
         mFloatLayout.addView(MyRoundButton12,lp);
+        mFloatLayout.addView(MyRoundButton8,lp);
 //        mFloatLayout.addView(MyRoundButton13,lp);
 
         //发送陀螺仪数据的任务
