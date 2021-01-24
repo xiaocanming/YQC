@@ -593,6 +593,7 @@ public class CarControlActivity extends AppCompatActivity  {
                     handcount=0;
                     sendhandler.postDelayed(runnable,delayMillis);//定期执行
                     LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
+                    homeUtilController.setButtonEnble(false,"演示模式状态");
                 }
                 //手动模式
                 if(index==1){
@@ -1098,7 +1099,7 @@ public class CarControlActivity extends AppCompatActivity  {
     TimerTask run_task = new TimerTask( ) {
         public void run ( )
         {
-            if(mTabSegment.getSelectedIndex()==0){
+            if(mTabSegment.getSelectedIndex()==0 && ShowController.IsSendTiming){
                 //是否发送速度
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");

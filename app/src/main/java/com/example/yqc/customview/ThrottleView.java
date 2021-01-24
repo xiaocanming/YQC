@@ -109,7 +109,7 @@ public class ThrottleView extends View {
         super.onDraw(canvas);
         canvas.drawRect(left, top, left+width, top+height, p_line);
         canvas.drawRect(left, bottom - Value_height, left+width, bottom, p_active);
-        canvas.drawText(youmen_string, left+width/2-youmen_text_width/2, (top+bottom)/2, p_text);
+        canvas.drawText(youmen_string, left+width/2-youmen_text_width/2-35, (top+bottom)/2, p_text);
     }
 
     int act_num;//有效触点是第几个

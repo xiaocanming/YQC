@@ -159,8 +159,8 @@ public class StringTool {
         CarControlActivity.VAL_X_Ordinate = numToMString(ByteInt_Single(bodybetys[27]));
         //获取Y坐标
         CarControlActivity.VAL_Y_Ordinate = numToMString(ByteInt_Single(bodybetys[28]));
-        //获取Z坐标
-        CarControlActivity.VAL_Z_Ordinate = numToMString(ByteInt_Single(bodybetys[29]));
+        //保留字节
+        CarControlActivity.VAL_Z_Ordinate =  String.format("%.1f", ByteInt_Single(bodybetys[29]) / 10.0);
         //TOF前1距离
         CarControlActivity.VAL_TOF_Front1 = String.format("%.1f",byte2short(bodybetys, 30) / 100.0)+ " m";
         //TOF前2距离
@@ -276,7 +276,7 @@ public class StringTool {
         }
         LogTool.d("TimeDifference", "显示数据3"+"("+String.valueOf(tiems.size())+"/"+String.valueOf(high+exit)+")"+timeDifference);
         LogTool.d("TimeDifference", "结束计算倒计时时间");
-        return "("+String.valueOf(tiems.size())+"/"+String.valueOf(high+exit)+")"+timeDifference;
+        return "("+String.valueOf(tiems.size())+"/"+String.valueOf(high+exit)+")"+"\n"+timeDifference;
     }
 
     /**

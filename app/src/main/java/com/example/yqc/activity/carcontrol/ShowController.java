@@ -14,6 +14,7 @@ import com.example.yqc.R;
 import com.example.yqc.activity.CarControlActivity;
 import com.example.yqc.bean.DefaultSendBean;
 import com.example.yqc.customview.MyRoundButton;
+import com.example.yqc.hkws.HC_DVRManager;
 import com.example.yqc.util.LogTool;
 import com.example.yqc.util.StringTool;
 import com.qmuiteam.qmui.skin.QMUISkinManager;
@@ -29,6 +30,8 @@ public class ShowController extends HomeController{
 
     private static final String SET_FILENAME = "ano_set_filename";
     private static boolean IsShowDemo;
+    public static int ShowStates=0;
+    public static boolean IsSendTiming=false ;
     private static int MagneticFieldA ;
     private static int MagneticFieldB ;
     private static int MagneticFieldY1 ;
@@ -66,6 +69,8 @@ public class ShowController extends HomeController{
                 bean.setFourbyte((byte) 0x01);
                 sendDataByteOnce(bean);
                 startChronometer();
+                ShowStates=1;
+                ChangeShowStatuse();
                 LogTool.d("单程演示",StringTool.byteToString(bean.parse()));
             }
         });
@@ -80,6 +85,8 @@ public class ShowController extends HomeController{
                 bean.setFourbyte((byte) 0x02);
                 sendDataByteOnce(bean);
                 startChronometer();
+                ShowStates=2;
+                ChangeShowStatuse();
                 LogTool.d("往复演示",StringTool.byteToString(bean.parse()));
             }
         });
@@ -135,30 +142,77 @@ public class ShowController extends HomeController{
             }
         });
 
+
+        //周期演示
+        MyRoundButton MyRoundButton5= new MyRoundButton(getContext());
+        MyRoundButton5.setText("周期演示");
+        MyRoundButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!IsSendTiming){
+                    //判断是否选择演示模式
+                    if(ShowStates==0){
+                        new QMUIDialog.MessageDialogBuilder(getContext())
+                                .setTitle("错误提示")
+                                .setMessage("请先选择单程演示或者往复演示！")
+                                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                                    @Override
+                                    public void onClick(QMUIDialog dialog, int index) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create().show();
+                        return;
+                    }
+                }
+                IsSendTiming=!IsSendTiming;
+                ChangeShowStatuse();
+            }
+        });
+
         int textViewSize = QMUIDisplayHelper.dpToPx(60);
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(textViewSize, textViewSize);
         mFloatLayout.addView(MyRoundButton1, lp);
         mFloatLayout.addView(MyRoundButton2, lp);
         mFloatLayout.addView(MyRoundButton4, lp);
-
+        mFloatLayout.addView(MyRoundButton5, lp);
         //演示指令
         if(IsShowDemo){
             MyRoundButton MyRoundButton3= new MyRoundButton(getContext());
-            MyRoundButton3.setText("开始演示");
+            MyRoundButton3.setText("单次演示");
             MyRoundButton3.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //判断是否选择演示模式
+                    if(ShowStates==0){
+                        new QMUIDialog.MessageDialogBuilder(getContext())
+                                .setTitle("错误提示")
+                                .setMessage("请先选择单程演示或者往复演示！")
+                                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                                    @Override
+                                    public void onClick(QMUIDialog dialog, int index) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .create().show();
+                        return;
+                    }
+                    if(IsSendTiming){
+                        IsSendTiming=false;
+                    }
+                    ChangeShowStatuse();
+
                     DefaultSendBean bean = new DefaultSendBean();
                     bean.setThreebyte((byte) 0x02);
                     bean.setFourbyte((byte)0xA5);
                     sendDataByteOnce(bean);
                     startChronometer();
-                    LogTool.d("开始演示",StringTool.byteToString(bean.parse()));
+                    LogTool.d("单次演示",StringTool.byteToString(bean.parse()));
                 }
             });
             mFloatLayout.addView(MyRoundButton3, lp);
         }
-
+        ChangeShowStatuse();
     }
 
     @Override
@@ -169,8 +223,18 @@ public class ShowController extends HomeController{
             button.setEnabled(enble);
             button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
         }
+        ShowStates=0;
+        IsSendTiming=false;
+        ChangeShowStatuse();
     }
-
+    @Override
+    public void setButtonEnble(boolean enble,String tag){
+        if(tag.equals("演示模式状态")){
+            ShowStates=0;
+            IsSendTiming=false;
+            ChangeShowStatuse();
+        }
+    }
 
     private int handcountMagneticField=0;
     private int type;
@@ -230,4 +294,60 @@ public class ShowController extends HomeController{
         editor.commit();
     }
 
+    public void ChangeShowStatuse() {
+        int currentChildCount = mFloatLayout.getChildCount();
+        if(IsSendTiming){
+            for(int i=0;i<currentChildCount;i++){
+                MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+                if(button.getText().equals("周期演示")){
+                    button.setBackgroundColor(getResources().getColor(R.color.radiusImageView_selected_border_color));
+                }
+            }
+        }else {
+            for(int i=0;i<currentChildCount;i++){
+                MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+                if(button.getText().equals("周期演示")){
+                    button.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }
+        }
+        switch (ShowStates){
+            case 0:
+                for(int i=0;i<currentChildCount;i++){
+                    MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+                    if(button.getText().equals("单程演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
+                    if(button.getText().equals("往复演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.transparent));
+
+                    }
+                }
+                break;
+            case 1:
+                for(int i=0;i<currentChildCount;i++){
+                    MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+                    if(button.getText().equals("单程演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.radiusImageView_selected_border_color));
+                    }
+                    if(button.getText().equals("往复演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
+                }
+                break;
+            case 2:
+                for(int i=0;i<currentChildCount;i++){
+                    MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
+                    if(button.getText().equals("单程演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
+                    if(button.getText().equals("往复演示")){
+                        button.setBackgroundColor(getResources().getColor(R.color.radiusImageView_selected_border_color));
+
+                    }
+                }
+                break;
+        }
+
+    }
 }
