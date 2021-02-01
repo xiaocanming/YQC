@@ -122,10 +122,14 @@ public class ShowController extends HomeController{
                                             public void onClick(QMUIDialog dialog, int index) {
                                                 String text = builder.getEditText().getText().toString();
                                                 if(StringTool.StringIsNumber(text)){
+                                                    int numpares=Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0)));
+                                                    if(numpares>3600){
+                                                        Toast.makeText(getContext(), "角度不能大于360 °" , Toast.LENGTH_SHORT).show();
+                                                        return;
+                                                    }
                                                     dialog.dismiss();
                                                     handcountMagneticField=0;
                                                     type=which;
-                                                    int numpares=Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text)*10.0)));
                                                     num=numpares;
                                                     SaveSharedPreferencesInt(itemstag[which],numpares);
                                                     sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);

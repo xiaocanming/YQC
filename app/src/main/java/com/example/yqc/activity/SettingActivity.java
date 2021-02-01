@@ -256,21 +256,40 @@ public class SettingActivity extends AppCompatActivity {
                         .setTitle("定时器")
                         .setMessage("定时器修改和删除")
                         .setSkinManager(QMUISkinManager.defaultInstance(SettingActivity.this))
-                        .addAction("取消", new QMUIDialogAction.ActionListener() {
-                            @Override
-                            public void onClick(QMUIDialog dialog, int index) {
-                                dialog.dismiss();
-                            }
-                        })
                         .addAction("删除", new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
-                                AddSharedPreferencesSet("Set_TimerSet1","",item.getDetailText().toString());
-                                initGroupListView();
                                 dialog.dismiss();
+                                new QMUIDialog.MessageDialogBuilder(SettingActivity.this)
+                                        .setTitle("提示")
+                                        .setMessage("删除定时任务")
+                                        .setSkinManager(QMUISkinManager.defaultInstance(SettingActivity.this))
+                                        .addAction("全部", new QMUIDialogAction.ActionListener() {
+                                            @Override
+                                            public void onClick(QMUIDialog dialog, int index) {
+                                                ClearSharedPreferencesSet("Set_TimerSet1");
+                                                initGroupListView();
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .addAction("当前", new QMUIDialogAction.ActionListener() {
+                                            @Override
+                                            public void onClick(QMUIDialog dialog, int index) {
+                                                AddSharedPreferencesSet("Set_TimerSet1","",item.getDetailText().toString());
+                                                initGroupListView();
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                                            @Override
+                                            public void onClick(QMUIDialog dialog, int index) {
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                        .create(mCurrentDialogStyle).show();
                             }
                         })
-                        .addAction(0, "修改", QMUIDialogAction.ACTION_PROP_POSITIVE, new QMUIDialogAction.ActionListener() {
+                        .addAction("修改",  new QMUIDialogAction.ActionListener() {
                             @Override
                             public void onClick(QMUIDialog dialog, int index) {
                                 dialog.dismiss();
@@ -286,6 +305,12 @@ public class SettingActivity extends AppCompatActivity {
                                 calendar.setTime(date);
                                 pvTime.setDate(calendar);
                                 pvTime.show(v);
+                            }
+                        })
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
                             }
                         })
                         .create(mCurrentDialogStyle).show();
@@ -364,7 +389,7 @@ public class SettingActivity extends AppCompatActivity {
             eM.add(minute);
         }
         List<String> iv = new ArrayList<>();
-        for (int i = 10; i <= 120; i = i+10) {
+        for (int i = 15; i <= 60; i = i+5) {
             iv.add(i + "分");
         }
         List<List<String>> timelist = new ArrayList<>();
@@ -565,6 +590,14 @@ public class SettingActivity extends AppCompatActivity {
             SetList.add(value);
         }
         editor.putStringSet(tag,SetList);
+        // 将内存中的数据写到XML文件中去   
+        editor.commit();
+    }
+
+    private void ClearSharedPreferencesSet(String tag) {
+        // 得到编辑器对象   
+        SharedPreferences.Editor editor = getSharedPreferences(SET_FILENAME, MODE_PRIVATE).edit();
+        editor.remove(tag);
         // 将内存中的数据写到XML文件中去   
         editor.commit();
     }
