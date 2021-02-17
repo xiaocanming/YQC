@@ -26,12 +26,19 @@ public class HomeController extends QMUIWindowInsetLayout {
         }
     }
 
+    protected void initHomeSetting() {
+        if (mHomeControlListener != null) {
+            mHomeControlListener.initHomeSetting();
+        }
+    }
+
     public void setHomeControlListener(HomeControlListener homeControlListener) {
         mHomeControlListener = homeControlListener;
     }
     public interface HomeControlListener {
         void sendDataByteOnce(DefaultSendBean bean);
         void startChronometer();
+        void initHomeSetting();
     }
 
     public void setButtonEnble(boolean enble){

@@ -134,6 +134,7 @@ public class ShowController extends HomeController{
                                                     SaveSharedPreferencesInt(itemstag[which],numpares);
                                                     sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);
                                                     initSetting();
+                                                    initHomeSetting();
                                                 }else {
                                                     Toast.makeText(getContext(), "请输入有效的坐标值,精度保留一位小数" , Toast.LENGTH_SHORT).show();
                                                 }

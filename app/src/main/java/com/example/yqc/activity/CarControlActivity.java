@@ -750,6 +750,11 @@ public class CarControlActivity extends AppCompatActivity  {
             public void startChronometer() {
                 Start_Chronometer();
             }
+
+            @Override
+            public void initHomeSetting() {
+                initSetting();
+            }
         };
 
         mPages = new HashMap<>();
