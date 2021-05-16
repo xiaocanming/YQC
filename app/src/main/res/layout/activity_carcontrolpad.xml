@@ -415,7 +415,7 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/text31_value"
         android:layout_marginLeft="-30dp"
-        android:text="月球车遥测"
+        android:text="火星车遥测"
         android:textSize="18sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/colorHelper_square_alpha_background" />
@@ -869,7 +869,7 @@
         android:id="@+id/tcpstatustitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="月球车状态："
+        android:text="火星车状态："
         android:textSize="18sp"
         android:layout_alignLeft="@+id/carmerstatustitle"
         android:layout_below="@+id/carmerstatustitle"

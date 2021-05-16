@@ -29,8 +29,8 @@ android {
         applicationId "com.example.yqc"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 8
-        versionName "1.3.5"
+        versionCode 10
+        versionName "1.4.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
