@@ -18,6 +18,22 @@
         android:layout_marginTop="10dp"
         app:backgroundTint="@color/colorPrimary"  />
 
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+        android:id="@+id/btn_rz"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:clickable="false"
+        android:src="@mipmap/btnimg"
+        android:layout_alignTop="@+id/Sur_Player"
+        android:layout_toLeftOf="@+id/Sur_Player"
+        app:qmui_border_color="?attr/qmui_config_color_gray_6"
+        app:qmui_border_width="2dp"
+        app:qmui_corner_radius="4dp"
+        app:qmui_selected_border_color="?attr/qmui_config_color_gray_4"
+        app:qmui_selected_border_width="2dp"
+        app:qmui_selected_mask_color="?attr/qmui_config_color_gray_8"/>
+
     <com.example.yqc.customview.ThrottleView
         android:id="@+id/thr_bar"
         android:layout_width="100dp"
@@ -1005,24 +1021,6 @@
             app:qmui_radiusBottomRight="8dp"/>
 
     </FrameLayout>
-
-
-    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-        android:id="@+id/btn_rz"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:clickable="false"
-        android:src="@mipmap/btnimg"
-        android:layout_above="@+id/main_view_pager"
-        android:layout_marginBottom="15dp"
-        android:layout_toRightOf="@+id/btn_group"
-        app:qmui_border_color="?attr/qmui_config_color_gray_6"
-        app:qmui_border_width="2dp"
-        app:qmui_corner_radius="4dp"
-        app:qmui_selected_border_color="?attr/qmui_config_color_gray_4"
-        app:qmui_selected_border_width="2dp"
-        app:qmui_selected_mask_color="?attr/qmui_config_color_gray_8"/>
-
 
     <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
         android:id="@+id/btn_sugh"

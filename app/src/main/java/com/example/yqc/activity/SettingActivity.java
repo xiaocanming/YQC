@@ -245,6 +245,167 @@ public class SettingActivity extends AppCompatActivity {
     };
 
 
+    //A点磁场角度
+    private QMUICommonListItemView itemWithMagneticFieldA;
+    View.OnClickListener itemWithMagneticFieldAOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("A点磁场角度")
+                        .setPlaceholder("请输入您的磁场角度")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(MagneticFieldA/10.0))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if (StringTool.StringIsNumber(text)) {
+                                    int numpares = Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text) * 10.0)));
+                                    if (numpares > 3600) {
+                                        Toast.makeText(SettingActivity.this, "角度不能大于360 °", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    SaveSharedPreferencesInt("Set_MagneticFieldA", numpares);
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(SettingActivity.this, "请输入有效的坐标值,精度保留一位小数", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+    //B点磁场角度
+    private QMUICommonListItemView itemWithMagneticFieldB;
+    View.OnClickListener itemWithMagneticFieldBOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("B点磁场角度")
+                        .setPlaceholder("请输入您的磁场角度")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(MagneticFieldB/10.0))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if (StringTool.StringIsNumber(text)) {
+                                    int numpares = Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text) * 10.0)));
+                                    if (numpares > 3600) {
+                                        Toast.makeText(SettingActivity.this, "角度不能大于360 °", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    SaveSharedPreferencesInt("Set_MagneticFieldB", numpares);
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(SettingActivity.this, "请输入有效的坐标值,精度保留一位小数", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+    //Y轴正方向磁场角度
+    private QMUICommonListItemView itemWithMagneticFieldY1;
+    View.OnClickListener itemWithMagneticFieldY1OnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("Y轴正方向磁场角度")
+                        .setPlaceholder("请输入您的磁场角度")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(MagneticFieldY1/10.0))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if (StringTool.StringIsNumber(text)) {
+                                    int numpares = Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text) * 10.0)));
+                                    if (numpares > 3600) {
+                                        Toast.makeText(SettingActivity.this, "角度不能大于360 °", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    SaveSharedPreferencesInt("Set_MagneticFieldY1", numpares);
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(SettingActivity.this, "请输入有效的坐标值,精度保留一位小数", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+    //Y轴负方向磁场角度
+    private QMUICommonListItemView itemWithMagneticFieldY2;
+    View.OnClickListener itemWithMagneticFieldY2OnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("Y轴负方向磁场角度")
+                        .setPlaceholder("请输入您的磁场角度")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(MagneticFieldY2/10.0))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if (StringTool.StringIsNumber(text)) {
+                                    int numpares = Integer.parseInt(new java.text.DecimalFormat("0").format((Float.valueOf(text) * 10.0)));
+                                    if (numpares > 3600) {
+                                        Toast.makeText(SettingActivity.this, "角度不能大于360 °", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    SaveSharedPreferencesInt("Set_MagneticFieldY2", numpares);
+                                    initGroupListView();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(SettingActivity.this, "请输入有效的坐标值,精度保留一位小数", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+
     //定时器
     private QMUIGroupListView.Section sectionTimer;
     View.OnClickListener itemWithTimerOnClickListener = new View.OnClickListener() {
@@ -496,6 +657,41 @@ public class SettingActivity extends AppCompatActivity {
                 .addItemView(itemWithCameraUserName, itemWithCameraUserNameOnClickListener)
                 .addItemView(itemWithCameraPassWord, itemWithCameraPassWordOnClickListener)
                 .addTo(mGroupListView);
+
+        //磁场设置
+        itemWithMagneticFieldA = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_magneticfield),
+                "A点磁场角度",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+        itemWithMagneticFieldB = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_magneticfield),
+                "B点磁场角度",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+        itemWithMagneticFieldY1 = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_magneticfield),
+                "Y轴正方向磁场角度",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+        itemWithMagneticFieldY2 = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_magneticfield),
+                "Y轴负方向磁场角度",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+
+        QMUIGroupListView.newSection(SettingActivity.this)
+                .setTitle("磁场设置")
+                .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .addItemView(itemWithMagneticFieldA, itemWithMagneticFieldAOnClickListener)
+                .addItemView(itemWithMagneticFieldB, itemWithMagneticFieldBOnClickListener)
+                .addItemView(itemWithMagneticFieldY1, itemWithMagneticFieldY1OnClickListener)
+                .addItemView(itemWithMagneticFieldY2, itemWithMagneticFieldY2OnClickListener)
+                .addTo(mGroupListView);
     }
 
     private  String HostIP;
@@ -504,6 +700,10 @@ public class SettingActivity extends AppCompatActivity {
     private  int CameraPort;
     private  String CameraUserName;
     private  String CameraPassWord;
+    private  int MagneticFieldA;
+    private  int MagneticFieldB;
+    private  int MagneticFieldY1;
+    private  int MagneticFieldY2;
     private void initGroupListView() {
         // 得到SP对象 
         SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
@@ -517,10 +717,19 @@ public class SettingActivity extends AppCompatActivity {
         CameraPort = sp.getInt("Set_CameraPort", getResources().getInteger(R.integer.set_cameraport));
         CameraUserName = sp.getString("Set_CameraUserName", getResources().getString(R.string.set_camerausername));
         CameraPassWord = sp.getString("Set_CameraPassWord", getResources().getString(R.string.set_camerapassword));
+        MagneticFieldA = sp.getInt("Set_MagneticFieldA",getResources().getInteger(R.integer.set_magneticfielda));
+        MagneticFieldB = sp.getInt("Set_MagneticFieldB",getResources().getInteger(R.integer.set_magneticfieldb));
+        MagneticFieldY1 = sp.getInt("Set_MagneticFieldY1",getResources().getInteger(R.integer.set_magneticfieldy1));
+        MagneticFieldY2 = sp.getInt("Set_MagneticFieldY2",getResources().getInteger(R.integer.set_magneticfieldy2));
+
         itemWithCameraIP.setDetailText(CameraIP);
         itemWithCameraPort.setDetailText(String.valueOf(CameraPort));
         itemWithCameraUserName.setDetailText(CameraUserName);
         itemWithCameraPassWord.setDetailText(CameraPassWord);
+        itemWithMagneticFieldA.setDetailText(String.valueOf(MagneticFieldA/10.0)+" °");
+        itemWithMagneticFieldB.setDetailText(String.valueOf(MagneticFieldB/10.0)+" °");
+        itemWithMagneticFieldY1.setDetailText(String.valueOf(MagneticFieldY1/10.0)+" °");
+        itemWithMagneticFieldY2.setDetailText(String.valueOf(MagneticFieldY2/10.0)+" °");
 
         Set<String> SetList =sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
         Set<String> sortSet = new TreeSet<String>(new Comparator<String>() {

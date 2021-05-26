@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -41,7 +42,7 @@ public class ThrottleView extends View {
     int color_line = Color.GRAY;
     int color_background = Color.GRAY;
     int color_active = Color.GREEN;
-    int color_text = Color.RED;
+    int color_text = Color.WHITE;
 
     int FLAG_DG=0;
 
@@ -98,7 +99,8 @@ public class ThrottleView extends View {
         p_text.setAntiAlias(true);
         p_text.setColor(color_text);
         //p_text.setAlpha(255);
-        p_text.setTextSize(30);
+        p_text.setTextSize(50);
+        p_text.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));//加粗
         youmen_text_width = p_text.measureText(youmen_string);
 
     }

@@ -261,6 +261,7 @@ public class CarControlActivity extends AppCompatActivity  {
         throttleView=findViewById(R.id.thr_bar);
         throttleView.Value_height=realtimecarvalTHR*100;
         throttleView.Value=realtimecarvalTHR;
+        throttleView.setEnabled(false);
         VAL_THR=realtimecarvalTHR;
         //电池
         batteryView=findViewById(R.id.battery_24v);
@@ -739,6 +740,59 @@ public class CarControlActivity extends AppCompatActivity  {
         }
     };
 
+
+
+//  sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);
+    private int handcountMagneticField=0;
+    private int type;
+    private int num;
+    private final int delayMillisMagneticField = 100;
+    private Handler sendMagneticField = new Handler();
+    public Runnable runnableMagneticField  = new Runnable(){//推送runnable，定期2s执行一次
+        @Override
+        public void run() {
+            if (handcountMagneticField==3){
+                sendMagneticField.removeCallbacks(runnableMagneticField);
+            }else {
+                byte[] bytes=StringTool.toLH(num);
+                DefaultSendBean bean1 = new DefaultSendBean();
+                DefaultSendBean bean2 = new DefaultSendBean();
+                switch (type){
+                    case 0:
+                        bean1.setThreebyte((byte)0x1E);
+                        bean2.setThreebyte((byte)0x1F);
+                        break;
+                    case 1:
+                        bean1.setThreebyte((byte)0x20);
+                        bean2.setThreebyte((byte)0x21);
+                        break;
+                    case 2:
+                        bean1.setThreebyte((byte)0x22);
+                        bean2.setThreebyte((byte)0x23);
+                        break;
+                    case 3:
+                        bean1.setThreebyte((byte)0x24);
+                        bean2.setThreebyte((byte)0x25);
+                        break;
+                }
+                bean1.setFourbyte((byte)( bytes[1] & 0xFF));
+                bean2.setFourbyte((byte)( bytes[0] & 0xFF));
+                SendData_ByteOnce(bean1);
+                try {
+                    Thread.sleep(delayMillisMagneticField);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                SendData_ByteOnce(bean2);
+                LogTool.d("角度设置",StringTool.byteToString(bean1.parse()));
+                LogTool.d("角度设置",StringTool.byteToString(bean2.parse()));
+                handcountMagneticField++;
+                sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);
+            }
+        }
+    };
+
+
     private void initPagers() {
         HomeController.HomeControlListener listener = new HomeController.HomeControlListener() {
             @Override
@@ -900,6 +954,7 @@ public class CarControlActivity extends AppCompatActivity  {
         if(mManager.isConnect()){
             mManager.send(bean);
         }else {
+            LogTool.d("发送失败",StringTool.byteToString(bean.parse()));
             CarControlActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     mTextViewTcpStatus.setText("未连接");
@@ -1139,6 +1194,7 @@ public class CarControlActivity extends AppCompatActivity  {
             bean.setFourbyte((byte)(VAL_THR & 0xFF));
             SendData_ByteOnce(bean);
             LogTool.d("速度",StringTool.byteToString(bean.parse()));
+            LogTool.d("连接状态","已连接");
         }
 
         @Override
@@ -1148,15 +1204,18 @@ public class CarControlActivity extends AppCompatActivity  {
 //                    logSend("正在重定向连接(Redirect Connecting)...");
                     mManager.switchConnectionInfo(((RedirectException) e).redirectInfo);
                     mManager.connect();
+                    LogTool.d("连接状态","重定向");
                 } else {
 //                    logSend("异常断开(Disconnected with exception):" + e.getMessage());
                     mTextViewTcpStatus.setText("异常断开");
                     mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+                    LogTool.d("连接状态","异常断开");
                 }
             } else {
 //                logSend("正常断开(Disconnect Manually)");
                 mTextViewTcpStatus.setText("连接断开");
                 mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+                LogTool.d("连接状态","连接断开");
             }
         }
 
@@ -1164,6 +1223,7 @@ public class CarControlActivity extends AppCompatActivity  {
         public void onSocketConnectionFailed(ConnectionInfo info, String action, Exception e) {
             mTextViewTcpStatus.setText("连接失败");
             mTextViewTcpStatus.setTextColor(getResources().getColor(R.color.app_color_theme_2));
+            LogTool.d("连接状态","连接失败");
         }
 
         @Override
