@@ -44,7 +44,6 @@ public class ThrottleView extends View {
     int color_active = Color.GREEN;
     int color_text = Color.WHITE;
 
-    int FLAG_DG=0;
 
     static boolean isinrect(float x1, float y1, float top, float height, float left, float width)
     {//x2 y2为中心点
@@ -163,23 +162,23 @@ public class ThrottleView extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:		//全部手指抬起
-                if(FLAG_DG==0)
+                if(CarControlActivity.FLAG_DG==0)
                     act_num = 255;
                 else
                 {
-                    Value_height = (int)(bottom/2.05);
+                    Value_height = CarControlActivity.OldValue_height;
                     changevalue();
                     invalidate();
                 }
                 break;
             case MotionEvent.ACTION_POINTER_UP:		//两个手指时，第一个手指抬起
-                if(znum==act_num&&FLAG_DG==0)
+                if(znum==act_num&&CarControlActivity.FLAG_DG==0)
                 {
                     act_num = 255;
                 }
                 else
                 {
-                    Value_height = (int)(bottom/2.05);
+                    Value_height = CarControlActivity.OldValue_height;
                     changevalue();
                     invalidate();
                 }

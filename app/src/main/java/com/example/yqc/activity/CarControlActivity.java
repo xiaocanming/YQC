@@ -239,11 +239,22 @@ public class CarControlActivity extends AppCompatActivity  {
     //调节阶段用于查看接收的数据
     private TextView textView;
     private boolean updatetextView=false;
+
+    //速度固化标志
+    public static int FLAG_DG;
+    //速度固化大小
+    public static int OldValue_height;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);//禁止屏幕变暗
-        setContentView(R.layout.activity_carcontrolpad);
+//        setContentView(R.layout.activity_carcontrolpad);
+        if(!QMUIDeviceHelper.isTablet(CarControlActivity.this)){
+            setContentView(R.layout.activity_carcontrol);
+        }else {
+            setContentView(R.layout.activity_carcontrolpad);
+        }
 
         // 设置用于发广播的上下文
         HC_DVRManager.getInstance().setContext(getApplicationContext());
@@ -261,8 +272,9 @@ public class CarControlActivity extends AppCompatActivity  {
         throttleView=findViewById(R.id.thr_bar);
         throttleView.Value_height=realtimecarvalTHR*100;
         throttleView.Value=realtimecarvalTHR;
-        throttleView.setEnabled(false);
         VAL_THR=realtimecarvalTHR;
+        FLAG_DG=1;
+        OldValue_height=throttleView.Value_height;
         //电池
         batteryView=findViewById(R.id.battery_24v);
         //    小车数据
@@ -552,10 +564,19 @@ public class CarControlActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 //当前油门
-                int new_VAL_THR = ThrottleView.Value;
+                int new_VAL_THR = throttleView.Value;
                 int VAL_THR=new_VAL_THR>=5?5:new_VAL_THR;
                 SaveSharedPreferencesInt("Set_CarvalTHR",VAL_THR);
                 initSetting();
+                if(FLAG_DG==0){
+                    qmuiRoundButtonsugh.setBackgroundColor(getResources().getColor(R.color.radiusImageView_selected_border_color));
+                    OldValue_height= throttleView.Value_height;
+                    FLAG_DG=1;
+                }else {
+                    qmuiRoundButtonsugh.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    OldValue_height= throttleView.Value_height;
+                    FLAG_DG=0;
+                }
             }
         });
     }
@@ -1079,7 +1100,7 @@ public class CarControlActivity extends AppCompatActivity  {
             }
             //是否发送速度
             int new_VAL_THR = ThrottleView.Value;
-            if(new_VAL_THR!=VAL_THR){
+            if(new_VAL_THR!=VAL_THR&&FLAG_DG==0){
                 VAL_THR=new_VAL_THR;
                 SaveSharedPreferencesInt("Set_RealtimeCarvalTHR",VAL_THR);
                 DefaultSendBean bean=new DefaultSendBean();
@@ -1294,6 +1315,15 @@ public class CarControlActivity extends AppCompatActivity  {
     private boolean CarStatus=false;
     private void setButtonEnble(boolean enble){
         CarStatus=enble;
+        if(!enble){
+            OldValue_height= throttleView.Value_height;
+            FLAG_DG=1;
+            qmuiRoundButtonsugh.setBackgroundColor(getResources().getColor(R.color.transparent));
+        }else {
+            OldValue_height= throttleView.Value_height;
+            FLAG_DG=0;
+            qmuiRoundButtonsugh.setBackgroundColor(getResources().getColor(R.color.transparent));
+        }
         homeComponentsController.setButtonEnble(enble);
         homeUtilController.setButtonEnble(enble);
         qmuiRoundButton1.setEnabled(enble);
