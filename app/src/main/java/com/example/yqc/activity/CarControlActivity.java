@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.InputType;
@@ -62,6 +63,7 @@ import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.popup.QMUIPopup;
 import com.qmuiteam.qmui.widget.popup.QMUIPopups;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
@@ -82,12 +84,14 @@ import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -181,7 +185,7 @@ public class CarControlActivity extends AppCompatActivity  {
     private static final String SET_FILENAME = "ano_set_filename";
     private static String 	HostIP;
     private static int 	HostPort;
-    private static Set<String> 	TimerSetList;
+    private static Set<String> 	TimerSet;
     private static int LeftX ;
     private static int LeftY ;
     private static int RightX ;
@@ -215,7 +219,6 @@ public class CarControlActivity extends AppCompatActivity  {
 
 
 //    private Timer getsenddate_timer = new Timer( );
-    private Timer run_timer = new Timer( );
     private final Handler ui_handler = new Handler();
 
     //oksocket
@@ -263,8 +266,123 @@ public class CarControlActivity extends AppCompatActivity  {
         initTcp();
         initTabs();
         initPagers();
-
+        initTimerList();
     }
+
+    private  List<String>  TimerSetList=new ArrayList<>();
+    private void initTimerList(){
+        Set<String> sortSet = new TreeSet<String>(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);//降序排列
+            }
+        });
+        sortSet.addAll(TimerSet);
+        for (String str : sortSet) {
+            TimerSetList.add(str);
+        }
+        if(TimerSetList.size()!=0){
+            SetTimer(-2);
+        }
+    }
+
+    private CountDownTimer timer1;
+    private  void SetTimer(int flag){
+        //获取下一个计时器的坐标
+        if(flag==-2){
+            int index= StringTool.TimeDifference(TimerSetList);
+            flag=index;
+        }
+        if(flag==TimerSetList.size()-1){
+            flag=flag-1;
+        }
+        //计算时间差
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
+        String nowtime = sdf.format(calendar.getTime());
+        String[] nowtimesplit=nowtime.split(":");
+        int nowhours=Integer.parseInt(nowtimesplit[0]);
+        int nowminutes=Integer.parseInt(nowtimesplit[1]);
+        long millisInFuture;
+        if(flag==-1){
+            String[] timesplit=TimerSetList.get(TimerSetList.size()-1).split(":");
+            int hours=Integer.parseInt(timesplit[0]);
+            int minutes=Integer.parseInt(timesplit[1]);
+            millisInFuture=((24-nowhours)*60-nowminutes)+(hours*60+minutes);
+            flag=TimerSetList.size();
+        }else {
+            String[] timesplit=TimerSetList.get(flag).split(":");
+            int hours=Integer.parseInt(timesplit[0]);
+            int minutes=Integer.parseInt(timesplit[1]);
+            millisInFuture=(hours-nowhours)*60+(hours-nowhours)+minutes-nowminutes;
+        }
+        final int finalFlag = flag;
+        timer1 = new CountDownTimer(millisInFuture*60*1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long hh = millisUntilFinished /1000 / 60 /60 % 60;
+                long mm = millisUntilFinished /1000 /60 % 60;
+                long ss = millisUntilFinished /1000  % 60;
+                String showtime=(String.valueOf(hh).length()==1?"0"+String.valueOf(hh):String.valueOf(hh))+":"+(String.valueOf(mm).length()==1?"0"+String.valueOf(mm):String.valueOf(mm))+":"+(String.valueOf(ss).length()==1?"0"+String.valueOf(ss):String.valueOf(ss));
+                String showcount="("+String.valueOf(TimerSetList.size())+"/"+String.valueOf(TimerSetList.size()-finalFlag)+")";
+                TimeDifference.setText(showcount+"\n"+showtime);
+            }
+            public void onFinish() {
+                SetTimer(finalFlag-1);
+                //发送定时任务
+                handcountTimerTask=0;
+                OldVAL_Sport_Mode=CarControlActivity.VAL_Sport_Mode;
+                sendTimerTask.postDelayed(runnableTimerTask, delayMillisTimerTask);
+                //发送视频连接
+                sendCarmer.postDelayed(runnableCarmer, delayMillisCarmer);
+            }
+        };
+        timer1.start();
+        LogTool.d("生成定时任务，倒计时(分)：",Integer.toString((int)millisInFuture));
+    }
+
+    //  一直循环发送定时任务
+    private String OldVAL_Sport_Mode;
+    private int handcountTimerTask=0;
+    private final int delayMillisTimerTask = 100;
+    private Handler sendTimerTask = new Handler();
+    public Runnable runnableTimerTask  = new Runnable(){//推送runnable，定期2s执行一次
+        @Override
+        public void run() {
+            if (handcountTimerTask==5){
+                sendTimerTask.removeCallbacks(runnableTimerTask);
+            }else {
+                if(OldVAL_Sport_Mode.equals(CarControlActivity.VAL_Sport_Mode)){
+                    DefaultSendBean bean=new DefaultSendBean();
+                    bean.setThreebyte((byte) 0x02);
+                    bean.setFourbyte((byte)0xA5);
+                    SendData_ByteOnce(bean);
+                    LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
+                    handcountTimerTask++;
+                    sendTimerTask.postDelayed(runnableTimerTask, delayMillisTimerTask);
+                }else {
+                    sendTimerTask.removeCallbacks(runnableTimerTask);
+                }
+            }
+        }
+    };
+
+    //  一直循环重连摄像头
+    private final int delayMillisCarmer = 10000;
+    private Handler sendCarmer = new Handler();
+    public Runnable runnableCarmer  = new Runnable(){//推送runnable，定期2s执行一次
+        @Override
+        public void run() {
+            if(mTextViewCarmerStatus.getText().equals("连接失败")){
+                startPlay();
+            }
+            if(mTextViewCarmerStatus.getText().equals("连接中……")){
+                sendCarmer.postDelayed(runnableCarmer, delayMillisCarmer);
+            }
+            if(mTextViewCarmerStatus.getText().equals("已连接")){
+                sendCarmer.removeCallbacks(runnableCarmer);
+            }
+        }
+    };
 
 
     private void initView() {
@@ -383,8 +501,6 @@ public class CarControlActivity extends AppCompatActivity  {
         // 发送陀螺仪数据的任务
         // 循环任务，按照上一次任务的发起时间计算下一次任务的开始时间
         mScheduledExecutorService.scheduleAtFixedRate(send_task, 1000, DirectionTimeinterval, TimeUnit.MILLISECONDS);
-        //发送定时任务
-        run_timer.schedule(run_task,1000,60000);
         // 停止运动
         qmuiRoundButton1 = (QMUIRoundButton) findViewById(R.id.button1);
         qmuiRoundButton1.setOnClickListener(new View.OnClickListener() {
@@ -763,55 +879,6 @@ public class CarControlActivity extends AppCompatActivity  {
 
 
 
-//  sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);
-    private int handcountMagneticField=0;
-    private int type;
-    private int num;
-    private final int delayMillisMagneticField = 100;
-    private Handler sendMagneticField = new Handler();
-    public Runnable runnableMagneticField  = new Runnable(){//推送runnable，定期2s执行一次
-        @Override
-        public void run() {
-            if (handcountMagneticField==3){
-                sendMagneticField.removeCallbacks(runnableMagneticField);
-            }else {
-                byte[] bytes=StringTool.toLH(num);
-                DefaultSendBean bean1 = new DefaultSendBean();
-                DefaultSendBean bean2 = new DefaultSendBean();
-                switch (type){
-                    case 0:
-                        bean1.setThreebyte((byte)0x1E);
-                        bean2.setThreebyte((byte)0x1F);
-                        break;
-                    case 1:
-                        bean1.setThreebyte((byte)0x20);
-                        bean2.setThreebyte((byte)0x21);
-                        break;
-                    case 2:
-                        bean1.setThreebyte((byte)0x22);
-                        bean2.setThreebyte((byte)0x23);
-                        break;
-                    case 3:
-                        bean1.setThreebyte((byte)0x24);
-                        bean2.setThreebyte((byte)0x25);
-                        break;
-                }
-                bean1.setFourbyte((byte)( bytes[1] & 0xFF));
-                bean2.setFourbyte((byte)( bytes[0] & 0xFF));
-                SendData_ByteOnce(bean1);
-                try {
-                    Thread.sleep(delayMillisMagneticField);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                SendData_ByteOnce(bean2);
-                LogTool.d("角度设置",StringTool.byteToString(bean1.parse()));
-                LogTool.d("角度设置",StringTool.byteToString(bean2.parse()));
-                handcountMagneticField++;
-                sendMagneticField.postDelayed(runnableMagneticField, delayMillisMagneticField);
-            }
-        }
-    };
 
 
     private void initPagers() {
@@ -855,7 +922,7 @@ public class CarControlActivity extends AppCompatActivity  {
         SendTimeinterval = sp.getInt("Set_SendTimeinterval",50);
         ReceiveTimeinterval = sp.getInt("Set_ReceiveTimeinterval",50);
         DirectionTimeinterval = sp.getInt("Set_DirectionTimeinterval",50);
-        TimerSetList = sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
+        TimerSet = sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
         // 从存储的XML文件中根据相应的键获取数据，没有数据就返回默认值    
         LeftX = sp.getInt("Set_LeftX", 0);
         LeftY = sp.getInt("Set_LeftY",0);
@@ -1177,30 +1244,6 @@ public class CarControlActivity extends AppCompatActivity  {
         }
     };
 
-    TimerTask run_task = new TimerTask( ) {
-        public void run ( )
-        {
-            if(mTabSegment.getSelectedIndex()==0 && ShowController.IsSendTiming){
-                //是否发送速度
-                Calendar calendar = Calendar.getInstance();
-                SimpleDateFormat sdf= new SimpleDateFormat("HH:mm");
-                String dateStr = sdf.format(calendar.getTime());
-                if(TimerSetList.contains(dateStr)){
-                    DefaultSendBean bean=new DefaultSendBean();
-                    bean.setThreebyte((byte) 0x02);
-                    bean.setFourbyte((byte)0xA5);
-                    SendData_ByteOnce(bean);
-                    LogTool.d("倒计时演示",StringTool.byteToString(bean.parse()));
-                }
-            }
-            TimeDifference.post(new Runnable() {
-                @Override
-                public void run() {
-                    TimeDifference.setText(StringTool.TimeDifference(TimerSetList));
-                }
-            });
-        }
-    };
 
     private SocketActionAdapter adapter = new SocketActionAdapter() {
         @Override
@@ -1402,10 +1445,14 @@ public class CarControlActivity extends AppCompatActivity  {
     protected void onDestroy() {
         super.onDestroy();
         mScheduledExecutorService.shutdown();
-        if (run_timer != null)
-        {
-            run_timer.cancel( );
-            run_timer = null;
+        if(sendTimerTask!=null){
+            sendTimerTask.removeCallbacks(runnableTimerTask);
+        }
+        if(sendCarmer!=null){
+            sendCarmer.removeCallbacks(runnableCarmer);
+        }
+        if(timer1!=null){
+            timer1.cancel();
         }
         if (mManager != null) {
             mManager.disconnect();
