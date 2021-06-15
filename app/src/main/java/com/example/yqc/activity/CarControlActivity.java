@@ -328,12 +328,15 @@ public class CarControlActivity extends AppCompatActivity  {
             }
             public void onFinish() {
                 SetTimer(finalFlag-1);
-                //发送定时任务
-                handcountTimerTask=0;
-                OldVAL_Sport_Mode=CarControlActivity.VAL_Sport_Mode;
-                sendTimerTask.postDelayed(runnableTimerTask, delayMillisTimerTask);
-                //发送视频连接
-                sendCarmer.postDelayed(runnableCarmer, delayMillisCarmer);
+                //判断是否演示模式
+                if(mTabSegment.getSelectedIndex()==Pager.Show.ordinal()){
+                    //发送定时任务
+                    handcountTimerTask=0;
+                    OldVAL_Sport_Mode=CarControlActivity.VAL_Sport_Mode;
+                    sendTimerTask.postDelayed(runnableTimerTask, delayMillisTimerTask);
+                    //发送视频连接
+                    sendCarmer.postDelayed(runnableCarmer, delayMillisCarmer);
+                }
             }
         };
         timer1.start();

@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="火星车"
+                android:text="月球车"
                 android:textColor="?attr/qmui_config_color_gray_3"
                 android:textSize="16sp"/>
 
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:gravity="center_horizontal"
-                android:text="火星车 V0.0"
+                android:text="月球车 V0.0"
                 android:textColor="?attr/qmui_config_color_gray_7"/>
 
         </LinearLayout>

@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             versionName="0.0";
         }
-        versionNameView.setText("火星车 V"+ versionName);
+        versionNameView.setText("月球车 V"+ versionName);
     }
 
     private void initTopBar() {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initGroupList() {
         QMUIGroupListView.newSection(this)
-                .addItemView(mAboutGroupListView.createItemView("火星车控制器"), new View.OnClickListener() {
+                .addItemView(mAboutGroupListView.createItemView("月球车控制器"), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();

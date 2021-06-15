@@ -2,12 +2,14 @@ package com.example.yqc.activity.carcontrol;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.yqc.R;
@@ -18,6 +20,7 @@ import com.example.yqc.customview.ThrottleView;
 import com.example.yqc.util.LogTool;
 import com.example.yqc.util.MathTool;
 import com.example.yqc.util.StringTool;
+import com.google.android.material.snackbar.Snackbar;
 import com.hikvision.netsdk.HCNetSDK;
 import com.hikvision.netsdk.PTZCommand;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
@@ -149,6 +152,13 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x16);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                Snackbar snackbar = Snackbar.make(getRootView(), "原地转弯", Snackbar.LENGTH_SHORT);
+                View view = snackbar.getView();
+                if (view != null) {
+                    view.setBackgroundColor(0xff4caf50);
+                    ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(Color.BLACK);
+                }
+                snackbar.show();
                 LogTool.d("原地转弯",StringTool.byteToString(bean.parse()));
                 return super.onDoubleTap(e);
             }
@@ -244,6 +254,13 @@ public class ManualController extends HomeController{
                 bean.setThreebyte((byte) 0x1A);
                 bean.setFourbyte((byte) 0xA5);
                 sendDataByteOnce(bean);
+                Snackbar snackbar = Snackbar.make(getRootView(), "车轮复位", Snackbar.LENGTH_SHORT);
+                View view = snackbar.getView();
+                if (view != null) {
+                    view.setBackgroundColor(0xff4caf50);
+                    ((TextView) view.findViewById(R.id.snackbar_text)).setTextColor(Color.BLACK);
+                }
+                snackbar.show();
                 LogTool.d("车轮复位",StringTool.byteToString(bean.parse()));
                 return super.onDoubleTap(e);
             }
