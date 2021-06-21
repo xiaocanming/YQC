@@ -20,7 +20,8 @@
     <integer name="set_magneticfieldb">0</integer>
     <integer name="set_magneticfieldy1">0</integer>
     <integer name="set_magneticfieldy2">0</integer>
-
+    <integer name="set_autosleep">5</integer>
+    <integer name="set_yuntaidown">5</integer>
 
     <string name="btn_set">飞控设置</string>
     <string name="btn_col">体感飞行控制</string>

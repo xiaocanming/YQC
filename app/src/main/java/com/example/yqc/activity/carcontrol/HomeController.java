@@ -20,6 +20,12 @@ public class HomeController extends QMUIWindowInsetLayout {
         }
     }
 
+    protected void resetSleepTime() {
+        if (mHomeControlListener != null) {
+            mHomeControlListener.resetSleepTime();
+        }
+    }
+
     protected void startChronometer() {
         if (mHomeControlListener != null) {
             mHomeControlListener.startChronometer();
@@ -39,6 +45,7 @@ public class HomeController extends QMUIWindowInsetLayout {
         void sendDataByteOnce(DefaultSendBean bean);
         void startChronometer();
         void initHomeSetting();
+        void resetSleepTime();
     }
 
     public void setButtonEnble(boolean enble){

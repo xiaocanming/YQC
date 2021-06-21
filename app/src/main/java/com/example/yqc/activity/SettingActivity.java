@@ -405,6 +405,80 @@ public class SettingActivity extends AppCompatActivity {
         }
     };
 
+    //睡眠倒计时
+    private QMUICommonListItemView itemWithAutoSleep;
+    View.OnClickListener itemWithAutoSleepOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("睡眠倒计时")
+                        .setPlaceholder("单位（分）")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(AutoSleep))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if(StringTool.isInteger(text)){
+                                    if(5<=Integer.valueOf(text)&&Integer.valueOf(text)<=60){
+                                        SaveSharedPreferencesInt("Set_AutoSleep",Integer.valueOf(text));
+                                        initGroupListView();
+                                        dialog.dismiss();
+                                        return;
+                                    }
+                                }
+                                Toast.makeText(SettingActivity.this, "请输入有效的范围（5-60）" , Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
+    //云台向下时间
+    private QMUICommonListItemView itemWithYuntaiDown;
+    View.OnClickListener itemWithYuntaiDownOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof QMUICommonListItemView) {
+                final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(SettingActivity.this);
+                builder.setTitle("云台向下时间")
+                        .setPlaceholder("单位（秒）")
+                        .setInputType(InputType.TYPE_CLASS_TEXT)
+                        .setDefaultText(String.valueOf(YuntaiDown))
+                        .addAction("取消", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .addAction("确定", new QMUIDialogAction.ActionListener() {
+                            @Override
+                            public void onClick(QMUIDialog dialog, int index) {
+                                String text = builder.getEditText().getText().toString();
+                                if(StringTool.isInteger(text)){
+                                    if(2<=Integer.valueOf(text)&&Integer.valueOf(text)<=10){
+                                        SaveSharedPreferencesInt("Set_YuntaiDown",Integer.valueOf(text));
+                                        initGroupListView();
+                                        dialog.dismiss();
+                                        return;
+                                    }
+                                }
+                                Toast.makeText(SettingActivity.this, "请输入有效的范围（2-10）" , Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .create(mCurrentDialogStyle).show();
+            }
+        }
+    };
+
 
     //定时器
     private QMUIGroupListView.Section sectionTimer;
@@ -684,6 +758,7 @@ public class SettingActivity extends AppCompatActivity {
                 QMUICommonListItemView.HORIZONTAL,
                 QMUICommonListItemView.ACCESSORY_TYPE_NONE);
 
+
         QMUIGroupListView.newSection(SettingActivity.this)
                 .setTitle("磁场设置")
                 .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -691,6 +766,26 @@ public class SettingActivity extends AppCompatActivity {
                 .addItemView(itemWithMagneticFieldB, itemWithMagneticFieldBOnClickListener)
                 .addItemView(itemWithMagneticFieldY1, itemWithMagneticFieldY1OnClickListener)
                 .addItemView(itemWithMagneticFieldY2, itemWithMagneticFieldY2OnClickListener)
+                .addTo(mGroupListView);
+
+        //倒计时设置
+        itemWithAutoSleep = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_cycle),
+                "睡眠倒计时",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+        itemWithYuntaiDown = mGroupListView.createItemView(
+                ContextCompat.getDrawable(SettingActivity.this, R.mipmap.icon_listitem_cycle),
+                "云台向下时间",
+                "",
+                QMUICommonListItemView.HORIZONTAL,
+                QMUICommonListItemView.ACCESSORY_TYPE_NONE);
+        QMUIGroupListView.newSection(SettingActivity.this)
+                .setTitle("倒计时设置")
+                .setLeftIconSize(size, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .addItemView(itemWithAutoSleep, itemWithAutoSleepOnClickListener)
+                .addItemView(itemWithYuntaiDown, itemWithYuntaiDownOnClickListener)
                 .addTo(mGroupListView);
     }
 
@@ -704,6 +799,8 @@ public class SettingActivity extends AppCompatActivity {
     private  int MagneticFieldB;
     private  int MagneticFieldY1;
     private  int MagneticFieldY2;
+    private  int AutoSleep;
+    private  int YuntaiDown;
     private void initGroupListView() {
         // 得到SP对象 
         SharedPreferences sp = getSharedPreferences(SET_FILENAME, MODE_PRIVATE);
@@ -721,6 +818,8 @@ public class SettingActivity extends AppCompatActivity {
         MagneticFieldB = sp.getInt("Set_MagneticFieldB",getResources().getInteger(R.integer.set_magneticfieldb));
         MagneticFieldY1 = sp.getInt("Set_MagneticFieldY1",getResources().getInteger(R.integer.set_magneticfieldy1));
         MagneticFieldY2 = sp.getInt("Set_MagneticFieldY2",getResources().getInteger(R.integer.set_magneticfieldy2));
+        AutoSleep = sp.getInt("Set_AutoSleep",getResources().getInteger(R.integer.set_autosleep));
+        YuntaiDown = sp.getInt("Set_YuntaiDown",getResources().getInteger(R.integer.set_yuntaidown));
 
         itemWithCameraIP.setDetailText(CameraIP);
         itemWithCameraPort.setDetailText(String.valueOf(CameraPort));
@@ -730,6 +829,8 @@ public class SettingActivity extends AppCompatActivity {
         itemWithMagneticFieldB.setDetailText(String.valueOf(MagneticFieldB/10.0)+" °");
         itemWithMagneticFieldY1.setDetailText(String.valueOf(MagneticFieldY1/10.0)+" °");
         itemWithMagneticFieldY2.setDetailText(String.valueOf(MagneticFieldY2/10.0)+" °");
+        itemWithAutoSleep.setDetailText(AutoSleep+" 分");
+        itemWithYuntaiDown.setDetailText(YuntaiDown+" 秒");
 
         Set<String> SetList =sp.getStringSet("Set_TimerSet1",new HashSet<String>() );
         Set<String> sortSet = new TreeSet<String>(new Comparator<String>() {

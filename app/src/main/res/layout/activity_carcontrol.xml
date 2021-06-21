@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/text55_title"
         android:layout_below="@+id/text55_title"
-        android:text="+24V电压"
+        android:text="电池电压"
         android:textSize="@dimen/title_textsize"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" />

@@ -66,6 +66,7 @@ public class ManualController extends HomeController{
         MyRoundButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x08);
                 bean.setFourbyte((byte) 0xA5);
@@ -79,6 +80,7 @@ public class ManualController extends HomeController{
         MyRoundButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x01);
@@ -92,6 +94,7 @@ public class ManualController extends HomeController{
         MyRoundButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x09);
                 bean.setFourbyte((byte) 0x02);
@@ -105,6 +108,7 @@ public class ManualController extends HomeController{
         MyRoundButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x0A);
                 bean.setFourbyte((byte) 0x01);
@@ -118,6 +122,7 @@ public class ManualController extends HomeController{
         MyRoundButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x0A);
                 bean.setFourbyte((byte) 0x02);
@@ -148,6 +153,7 @@ public class ManualController extends HomeController{
             @Override
             public boolean onDoubleTap(MotionEvent e) {//双击事件
 //                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x16);
                 bean.setFourbyte((byte) 0xA5);
@@ -250,6 +256,7 @@ public class ManualController extends HomeController{
             @Override
             public boolean onDoubleTap(MotionEvent e) {//双击事件
 //                Toast.makeText(getContext(),"这是双击事件",Toast.LENGTH_SHORT).show();
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x1A);
                 bean.setFourbyte((byte) 0xA5);
@@ -288,6 +295,7 @@ public class ManualController extends HomeController{
         MyRoundButton9.setOnTouchListener(new OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                resetSleepTime();
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton9DOWN=true;
@@ -306,6 +314,7 @@ public class ManualController extends HomeController{
         MyRoundButton10.setOnTouchListener(new OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                resetSleepTime();
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton10DOWN=true;
@@ -324,6 +333,7 @@ public class ManualController extends HomeController{
         MyRoundButton11.setOnTouchListener(new OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                resetSleepTime();
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton11DOWN=true;
@@ -342,6 +352,7 @@ public class ManualController extends HomeController{
         MyRoundButton12.setOnTouchListener(new OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                resetSleepTime();
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         MyRoundButton12DOWN=true;
@@ -360,6 +371,7 @@ public class ManualController extends HomeController{
         MyRoundButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                resetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x05);
                 bean.setFourbyte((byte) 0xA5);

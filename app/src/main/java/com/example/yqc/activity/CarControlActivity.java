@@ -46,6 +46,7 @@ import com.example.yqc.customview.MyRoundButton;
 import com.example.yqc.customview.NoScrollViewPager;
 import com.example.yqc.customview.SingleRockerView;
 import com.example.yqc.customview.ThrottleView;
+import com.example.yqc.handler.SleepTimeTimerTask;
 import com.example.yqc.hkws.DeviceBean;
 import com.example.yqc.hkws.HC_DVRManager;
 import com.example.yqc.util.CubbyHole;
@@ -170,6 +171,7 @@ public class CarControlActivity extends AppCompatActivity  {
     //计时器
     private Chronometer ch;
     private TextView TimeDifference;
+    private TextView TimeDifferenceTile;
 
     private HomeController homeUtilController;
     private HomeController homeComponentsController;
@@ -202,6 +204,8 @@ public class CarControlActivity extends AppCompatActivity  {
     private String password = ""; // fill in with appkey
     private static int  carvalTHR;
     private static int  realtimecarvalTHR;
+    private static int  AutoSleepValue;
+    private static int  YuntaiDownValue;
 
     //摄像头
     private final StartRenderingReceiver receiver = new StartRenderingReceiver();
@@ -478,12 +482,14 @@ public class CarControlActivity extends AppCompatActivity  {
         //获取计时器组件
         ch = (Chronometer) findViewById(R.id.test);
         TimeDifference = (TextView) findViewById(R.id.timedifference);
+        TimeDifferenceTile = (TextView) findViewById(R.id.text50_title);
 
         //摄像头重连
         QMUIRadiusImageView qmuiRadiusCarmerconnet = (QMUIRadiusImageView) findViewById(R.id.btn_carmerconnet);
         qmuiRadiusCarmerconnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 startPlay();
             }
         });
@@ -509,6 +515,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x06);
                 bean.setFourbyte((byte) 0xA5);
@@ -527,6 +534,7 @@ public class CarControlActivity extends AppCompatActivity  {
 //                bean.setFourbyte((byte) 0xA5);
 //                SendData_ByteOnce(bean);
 //                LogTool.d("恢复运动",StringTool.byteToString(bean.parse()));
+                ResetSleepTime();
                 setButtonEnble(false);
             }
         });
@@ -542,6 +550,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 updatetextView=true;
                 QMUIPopup mNormalPopup = QMUIPopups.popup(CarControlActivity.this, QMUIDisplayHelper.dp2px(CarControlActivity.this, 350), QMUIDisplayHelper.dp2px(CarControlActivity.this, 120))
                         .preferredDirection(QMUIPopup.DIRECTION_BOTTOM)
@@ -565,6 +574,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 //设置密码
                 final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(CarControlActivity.this);
                 builder.setTitle("密码")
@@ -650,6 +660,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButtonrz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x04);
                 bean.setFourbyte((byte) 0xA5);
@@ -665,6 +676,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButtonsn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 DefaultSendBean bean = new DefaultSendBean();
                 bean.setThreebyte((byte) 0x07);
                 bean.setFourbyte((byte) 0xA5);
@@ -682,6 +694,7 @@ public class CarControlActivity extends AppCompatActivity  {
         qmuiRoundButtonsugh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ResetSleepTime();
                 //当前油门
                 int new_VAL_THR = throttleView.Value;
                 int VAL_THR=new_VAL_THR>=5?5:new_VAL_THR;
@@ -735,6 +748,11 @@ public class CarControlActivity extends AppCompatActivity  {
                     sendhandler.postDelayed(runnable,delayMillis);//定期执行
                     LogTool.d("演示模式",StringTool.byteToString(bean.parse()));
                     homeUtilController.setButtonEnble(false,"演示模式状态");
+                    //显示演示倒计时
+                    TimeDifference.setVisibility(VISIBLE);
+                    TimeDifferenceTile.setVisibility(VISIBLE);
+                    //关闭睡眠倒计时
+                    stopAutoTimer();
                 }
                 //手动模式
                 if(index==1){
@@ -743,6 +761,12 @@ public class CarControlActivity extends AppCompatActivity  {
                     bean.setFourbyte((byte) 0x01);
                     SendData_ByteOnce(bean);
                     LogTool.d("手动模式",StringTool.byteToString(bean.parse()));
+                    //不显示演示倒计时
+                    TimeDifference.setVisibility(INVISIBLE);
+                    TimeDifferenceTile.setVisibility(INVISIBLE);
+                    //开启睡眠倒计时
+                    ResetSleepTime();
+                    startAutoTimer();
                 }
             }
 
@@ -779,6 +803,39 @@ public class CarControlActivity extends AppCompatActivity  {
             }
         });
     }
+
+    private Timer autoTimer = null;
+    private TimerTask autoTimerTask = null;
+    public static int sleepTimeCount;
+    public static boolean isSleepTime;
+    private void ResetSleepTime(){
+        sleepTimeCount=0;
+        isSleepTime=false;
+    }
+
+    private void startAutoTimer(){
+        if (autoTimer == null) {
+            autoTimer = new Timer();
+        }
+        if (autoTimerTask == null) {
+            autoTimerTask = new SleepTimeTimerTask(mManager,AutoSleepValue,YuntaiDownValue);
+        }
+        if(autoTimer != null && autoTimerTask != null )
+            autoTimer.schedule(autoTimerTask, 1000, 60*1000);
+    }
+
+    private void stopAutoTimer(){
+        if (autoTimer != null) {
+            autoTimer.cancel();
+            autoTimer = null;
+        }
+        if (autoTimerTask != null) {
+            autoTimerTask.cancel();
+            autoTimerTask = null;
+        }
+    }
+
+
 
     private int handcount=0;
     private final int delayMillis = 100;
@@ -900,6 +957,11 @@ public class CarControlActivity extends AppCompatActivity  {
             public void initHomeSetting() {
                 initSetting();
             }
+
+            @Override
+            public void resetSleepTime() {
+                ResetSleepTime();
+            }
         };
 
         mPages = new HashMap<>();
@@ -937,6 +999,8 @@ public class CarControlActivity extends AppCompatActivity  {
         MagneticFieldB = sp.getInt("Set_MagneticFieldB",getResources().getInteger(R.integer.set_magneticfieldb));
         MagneticFieldY1 = sp.getInt("Set_MagneticFieldY1",getResources().getInteger(R.integer.set_magneticfieldy1));
         MagneticFieldY2 = sp.getInt("Set_MagneticFieldY2",getResources().getInteger(R.integer.set_magneticfieldy2));
+        AutoSleepValue = sp.getInt("Set_AutoSleep",getResources().getInteger(R.integer.set_autosleep));
+        YuntaiDownValue = sp.getInt("Set_YuntaiDown",getResources().getInteger(R.integer.set_yuntaidown));
         ipaddr = sp.getString("Set_CameraIP", getResources().getString(R.string.set_cameraip));
         ipaddrport = sp.getInt("Set_CameraPort",getResources().getInteger(R.integer.set_cameraport));
         username = sp.getString("Set_CameraUserName",getResources().getString(R.string.set_camerausername));
@@ -1461,6 +1525,7 @@ public class CarControlActivity extends AppCompatActivity  {
             mManager.disconnect();
             mManager.unRegisterReceiver(adapter);
         }
+        stopAutoTimer();
 
         new Thread() {
             @Override
