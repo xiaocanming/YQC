@@ -1,5 +1,8 @@
 package com.example.yqc.handler;
 
+import android.os.Handler;
+import android.os.Message;
+
 import com.example.yqc.R;
 import com.example.yqc.activity.CarControlActivity;
 import com.example.yqc.bean.DefaultSendBean;
@@ -14,8 +17,10 @@ public class SleepTimeTimerTask extends TimerTask {
     private int AutoSleep;
     private int YuntaiDown;
     private IConnectionManager mManager;
+    private Handler MainUIHandler;
 
-    public SleepTimeTimerTask(IConnectionManager mManager,int AutoSleep, int YuntaiDown){
+    public SleepTimeTimerTask(Handler MainUIHandler, IConnectionManager mManager,int AutoSleep, int YuntaiDown){
+        this.MainUIHandler=MainUIHandler;
         this.mManager=mManager;
         this.AutoSleep=AutoSleep;
         this.YuntaiDown=YuntaiDown;
@@ -53,6 +58,11 @@ public class SleepTimeTimerTask extends TimerTask {
                                 LogTool.d("发送失败",StringTool.byteToString(bean.parse()));
                             }
                             LogTool.d("急停",StringTool.byteToString(bean.parse()));
+                            //更新UI
+                            Message message = new Message();
+                            message.what = 1;
+                            message.obj = "success!";
+                            MainUIHandler.sendMessage(message);
                         } catch (Exception e) {
                             LogTool.d("睡眠倒计时报错", e.getMessage());
                             e.printStackTrace();

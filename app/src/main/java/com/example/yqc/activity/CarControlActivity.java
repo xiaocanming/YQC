@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.util.DisplayMetrics;
@@ -252,6 +253,9 @@ public class CarControlActivity extends AppCompatActivity  {
     //速度固化大小
     public static int OldValue_height;
 
+    // 线程更新UIHandler
+    private Handler MainUIHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -265,12 +269,28 @@ public class CarControlActivity extends AppCompatActivity  {
 
         // 设置用于发广播的上下文
         HC_DVRManager.getInstance().setContext(getApplicationContext());
+        //初始化线程更新UI进程
+        initMainUIHandler();
         initSetting();
         initView();
         initTcp();
         initTabs();
         initPagers();
         initTimerList();
+    }
+
+    private void initMainUIHandler(){
+        MainUIHandler = new Handler() {
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+                        //开启退出睡眠按钮
+                        homeComponentsController.setButtonEnble(true,"退出休眠");
+                        setButtonEnble(false);
+                        break;
+                }
+            }
+        };
     }
 
     private  List<String>  TimerSetList=new ArrayList<>();
@@ -818,7 +838,7 @@ public class CarControlActivity extends AppCompatActivity  {
             autoTimer = new Timer();
         }
         if (autoTimerTask == null) {
-            autoTimerTask = new SleepTimeTimerTask(mManager,AutoSleepValue,YuntaiDownValue);
+            autoTimerTask = new SleepTimeTimerTask(MainUIHandler, mManager,AutoSleepValue,YuntaiDownValue);
         }
         if(autoTimer != null && autoTimerTask != null )
             autoTimer.schedule(autoTimerTask, 1000, 60*1000);

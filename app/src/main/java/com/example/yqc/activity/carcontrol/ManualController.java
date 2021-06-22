@@ -380,6 +380,24 @@ public class ManualController extends HomeController{
             }
         });
 
+        //退出休眠
+        MyRoundButton MyRoundButton14= new MyRoundButton(getContext());
+        MyRoundButton14.setText("退出休眠");
+        MyRoundButton14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetSleepTime();
+                DefaultSendBean bean = new DefaultSendBean();
+                bean.setThreebyte((byte) 0x0B);
+                bean.setFourbyte((byte) 0x01);
+                sendDataByteOnce(bean);
+                LogTool.d("退出休眠",StringTool.byteToString(bean.parse()));
+                MyRoundButton button=(MyRoundButton)v;
+                button.setEnabled(false);
+                button.setTextColor(getResources().getColor(R.color.app_color_description));
+            }
+        });
+
         int textViewSize = QMUIDisplayHelper.dpToPx(60);
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(textViewSize, textViewSize);
         mFloatLayout.addView(MyRoundButton1,lp);
@@ -395,6 +413,7 @@ public class ManualController extends HomeController{
         mFloatLayout.addView(MyRoundButton12,lp);
         mFloatLayout.addView(MyRoundButton8,lp);
 //        mFloatLayout.addView(MyRoundButton13,lp);
+        mFloatLayout.addView(MyRoundButton14,lp);
 
         //发送陀螺仪数据的任务
         send_timer.schedule(send_task,1000,DirectionTimeinterval);
@@ -405,8 +424,10 @@ public class ManualController extends HomeController{
         int currentChildCount = mFloatLayout.getChildCount();
         for(int i=0;i<currentChildCount;i++){
             MyRoundButton button=(MyRoundButton)mFloatLayout.getChildAt(i);
-            button.setEnabled(enble);
-            button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+            if(!button.getText().equals("退出休眠")){
+                button.setEnabled(enble);
+                button.setTextColor(enble? getResources().getColor(R.color.white):getResources().getColor(R.color.app_color_description));
+            }
         }
     }
     @Override
