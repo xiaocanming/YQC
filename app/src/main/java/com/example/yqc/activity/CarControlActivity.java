@@ -982,6 +982,11 @@ public class CarControlActivity extends AppCompatActivity  {
             public void resetSleepTime() {
                 ResetSleepTime();
             }
+
+            @Override
+            public void setMainButtonEnble(boolean enble) {
+                setButtonEnble(enble);
+            }
         };
 
         mPages = new HashMap<>();

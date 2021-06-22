@@ -38,6 +38,12 @@ public class HomeController extends QMUIWindowInsetLayout {
         }
     }
 
+    protected void setMainButtonEnble(boolean enble) {
+        if (mHomeControlListener != null) {
+            mHomeControlListener.setMainButtonEnble(enble);
+        }
+    }
+
     public void setHomeControlListener(HomeControlListener homeControlListener) {
         mHomeControlListener = homeControlListener;
     }
@@ -46,6 +52,7 @@ public class HomeController extends QMUIWindowInsetLayout {
         void startChronometer();
         void initHomeSetting();
         void resetSleepTime();
+        void setMainButtonEnble(boolean enble);
     }
 
     public void setButtonEnble(boolean enble){

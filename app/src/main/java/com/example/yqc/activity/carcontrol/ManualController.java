@@ -395,6 +395,7 @@ public class ManualController extends HomeController{
                 MyRoundButton button=(MyRoundButton)v;
                 button.setEnabled(false);
                 button.setTextColor(getResources().getColor(R.color.app_color_description));
+                setMainButtonEnble(true);
             }
         });
 
